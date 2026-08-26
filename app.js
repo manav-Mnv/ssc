@@ -130,25 +130,14 @@ function initGSAP(){
     heroTl.fromTo(".hero-desc",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
   }
 
-  /* Guideline cards — scroll-triggered stagger reveal.
-     On large fine-pointer displays the cards get the full scattered
-     collage treatment instead (see initGuidelinesScatter). */
+  /* Guideline cards — scroll-triggered reveal. initGuidelinesScatter owns
+     BOTH layouts via gsap.matchMedia(), so crossing the breakpoint in either
+     direction swaps between the scattered collage and the plain stagger
+     without ever needing a reload. */
   if(typeof ScrollTrigger!=="undefined"){
     gsap.fromTo(".guidelines-head",{opacity:0,y:24},{opacity:1,y:0,duration:0.6,ease:"power3.out",scrollTrigger:{trigger:"#guidelinesSection",start:"top 80%",once:true}});
-    if(scatterGuidesOK()){
-      initGuidelinesScatter();
-    }else{
-      gsap.fromTo(".guideline-card",{opacity:0,y:36},{opacity:1,y:0,duration:0.6,ease:"power3.out",stagger:0.12,clearProps:"opacity,transform",scrollTrigger:{trigger:".guidelines-list",start:"top 82%",once:true}});
-    }
+    initGuidelinesScatter();
   }
-}
-
-/* Desktop-only gate for the scattered panels — strictly no touch/mobile,
-   no reduced-motion, and only on genuinely wide viewports. */
-function scatterGuidesOK(){
-  return !!(window.matchMedia
-    && window.matchMedia("(min-width:1100px) and (hover:hover) and (pointer:fine)").matches
-    && !window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 }
 
 /* ============================================
@@ -164,12 +153,16 @@ function scatterGuidesOK(){
 function initGuidelinesScatter(){
   var mm=gsap.matchMedia();
   mm.add({
-    desktop:"(min-width:1100px)",
-    wide:"(min-width:1900px)",
+    desktop:"(min-width:1100px) and (hover:hover) and (pointer:fine)",
+    wide:"(min-width:1900px) and (hover:hover) and (pointer:fine)",
     motion:"(prefers-reduced-motion: no-preference)"
   },function(ctx){
-    /* only run on the big fine-pointer layout */
-    if(!ctx.conditions.desktop||!ctx.conditions.motion)return;
+    /* off-layout (mobile / touch / narrow / reduced-motion): cheap stagger
+       reveal, transforms cleared afterwards so nothing lingers */
+    if(!ctx.conditions.desktop||!ctx.conditions.motion){
+      gsap.fromTo(".guideline-card",{opacity:0,y:36},{opacity:1,y:0,duration:0.6,ease:"power3.out",stagger:0.12,clearProps:"opacity,transform",scrollTrigger:{trigger:".guidelines-list",start:"top 82%",once:true}});
+      return;
+    }
 
     /* ultra-wide displays get a proportionally wider scatter;
        normal laptops keep the composed look */
@@ -243,6 +236,14 @@ function initGuidelinesScatter(){
     var pulsePath=svg.querySelector("#threadPulse");
 
     var drawTween=null,pulseTween=null,tailTip=null;
+    var buildAttempts=0,buildQueued=false,cancelled=false,ro=null;
+
+    /* coalesce every rebuild trigger (resize, fonts, RO, load) into one rAF */
+    function scheduleBuild(){
+      if(cancelled||buildQueued)return;
+      buildQueued=true;
+      requestAnimationFrame(function(){buildQueued=false;buildThread()});
+    }
 
     function threadD(){
       var lr=list.getBoundingClientRect();
@@ -277,32 +278,54 @@ function initGuidelinesScatter(){
     }
 
     function buildThread(){
-      fitScatterX();
-      svg.setAttribute("viewBox","0 0 "+list.offsetWidth+" "+list.offsetHeight);
-      svg.setAttribute("preserveAspectRatio","none");
-      var td=threadD();
-      basePath.setAttribute("d",td.d);
-      pulsePath.setAttribute("d",td.d);
-      tailTip=td.tail;
+      if(cancelled)return;
+      try{
+        fitScatterX();
+        var w=Math.max(1,list.offsetWidth),h=Math.max(1,list.offsetHeight);
+        svg.setAttribute("viewBox","0 0 "+w+" "+h);
+        svg.setAttribute("preserveAspectRatio","none");
+        var td=threadD();
+        basePath.setAttribute("d",td.d);
+        pulsePath.setAttribute("d",td.d);
+        tailTip=td.tail;
 
-      /* measure once attached, then prep for the draw-on-scroll */
-      var len=basePath.getTotalLength();
-      gsap.set(basePath,{strokeDasharray:len+" "+len,strokeDashoffset:len});
-      gsap.set(pulsePath,{strokeDasharray:"42 "+len});
+        /* measure once attached, then prep for the draw-on-scroll;
+           a zero/NaN length means layout wasn't ready — retry below */
+        var len=basePath.getTotalLength();
+        if(!len||!isFinite(len))throw new Error("thread length unavailable");
+        buildAttempts=0;
+        gsap.set(basePath,{strokeDasharray:len+" "+len,strokeDashoffset:len});
+        gsap.set(pulsePath,{strokeDasharray:"42 "+len});
 
-      if(drawTween){drawTween.scrollTrigger&&drawTween.scrollTrigger.kill();drawTween.kill()}
-      if(pulseTween)pulseTween.kill();
+        if(drawTween){drawTween.scrollTrigger&&drawTween.scrollTrigger.kill();drawTween.kill()}
+        if(pulseTween)pulseTween.kill();
 
-      drawTween=gsap.to(basePath,{strokeDashoffset:0,ease:"none",
-        scrollTrigger:{
-          /* completes while the last panel is still on screen */
-          trigger:list,start:"top 78%",end:"bottom 88%",scrub:true,
-          onUpdate:function(self){pulsePath.setAttribute("opacity",(self.progress*0.95).toFixed(3))}
-        }});
+        drawTween=gsap.to(basePath,{strokeDashoffset:0,ease:"none",
+          scrollTrigger:{
+            trigger:list,start:"top 80%",
+            /* function-based end: a FIXED scroll distance past the start,
+               so the draw range can never invert on short sections /
+               very tall viewports (the old top/bottom-percentage pair
+               collapsed to <=0 range and froze the thread invisible) */
+            end:function(){return "+="+Math.max(window.innerHeight*0.4,list.offsetHeight*0.8)},
+            scrub:true,invalidateOnRefresh:true,
+            onUpdate:function(self){pulsePath.setAttribute("opacity",(self.progress*0.95).toFixed(3))}
+          }});
 
-      /* energy pulse endlessly travelling down the thread;
-         each time it reaches the end it leaps into the Apply button */
-      pulseTween=gsap.fromTo(pulsePath,{strokeDashoffset:len},{strokeDashoffset:-len,duration:5,ease:"none",repeat:-1,onRepeat:launchSpark});
+        /* sync the ember glow to wherever the draw already is (mid-page
+           refresh restores scroll, breakpoint flips) so the pulse is never
+           stranded at opacity 0 */
+        var p=drawTween.scrollTrigger?drawTween.scrollTrigger.progress:0;
+        pulsePath.setAttribute("opacity",(p*0.95).toFixed(3));
+
+        /* energy pulse endlessly travelling down the thread;
+           each time it reaches the end it leaps into the Apply button */
+        pulseTween=gsap.fromTo(pulsePath,{strokeDashoffset:len},{strokeDashoffset:-len,duration:5,ease:"none",repeat:-1,onRepeat:launchSpark});
+      }catch(err){
+        /* transient layout state (fonts swapping, grid not sized yet) —
+           bounded retries instead of silently dying */
+        if(buildAttempts++<6)setTimeout(buildThread,150*buildAttempts);
+      }
     }
 
     /* ---- pulse hand-off: fly a spark from the thread's tail into the
@@ -373,13 +396,24 @@ function initGuidelinesScatter(){
     }
 
     buildThread();
-    window.addEventListener("load",buildThread);
-    var rsz;
-    function onResize(){clearTimeout(rsz);rsz=setTimeout(buildThread,200)}
-    window.addEventListener("resize",onResize);
+    window.addEventListener("load",scheduleBuild);
+    window.addEventListener("resize",scheduleBuild);
+    window.addEventListener("orientationchange",scheduleBuild);
+    /* late font swaps change every card's height — rebuild when they land */
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){scheduleBuild()});
+    /* ResizeObserver catches ANY layout shift that changes the list or a
+       card (font swap, zoom, devtools open, dynamic content) — this is the
+       safety net that made the thread flaky before */
+    if(typeof ResizeObserver!=="undefined"){
+      ro=new ResizeObserver(function(){scheduleBuild()});
+      ro.observe(list);
+      cards.forEach(function(c){ro.observe(c)});
+    }
 
     return function(){ /* revert when the media query stops matching */
+      cancelled=true;
       cards.forEach(function(c){gsap.killTweensOf(c)});
+      if(ro){ro.disconnect();ro=null}
       if(drawTween){drawTween.scrollTrigger&&drawTween.scrollTrigger.kill();drawTween.kill()}
       if(pulseTween)pulseTween.kill();
       if(sparkTween)sparkTween.kill();
@@ -387,8 +421,9 @@ function initGuidelinesScatter(){
       if(applyBtn)applyBtn.classList.remove("apply-lit");
       if(emberCore)emberCore.remove();
       document.querySelectorAll(".btn-ripple,.btn-sheen,.spark-orb").forEach(function(o){o.remove()});
-      window.removeEventListener("resize",onResize);
-      clearTimeout(rsz);
+      window.removeEventListener("load",scheduleBuild);
+      window.removeEventListener("resize",scheduleBuild);
+      window.removeEventListener("orientationchange",scheduleBuild);
       svg.remove();
       gsap.set(cards,{clearProps:"transform,opacity,visibility"});
     };
