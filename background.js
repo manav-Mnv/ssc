@@ -235,24 +235,35 @@ void main(){
 
     let W, H;
     const isMobileFX = window.matchMedia('(max-width:768px)').matches;
+    const isAndroid = /Android/i.test(navigator.userAgent);
+
     if (isMobileFX) {
       U.blur = 0.0;
       gl.uniform4f(uni.finish, U.hue, U.vignette, U.blur, U.grain);
     }
-    const resize = () => {
+
+    // Android mid-range GPUs struggle with heavy fragment shaders. Start Android at 55% scale.
+    let resolutionScale = isAndroid ? 0.55 : 1.0;
+
+    const resize = (scaleFactor = 1.0) => {
       let dpr = Math.min(window.devicePixelRatio || 1, isMobileFX ? 1.5 : 2);
       if (isMobileFX) dpr *= 0.75; // lower internal resolution on phones (~44% fewer fragments, imperceptible on a 6" screen)
       if (SSC_LOW) dpr *= 0.8; // extra reduction for low-power devices
+      dpr *= scaleFactor; // Apply dynamic quality scaling
       W = canvas.width = Math.max(1, Math.round(canvas.clientWidth * dpr));
       H = canvas.height = Math.max(1, Math.round(canvas.clientHeight * dpr));
       gl.viewport(0, 0, W, H);
     };
-    resize();
-    window.addEventListener("resize", resize);
+    resize(resolutionScale);
+    window.addEventListener("resize", () => resize(resolutionScale));
 
     const start = performance.now();
     let _lastFrame = 0;
     const _targetDt = SSC_LOW ? (1000 / 30) : 0;
+
+    let frameTimes = [];
+    let performanceCheckDone = false;
+
     function render(now) {
       if (window.SSC_FX_PAUSED) { requestAnimationFrame(render); return; }
       if (SSC_REDUCED) {
@@ -266,7 +277,35 @@ void main(){
         }
         return;
       }
-      if (_targetDt && now - _lastFrame < _targetDt) { requestAnimationFrame(render); return; }
+
+      // Live FPS Performance profiling over the first 30 frames (unthrottled to measure raw GPU speed)
+      if (!performanceCheckDone && _lastFrame > 0) {
+        frameTimes.push(now - _lastFrame);
+        if (frameTimes.length >= 30) {
+          performanceCheckDone = true;
+          const avgFrameTime = frameTimes.reduce((a, b) => a + b, 0) / frameTimes.length;
+          
+          if (avgFrameTime > 36) { // < 28 FPS: Severe lag, disable WebGL completely
+            console.warn("Low performance detected (" + Math.round(1000/avgFrameTime) + " FPS). Disabling background shader.");
+            canvas.style.transition = "opacity 1.2s ease";
+            canvas.style.opacity = "0";
+            setTimeout(() => {
+              window.SSC_FX_PAUSED = true;
+              canvas.style.display = "none";
+            }, 1200);
+          } else if (avgFrameTime > 20) { // < 50 FPS: Moderate lag, reduce resolution scale
+            console.warn("Low frame rate detected (" + Math.round(1000/avgFrameTime) + " FPS). Reducing WebGL resolution.");
+            resolutionScale *= 0.5;
+            resize(resolutionScale);
+          }
+        }
+      }
+
+      // Apply the 30fps battery-saving throttle ONLY after the benchmark completes
+      if (performanceCheckDone) {
+        if (_targetDt && now - _lastFrame < _targetDt) { requestAnimationFrame(render); return; }
+      }
+
       _lastFrame = now;
       const t = ((now - start) / 1000) * U.timeScale;
       gl.uniform4f(uni.scene, W, H, t, U.colorCount);

@@ -1,4 +1,4 @@
-﻿/* SSC 2027 — Pastel + Liquid Glass + Component Patterns */
+/* SSC 2027 — Pastel + Liquid Glass + Component Patterns */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
@@ -782,13 +782,14 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 .success-title{font-family:var(--font-display);font-size:26px;font-weight:700;color:#fff;margin-bottom:12px}
 .success-desc{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.6;max-width:400px;margin:0 auto}
 .success-email-box{
-  display:inline-flex;align-items:center;gap:9px;margin:22px auto 0;
-  padding:11px 18px;border-radius:100px;
+  display:inline-flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 9px;margin:22px auto 0;
+  padding:11px 20px;border-radius:24px;
   background:rgba(240,81,56,0.10);border:1px solid rgba(240,81,56,0.28);
   color:rgba(255,255,255,0.88);font-size:14px;
+  max-width:100%;box-sizing:border-box;text-align:center;
 }
 .success-email-box svg{color:var(--swift);flex:none}
-.success-email{color:#fff;font-weight:700;word-break:break-all}
+.success-email{color:#fff;font-weight:700;word-break:normal;overflow-wrap:break-word}
 .success-note{
   max-width:420px;margin:20px auto 0;font-size:13px;line-height:1.6;
   color:rgba(255,255,255,0.45);

@@ -1,4 +1,5 @@
-﻿/* SSC 2027 — Form Logic + GSAP + Lenis + Enhanced Interactions */
+
+/* SSC 2027 — Form Logic + GSAP + Lenis + Enhanced Interactions */
 (function(){
 "use strict";
 
@@ -20,8 +21,6 @@ var FIELD_MAP={
   division:"division_batch",
   github:"github_profile",
   linkedin:"linkedin_profile",
-  github_profile:"github_profile",
-  linkedin_profile:"linkedin_profile",
   portfolio:"portfolio_website",
   hasUniEmail:"has_uni_email",
   uniEmail:"uni_email",
@@ -72,10 +71,24 @@ function buildRegistrationRow(){
     else if(BOOL_COLS.indexOf(col)>=0)val=(val==="Yes");
     row[col]=val;
   });
+  // Sync enrollment number to both columns
+  if (row.enrollment_number) {
+    row.uni_enrollment_id = row.enrollment_number;
+  }
+  // Auto-fill personal_email with primary email if empty/not provided
+  if (!row.personal_email && row.email) {
+    row.personal_email = row.email;
+  }
+  // Default student_status to 'Regular' if empty (e.g. university email users where field is hidden)
+  if (!row.student_status) {
+    row.student_status = "Regular";
+  }
+  // Default needs_mac_lab to 'No' (since we removed it from the form)
+  row.needs_mac_lab = "No";
   return row;
 }
 
-var TOTAL_PAGES=9,currentPage=1,lenis=null;
+var TOTAL_PAGES=8,currentPage=1,lenis=null;
 var heroSection=document.getElementById("heroSection");
 var formSection=document.getElementById("formSection");
 var showcaseSection=document.getElementById("showcaseSection");
@@ -91,14 +104,13 @@ var pages=document.querySelectorAll(".form-page");
 
 var pageValidation={
   1:["email"],
-  2:["fullName","contact","faculty","programme","semester","hasUniEmail"],
-  3:["uniEmail","enrollmentId"],
-  4:["personalEmail","studentStatus","enrollmentNumber"],
-  5:["macAccess","needMacLab","prepHours"],
+  2:["whyInterested","hasIdea"],
+  3:["fullName","contact","faculty","programme","semester","hasUniEmail"],
+  4:["uniEmail","personalEmail","studentStatus","enrollmentNumber"],
+  5:["macAccess","deviceFrequency","prepHours"],
   6:["appExperience","appleExperience","independence","prevCompetitions"],
   7:["commitmentLevel","programHours","attendSessions"],
-  8:["whyInterested","hasIdea"],
-  9:["confirmAccuracy","noGuarantee","agreeContact"]
+  8:["confirmAccuracy","noGuarantee","agreeContact"]
 };
 
 /* ============================================
@@ -507,6 +519,15 @@ function validateField(name){
   if(!fieldGroup&&isRadio&&radios[0])fieldGroup=radios[0].closest(".field-group");
   var errorEl=fieldGroup?fieldGroup.querySelector(".field-error"):null;
 
+  // Skip validation if the field's group is hidden
+  if (fieldGroup && fieldGroup.classList.contains("hidden")) {
+    if(errorEl){errorEl.textContent="";errorEl.classList.remove("visible")}
+    if(fieldGroup)fieldGroup.classList.remove("has-error");
+    if(input)input.classList.remove("error");
+    if(isRadio){var rg3=radios[0].closest(".radio-group");if(rg3)rg3.classList.remove("error")}
+    return true;
+  }
+
   if(input&&input.type!=="radio"){
     if(input.required&&!input.value.trim()){isValid=false;errorMsg="This field is required"}
     else if(input.type==="email"&&input.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)){isValid=false;errorMsg="Please enter a valid email"}
@@ -675,7 +696,6 @@ if(form)form.addEventListener("submit",function(e){
   supabase.from("registrations").insert([row],{returning:"minimal"}).then(function(res){
     if(res.error)throw res.error;
     showSuccess(row.email);
-    sendConfirmation(row.email,row.full_name);
   }).catch(function(err){
     console.error("Supabase insert failed:",err);
     showToast("Submission failed: "+(err&&err.message?err.message:"please try again"),"error");
@@ -686,6 +706,10 @@ if(form)form.addEventListener("submit",function(e){
 
 function showSuccess(email){
   clearProgress();
+  try {
+    localStorage.setItem("ssc2027_submitted", "true");
+    localStorage.setItem("ssc2027_submitted_email", email || "");
+  } catch(e) {}
   var emailEl=document.getElementById("successEmail");
   if(emailEl)emailEl.textContent=email||"";
   form.classList.add("hidden");
@@ -701,17 +725,7 @@ function showSuccess(email){
   showToast("Application submitted successfully!","success");
 }
 
-/* Fire-and-forget confirmation email (serverless /api/confirm) */
-function sendConfirmation(email,name){
-  if(!email)return;
-  fetch("/api/confirm",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({email:email,name:name||""})
-  }).catch(function(e){
-    console.warn("Confirmation email was not sent:",e);
-  });
-}
+
 
 /* live validation on change */
 if(form)form.querySelectorAll("input,textarea").forEach(function(el){
@@ -816,6 +830,44 @@ function initDeviceParallax(){
   });
 }
 
+// Handle conditional verification fields based on uni email availability
+function toggleVerificationFields() {
+  var selected = document.querySelector('input[name="hasUniEmail"]:checked');
+  var uniEmailGroup = document.getElementById("uniEmailGroup");
+  var personalEmailGroup = document.getElementById("personalEmailGroup");
+  var studentStatusGroup = document.getElementById("studentStatusGroup");
+  var personalEmailInput = document.getElementById("personalEmail");
+  var emailInput = document.getElementById("email");
+  var firstStatusRadio = document.querySelector('input[name="studentStatus"]');
+
+  if (!selected) return;
+  if (selected.value === "Yes") {
+    if (uniEmailGroup) uniEmailGroup.classList.remove("hidden");
+    if (personalEmailGroup) personalEmailGroup.classList.add("hidden");
+    if (studentStatusGroup) studentStatusGroup.classList.add("hidden");
+    if (personalEmailInput) {
+      personalEmailInput.removeAttribute("required");
+    }
+    if (firstStatusRadio) {
+      firstStatusRadio.removeAttribute("required");
+    }
+  } else {
+    if (uniEmailGroup) uniEmailGroup.classList.add("hidden");
+    if (personalEmailGroup) personalEmailGroup.classList.remove("hidden");
+    if (studentStatusGroup) studentStatusGroup.classList.remove("hidden");
+    if (personalEmailInput) {
+      personalEmailInput.setAttribute("required", "required");
+      // Pre-fill with main email if currently blank
+      if (!personalEmailInput.value && emailInput) {
+        personalEmailInput.value = emailInput.value;
+      }
+    }
+    if (firstStatusRadio) {
+      firstStatusRadio.setAttribute("required", "required");
+    }
+  }
+}
+
 /* ============================================
    INIT
    ============================================ */
@@ -831,11 +883,24 @@ document.addEventListener("DOMContentLoaded",function(){
   initTouchRipple();
   initToastContainer();
   if(canHover) initDeviceParallax();
+
+  // Listen for changes on hasUniEmail radio buttons
+  document.querySelectorAll('input[name="hasUniEmail"]').forEach(function(radio) {
+    radio.addEventListener("change", toggleVerificationFields);
+  });
+
   /* On the apply page the form is visible immediately — restore any
      previously saved progress (Google-Forms-style resume) and jump to
      the step the user left off at. */
   if(formSection&&!formSection.classList.contains("hidden")){
+    try {
+      if (localStorage.getItem("ssc2027_submitted") === "true") {
+        showSuccess(localStorage.getItem("ssc2027_submitted_email") || "");
+        return;
+      }
+    } catch(e) {}
     var savedPage=restoreProgress();
+    toggleVerificationFields(); // Sync verification fields visibility
     goToPage(savedPage&&savedPage>=1&&savedPage<=TOTAL_PAGES?savedPage:1);
   }else if(progressFill){
     updateProgress();

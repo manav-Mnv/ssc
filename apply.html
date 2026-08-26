@@ -65,19 +65,17 @@
 
   <section id="formSection" class="form-section">
 
-
     <div class="progress-wrapper">
       <div class="progress-bar">
-        <div id="progressFill" class="progress-fill" style="width: 11.11%"></div>
+        <div id="progressFill" class="progress-fill" style="width: 12.5%"></div>
       </div>
       <div class="progress-info">
-        <span id="progressStep">Step 1 of 9</span>
-        <span id="progressPercent">11%</span>
+        <span id="progressStep">Step 1 of 8</span>
+        <span id="progressPercent">12%</span>
       </div>
     </div>
 
     <form id="registrationForm" novalidate>
-
       <!-- Page 1: Before You Apply -->
       <div class="form-page active" data-page="1">
         <div class="glass-card liquid-glass">
@@ -92,8 +90,123 @@
         </div>
       </div>
 
-      <!-- Page 2: About You -->
+      <!-- Page 2: Idea & Motivation -->
       <div class="form-page" data-page="2">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Idea &amp; Motivation</h2>
+          <p class="step-desc"><strong>Important:</strong> Selection and shortlisting for this cohort will be primarily based on your app playground concept and motivation. Show us your vision!</p>
+
+          <div class="field-group">
+            <label class="field-label" for="whyInterested">Why are you interested in this challenge? *</label>
+            <textarea class="field-textarea" id="whyInterested" name="whyInterested" rows="4" placeholder="Tell us what motivates you to participate..." required></textarea>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Do you have an app idea? *</label>
+            <span class="field-hint">It can be anything for the Swift Student Challenge—an iOS app, a game, an AI/ML concept, a utility, accessibility tool, etc.</span>
+            <div class="radio-group">
+              <label class="custom-radio">
+                <input type="radio" name="hasIdea" value="Yes" required>
+                <span class="radio-mark"></span>
+                Yes
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="hasIdea" value="No">
+                <span class="radio-mark"></span>
+                No
+              </label>
+              <label class="custom-radio">
+                <input type="radio" name="hasIdea" value="Rough concept">
+                <span class="radio-mark"></span>
+                Rough concept
+              </label>
+            </div>
+            <span class="field-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="ideaDescription">Describe your idea</label>
+            <span class="field-hint">Briefly explain what your app does or the problem it solves. Don't worry if it's a rough draft!</span>
+            <textarea class="field-textarea" id="ideaDescription" name="ideaDescription" rows="4" placeholder="Describe your app idea, the problem it solves, and who it helps..."></textarea>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">What excites you about this?</label>
+            <div class="checkbox-group">
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Learning Swift">
+                <span class="check-mark"></span>
+                Learning Swift
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Building an app">
+                <span class="check-mark"></span>
+                Building an app
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Apple ecosystem">
+                <span class="check-mark"></span>
+                Apple ecosystem
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Competition">
+                <span class="check-mark"></span>
+                Competition
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Networking">
+                <span class="check-mark"></span>
+                Networking
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="excitement" value="Portfolio">
+                <span class="check-mark"></span>
+                Portfolio
+              </label>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Build interest areas</label>
+            <div class="checkbox-group">
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Health">
+                <span class="check-mark"></span>
+                Health
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Education">
+                <span class="check-mark"></span>
+                Education
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Environment">
+                <span class="check-mark"></span>
+                Environment
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Accessibility">
+                <span class="check-mark"></span>
+                Accessibility
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Entertainment">
+                <span class="check-mark"></span>
+                Entertainment
+              </label>
+              <label class="custom-checkbox">
+                <input type="checkbox" name="buildInterest" value="Social Impact">
+                <span class="check-mark"></span>
+                Social Impact
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page 3: About You -->
+      <div class="form-page" data-page="3">
         <div class="glass-card liquid-glass">
           <h2 class="step-title">About You</h2>
           <p class="step-desc">Tell us about yourself and your academic background.</p>
@@ -183,40 +296,27 @@
           </div>
         </div>
       </div>
-      <!-- Page 3: University Verification -->
-      <div class="form-page" data-page="3">
-        <div class="glass-card liquid-glass">
-          <h2 class="step-title">University Verification</h2>
-          <p class="step-desc">Help us verify your enrollment at Parul University.</p>
 
-          <div class="field-group">
+      <!-- Page 4: Student Verification (Merged & Dynamic) -->
+      <div class="form-page" data-page="4">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Student Verification</h2>
+          <p class="step-desc">Verify your enrollment and student status.</p>
+
+          <div class="field-group" id="uniEmailGroup">
             <label class="field-label" for="uniEmail">University Email <span class="optional-tag">(optional)</span></label>
             <span class="field-hint">Only if you have one — leave blank otherwise.</span>
             <input class="field-input" type="email" id="uniEmail" name="uniEmail" placeholder="yourname@paruluniversity.ac.in">
             <span class="field-error"></span>
           </div>
 
-          <div class="field-group">
-            <label class="field-label" for="enrollmentId">Enrollment ID *</label>
-            <input class="field-input" type="text" id="enrollmentId" name="enrollmentId" placeholder="Your enrollment ID" required>
-            <span class="field-error"></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Page 4: Student Verification -->
-      <div class="form-page" data-page="4">
-        <div class="glass-card liquid-glass">
-          <h2 class="step-title">Student Verification</h2>
-          <p class="step-desc">Verify your student identity and status.</p>
-
-          <div class="field-group">
+          <div class="field-group" id="personalEmailGroup">
             <label class="field-label" for="personalEmail">Personal Email *</label>
             <input class="field-input" type="email" id="personalEmail" name="personalEmail" placeholder="your.email@gmail.com" required>
             <span class="field-error"></span>
           </div>
 
-          <div class="field-group">
+          <div class="field-group" id="studentStatusGroup">
             <label class="field-label">Student Status *</label>
             <div class="radio-group">
               <label class="custom-radio">
@@ -240,8 +340,8 @@
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="enrollmentNumber">Enrollment Number *</label>
-            <input class="field-input" type="text" id="enrollmentNumber" name="enrollmentNumber" placeholder="Your enrollment number" required>
+            <label class="field-label" for="enrollmentNumber">Enrollment Number / ID *</label>
+            <input class="field-input" type="text" id="enrollmentNumber" name="enrollmentNumber" placeholder="Your enrollment number or ID" required>
             <span class="field-error"></span>
           </div>
         </div>
@@ -313,28 +413,6 @@
           </div>
 
           <div class="field-group">
-            <label class="field-label">Need access to Mac Lab? *</label>
-            <div class="radio-group">
-              <label class="custom-radio">
-                <input type="radio" name="needMacLab" value="Yes" required>
-                <span class="radio-mark"></span>
-                Yes
-              </label>
-              <label class="custom-radio">
-                <input type="radio" name="needMacLab" value="No">
-                <span class="radio-mark"></span>
-                No
-              </label>
-              <label class="custom-radio">
-                <input type="radio" name="needMacLab" value="Maybe">
-                <span class="radio-mark"></span>
-                Maybe
-              </label>
-            </div>
-            <span class="field-error"></span>
-          </div>
-
-          <div class="field-group">
             <label class="field-label">Prep hours per week *</label>
             <div class="radio-group">
               <label class="custom-radio">
@@ -362,6 +440,7 @@
           </div>
         </div>
       </div>
+
       <!-- Page 6: Starting Point -->
       <div class="form-page" data-page="6">
         <div class="glass-card liquid-glass">
@@ -503,6 +582,7 @@
           </div>
         </div>
       </div>
+
       <!-- Page 7: Commitment -->
       <div class="form-page" data-page="7">
         <div class="glass-card liquid-glass">
@@ -607,120 +687,9 @@
           </div>
         </div>
       </div>
-      <!-- Page 8: Idea & Motivation -->
+
+      <!-- Page 8: Consent -->
       <div class="form-page" data-page="8">
-        <div class="glass-card liquid-glass">
-          <h2 class="step-title">Idea &amp; Motivation</h2>
-          <p class="step-desc">Share your vision and what drives you.</p>
-
-          <div class="field-group">
-            <label class="field-label" for="whyInterested">Why are you interested in this challenge? *</label>
-            <textarea class="field-textarea" id="whyInterested" name="whyInterested" rows="4" placeholder="Tell us what motivates you to participate..." required></textarea>
-            <span class="field-error"></span>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label">Do you have an idea? *</label>
-            <div class="radio-group">
-              <label class="custom-radio">
-                <input type="radio" name="hasIdea" value="Yes" required>
-                <span class="radio-mark"></span>
-                Yes
-              </label>
-              <label class="custom-radio">
-                <input type="radio" name="hasIdea" value="No">
-                <span class="radio-mark"></span>
-                No
-              </label>
-              <label class="custom-radio">
-                <input type="radio" name="hasIdea" value="Rough concept">
-                <span class="radio-mark"></span>
-                Rough concept
-              </label>
-            </div>
-            <span class="field-error"></span>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label" for="ideaDescription">Describe your idea</label>
-            <textarea class="field-textarea" id="ideaDescription" name="ideaDescription" rows="4" placeholder="Describe your app idea, the problem it solves, and who it helps..."></textarea>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label">What excites you about this?</label>
-            <div class="checkbox-group">
-              <label class="custom-checkbox">
-                <input type="checkbox" name="excitement" value="Learning Swift">
-                <span class="check-mark"></span>
-                Learning Swift
-              </label>
-              <label class="custom-checkbox">
-                <input type="checkbox" name="excitement" value="Building an app">
-                <span class="check-mark"></span>
-                Building an app
-              </label>
-              <label class="custom-checkbox">
-                <input type="checkbox" name="excitement" value="Apple ecosystem">
-                <span class="check-mark"></span>
-                Apple ecosystem
-              </label>
-              <label class="custom-checkbox">
-                <input type="checkbox" name="excitement" value="Competition">
-                <span class="check-mark"></span>
-                Competition
-              </label>
-              <label class="custom-checkbox">
-                <input type="checkbox" name="excitement" value="Networking">
-                <span class="check-mark"></span>
-                Networking
-              </label>
-              <label class="custom-checkbox">
-                <input type="checkbox" name="excitement" value="Portfolio">
-                <span class="check-mark"></span>
-                Portfolio
-              </label>
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label class="field-label">Build interest areas</label>
-            <div class="checkbox-group">
-              <label class="custom-checkbox">
-                <input type="checkbox" name="buildInterest" value="Health">
-                <span class="check-mark"></span>
-                Health
-              </label>
-              <label class="custom-checkbox">
-                <input type="checkbox" name="buildInterest" value="Education">
-                <span class="check-mark"></span>
-                Education
-              </label>
-              <label class="custom-checkbox">
-                <input type="checkbox" name="buildInterest" value="Environment">
-                <span class="check-mark"></span>
-                Environment
-              </label>
-              <label class="custom-checkbox">
-                <input type="checkbox" name="buildInterest" value="Accessibility">
-                <span class="check-mark"></span>
-                Accessibility
-              </label>
-              <label class="custom-checkbox">
-                <input type="checkbox" name="buildInterest" value="Entertainment">
-                <span class="check-mark"></span>
-                Entertainment
-              </label>
-              <label class="custom-checkbox">
-                <input type="checkbox" name="buildInterest" value="Social Impact">
-                <span class="check-mark"></span>
-                Social Impact
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Page 9: Consent -->
-      <div class="form-page" data-page="9">
         <div class="glass-card liquid-glass">
           <h2 class="step-title">Consent</h2>
           <p class="step-desc">Please review and confirm the following.</p>
@@ -799,9 +768,9 @@
       <div class="success-desc">Your response has been recorded and is now with our team at AATCe, Parul University for review.</div>
       <div class="success-email-box">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 7 9-7"/></svg>
-        <span>Confirmation email sent to <strong id="successEmail" class="success-email"></strong></span>
+        <span>Confirmation email will be sent to <strong id="successEmail" class="success-email"></strong> shortly.</span>
       </div>
-      <p class="success-note">Please check your inbox (and spam). If you don't see it within a few minutes, contact <a href="mailto:me@subhansh.dev">me@subhansh.dev</a>. The email is sent only after your response is safely stored — so if the entry wasn't saved, no email goes out.</p>
+      <p class="success-note">Please check your inbox (and spam). If you don't see it soon, contact <a href="mailto:aatce@paruluniversity.ac.in">aatce@paruluniversity.ac.in</a>. The email is queued only after your response is safely saved.</p>
     </div>
   </section>
 

@@ -6,7 +6,7 @@ create table if not exists public.registrations (
   created_at timestamptz not null default now(),
 
   -- Core identity
-  email text not null,
+  email text unique not null,
 
   -- Personal info
   full_name text not null,
@@ -25,7 +25,7 @@ create table if not exists public.registrations (
   uni_enrollment_id text,
   personal_email text,
   student_status text not null,
-  enrollment_number text not null,
+  enrollment_number text unique not null,
 
   -- Device & access
   mac_access text not null,
@@ -58,7 +58,8 @@ create table if not exists public.registrations (
   confirm_accurate boolean not null,
   understand_no_guarantee boolean not null,
   agree_contact boolean not null,
-  anything_else text
+  anything_else text,
+  email_sent boolean not null default false
 );
 
 -- Indexes
