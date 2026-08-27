@@ -28,7 +28,7 @@ const transporter = nodemailer.createTransport({
   port: parseInt(process.env.SMTP_PORT || "465"),
   secure: parseInt(process.env.SMTP_PORT || "465") === 465,
   auth: {
-    user: process.env.SMTP_USER, // your aatce@paruluniversity.ac.in account
+    user: process.env.SMTP_USER, // your aatcepu@gmail.com account
     pass: process.env.SMTP_PASS, // 16-character app password
   },
 });
@@ -78,7 +78,7 @@ function generateAntiSpamHtml(name, refId) {
       ${chosenClosing}
     </p>
     <p style="margin:0;color:#3f4651;font-size:15px;line-height:1.65;">
-      If you have any questions, reply directly to this mail or reach out at <a href="mailto:aatce@paruluniversity.ac.in" style="color:#F05138;text-decoration:none;">aatce@paruluniversity.ac.in</a>.
+      If you have any questions, reply directly to this mail or reach out at <a href="mailto:aatcepu@gmail.com" style="color:#F05138;text-decoration:none;">aatcepu@gmail.com</a>.
     </p>
     <div style="margin-top:28px;padding-top:18px;border-top:1px solid #eceef1;color:#9aa1ab;font-size:11px;display:flex;justify-content:between;">
       <span>AATCe · Parul University</span>
