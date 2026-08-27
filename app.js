@@ -837,12 +837,22 @@ function toggleVerificationFields() {
   var personalEmailGroup = document.getElementById("personalEmailGroup");
   var studentStatusGroup = document.getElementById("studentStatusGroup");
   var personalEmailInput = document.getElementById("personalEmail");
+  var uniEmailInput = document.getElementById("uniEmail");
   var emailInput = document.getElementById("email");
   var firstStatusRadio = document.querySelector('input[name="studentStatus"]');
 
   if (!selected) return;
   if (selected.value === "Yes") {
-    if (uniEmailGroup) uniEmailGroup.classList.remove("hidden");
+    if (uniEmailGroup) {
+      uniEmailGroup.classList.remove("hidden");
+      var label = uniEmailGroup.querySelector(".field-label");
+      if (label) {
+        label.innerHTML = "University Email *";
+      }
+    }
+    if (uniEmailInput) {
+      uniEmailInput.setAttribute("required", "required");
+    }
     if (personalEmailGroup) personalEmailGroup.classList.add("hidden");
     if (studentStatusGroup) studentStatusGroup.classList.add("hidden");
     if (personalEmailInput) {
@@ -852,7 +862,16 @@ function toggleVerificationFields() {
       firstStatusRadio.removeAttribute("required");
     }
   } else {
-    if (uniEmailGroup) uniEmailGroup.classList.add("hidden");
+    if (uniEmailGroup) {
+      uniEmailGroup.classList.add("hidden");
+      var label = uniEmailGroup.querySelector(".field-label");
+      if (label) {
+        label.innerHTML = 'University Email <span class="optional-tag">(optional)</span>';
+      }
+    }
+    if (uniEmailInput) {
+      uniEmailInput.removeAttribute("required");
+    }
     if (personalEmailGroup) personalEmailGroup.classList.remove("hidden");
     if (studentStatusGroup) studentStatusGroup.classList.remove("hidden");
     if (personalEmailInput) {
