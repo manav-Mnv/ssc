@@ -532,6 +532,18 @@ function validateField(name){
     if(input.required&&!input.value.trim()){isValid=false;errorMsg="This field is required"}
     else if(input.type==="email"&&input.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)){isValid=false;errorMsg="Please enter a valid email"}
     else if(input.type==="url"&&input.value&&!/^https?:\/\/.+/.test(input.value)){isValid=false;errorMsg="Please enter a valid URL"}
+    
+    // Custom check: University email must match [Enrollment Number]@paruluniversity.ac.in
+    if(isValid && name === "uniEmail" && input.value.trim()){
+      var enrollInput = form.querySelector('[name="enrollmentNumber"]');
+      if(enrollInput && enrollInput.value.trim()){
+        var expected = (enrollInput.value.trim() + "@paruluniversity.ac.in").toLowerCase();
+        if(input.value.trim().toLowerCase() !== expected){
+          isValid = false;
+          errorMsg = "Must match [Enrollment]@paruluniversity.ac.in";
+        }
+      }
+    }
   }
   if(isRadio){
     var checked=form.querySelector("[name=\""+name+"\"]:checked");
@@ -852,6 +864,13 @@ function toggleVerificationFields() {
     }
     if (uniEmailInput) {
       uniEmailInput.setAttribute("required", "required");
+      uniEmailInput.setAttribute("readonly", "readonly");
+      uniEmailInput.style.opacity = "0.75";
+      uniEmailInput.style.cursor = "not-allowed";
+      var enrollVal = document.getElementById("enrollmentNumber") ? document.getElementById("enrollmentNumber").value.trim() : "";
+      if (enrollVal) {
+        uniEmailInput.value = enrollVal.toLowerCase() + "@paruluniversity.ac.in";
+      }
     }
     if (personalEmailGroup) personalEmailGroup.classList.add("hidden");
     if (studentStatusGroup) studentStatusGroup.classList.add("hidden");
@@ -871,6 +890,9 @@ function toggleVerificationFields() {
     }
     if (uniEmailInput) {
       uniEmailInput.removeAttribute("required");
+      uniEmailInput.removeAttribute("readonly");
+      uniEmailInput.style.opacity = "";
+      uniEmailInput.style.cursor = "";
     }
     if (personalEmailGroup) personalEmailGroup.classList.remove("hidden");
     if (studentStatusGroup) studentStatusGroup.classList.remove("hidden");
@@ -907,6 +929,32 @@ document.addEventListener("DOMContentLoaded",function(){
   document.querySelectorAll('input[name="hasUniEmail"]').forEach(function(radio) {
     radio.addEventListener("change", toggleVerificationFields);
   });
+
+  // Dynamically sync university email to match [enrollment]@paruluniversity.ac.in
+  var enrollInput = document.getElementById("enrollmentNumber");
+  var uniEmailInput = document.getElementById("uniEmail");
+  if (enrollInput && uniEmailInput) {
+    enrollInput.addEventListener("input", function() {
+      var selected = document.querySelector('input[name="hasUniEmail"]:checked');
+      if (selected && selected.value === "Yes") {
+        var val = enrollInput.value.trim();
+        if (val) {
+          uniEmailInput.value = val.toLowerCase() + "@paruluniversity.ac.in";
+          // Clear validation errors on uniEmail since it's auto-generated correctly
+          var fieldGroup = uniEmailInput.closest(".field-group");
+          var errorEl = fieldGroup ? fieldGroup.querySelector(".field-error") : null;
+          if (errorEl) {
+            errorEl.textContent = "";
+            errorEl.classList.remove("visible");
+          }
+          uniEmailInput.classList.remove("error");
+          if (fieldGroup) fieldGroup.classList.remove("has-error");
+        } else {
+          uniEmailInput.value = "";
+        }
+      }
+    });
+  }
 
   /* On the apply page the form is visible immediately — restore any
      previously saved progress (Google-Forms-style resume) and jump to
