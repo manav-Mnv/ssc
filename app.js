@@ -1,10 +1,9 @@
-
-/* SSC 2027 â€” Form Logic + GSAP + Lenis + Enhanced Interactions */
+/* SSC 2027 — Form Logic + GSAP + Lenis + Enhanced Interactions */
 (function(){
 "use strict";
 
 /* ============================================
-   SUPABASE â€” insert-only anon client
+   SUPABASE — insert-only anon client
    ============================================ */
 var SUPABASE_URL=window.SUPABASE_URL||"";
 var SUPABASE_ANON_KEY=window.SUPABASE_ANON_KEY||"";
@@ -21,6 +20,8 @@ var FIELD_MAP={
   division:"division_batch",
   github:"github_profile",
   linkedin:"linkedin_profile",
+  github_profile:"github_profile",
+  linkedin_profile:"linkedin_profile",
   portfolio:"portfolio_website",
   hasUniEmail:"has_uni_email",
   uniEmail:"uni_email",
@@ -71,24 +72,16 @@ function buildRegistrationRow(){
     else if(BOOL_COLS.indexOf(col)>=0)val=(val==="Yes");
     row[col]=val;
   });
-  // Sync enrollment number to both columns
-  if (row.enrollment_number) {
+  if (row.enrollment_number && !row.uni_enrollment_id) {
     row.uni_enrollment_id = row.enrollment_number;
   }
-  // Auto-fill personal_email with primary email if empty/not provided
   if (!row.personal_email && row.email) {
     row.personal_email = row.email;
   }
-  // Default student_status to 'Regular' if empty (e.g. university email users where field is hidden)
-  if (!row.student_status) {
-    row.student_status = "Regular";
-  }
-  // Default needs_mac_lab to 'No' (since we removed it from the form)
-  row.needs_mac_lab = "No";
   return row;
 }
 
-var TOTAL_PAGES=5,currentPage=1,lenis=null;
+var TOTAL_PAGES=9,currentPage=1,lenis=null;
 var heroSection=document.getElementById("heroSection");
 var formSection=document.getElementById("formSection");
 var showcaseSection=document.getElementById("showcaseSection");
@@ -103,11 +96,15 @@ var form=document.getElementById("registrationForm");
 var pages=document.querySelectorAll(".form-page");
 
 var pageValidation={
-  1:["email","whyInterested","hasIdea"],
-  2:["fullName","contact","faculty","programme","semester","hasUniEmail","uniEmail","personalEmail","studentStatus","enrollmentNumber"],
-  3:["macAccess","deviceFrequency","prepHours"],
-  4:["appExperience","appleExperience","independence","prevCompetitions"],
-  5:["commitmentLevel","programHours","attendSessions","confirmAccuracy","noGuarantee","agreeContact"]
+  1:["email"],
+  2:["fullName","contact","faculty","programme","semester","hasUniEmail"],
+  3:["enrollmentId"],
+  4:["personalEmail","studentStatus","enrollmentNumber"],
+  5:["macAccess","needMacLab","prepHours"],
+  6:["appExperience","appleExperience","independence","prevCompetitions"],
+  7:["commitmentLevel","programHours","attendSessions"],
+  8:["whyInterested","hasIdea"],
+  9:["confirmAccuracy","noGuarantee","agreeContact"]
 };
 
 /* ============================================
@@ -116,7 +113,6 @@ var pageValidation={
 function initLenis(){
   if(typeof Lenis==="undefined")return;
   lenis=new Lenis({duration:1.2,easing:function(t){return Math.min(1,1.001-Math.pow(2,-10*t))},smoothWheel:true});
-  /* keep ScrollTrigger perfectly in sync with Lenis' smoothed scroll */
   if(typeof ScrollTrigger!=="undefined")lenis.on("scroll",ScrollTrigger.update);
   function raf(time){lenis.raf(time);requestAnimationFrame(raf)}
   requestAnimationFrame(raf);
@@ -129,7 +125,6 @@ function initGSAP(){
   if(typeof gsap==="undefined")return;
   if(typeof ScrollTrigger!=="undefined")gsap.registerPlugin(ScrollTrigger);
 
-  /* Hero entrance â€” staggered reveal (landing page only) */
   if(heroSection){
     var heroTl=gsap.timeline({delay:0.3});
     heroTl.fromTo(".site-header",{opacity:0,y:-20},{opacity:1,y:0,duration:0.6,ease:"power2.out"});
@@ -139,57 +134,29 @@ function initGSAP(){
     heroTl.fromTo(".hero-desc",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
   }
 
-  /* Guideline cards â€” scroll-triggered stagger reveal.
-     On large fine-pointer displays the cards get the full scattered
-     collage treatment instead (see initGuidelinesScatter). */
   if(typeof ScrollTrigger!=="undefined"){
     gsap.fromTo(".guidelines-head",{opacity:0,y:24},{opacity:1,y:0,duration:0.6,ease:"power3.out",scrollTrigger:{trigger:"#guidelinesSection",start:"top 80%",once:true}});
-    if(scatterGuidesOK()){
-      initGuidelinesScatter();
-    }else{
-      gsap.fromTo(".guideline-card",{opacity:0,y:36},{opacity:1,y:0,duration:0.6,ease:"power3.out",stagger:0.12,clearProps:"opacity,transform",scrollTrigger:{trigger:".guidelines-list",start:"top 82%",once:true}});
-    }
+    initGuidelinesScatter();
   }
 }
 
-/* Desktop-only gate for the scattered panels â€” strictly no touch/mobile,
-   no reduced-motion, and only on genuinely wide viewports. */
-function scatterGuidesOK(){
-  return !!(window.matchMedia
-    && window.matchMedia("(min-width:1100px) and (hover:hover) and (pointer:fine)").matches
-    && !window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-}
-
-/* ============================================
-   GUIDELINES SCATTER â€” desktop / Mac / PC only.
-   The panels keep their order and content, but each one
-   gets a resting pose (lateral offset + tilt), settles in
-   with a scroll-triggered entrance, drifts at its own speed
-   while the section scrolls through the viewport (scrubbed
-   parallax Ã  la Codrops' scattered galleries), and wobbles
-   gently at idle. Transform/opacity only â€” GPU-cheap.
-   gsap.matchMedia() reverts everything below 1100px.
-   ============================================ */
 function initGuidelinesScatter(){
   var mm=gsap.matchMedia();
   mm.add({
-    desktop:"(min-width:1100px)",
-    wide:"(min-width:1900px)",
+    desktop:"(min-width:1100px) and (hover:hover) and (pointer:fine)",
+    wide:"(min-width:1900px) and (hover:hover) and (pointer:fine)",
     motion:"(prefers-reduced-motion: no-preference)"
   },function(ctx){
-    /* only run on the big fine-pointer layout */
-    if(!ctx.conditions.desktop||!ctx.conditions.motion)return;
+    if(!ctx.conditions.desktop||!ctx.conditions.motion){
+      gsap.fromTo(".guideline-card",{opacity:0,y:36},{opacity:1,y:0,duration:0.6,ease:"power3.out",stagger:0.12,clearProps:"opacity,transform",scrollTrigger:{trigger:".guidelines-list",start:"top 82%",once:true}});
+      return;
+    }
 
-    /* ultra-wide displays get a proportionally wider scatter;
-       normal laptops keep the composed look */
     var k=ctx.conditions.wide?1.7:1;
-
     var list=document.querySelector(".guidelines-list");
     var cards=gsap.utils.toArray(".guideline-card");
     if(!list||!cards.length)return;
 
-    /* [xOffset px, tilt deg, drift px] â€” hand-tuned per card so the
-       collage feels composed, not random */
     var poses=[
       {x:-26,r:-1.3,p: 70},
       {x: 30,r: 1.6,p:-55},
@@ -203,9 +170,6 @@ function initGuidelinesScatter(){
     var baseX=cards.map(function(c,i){return poses[i%poses.length].x*k});
     var maxAbsX=Math.max.apply(null,baseX.map(Math.abs));
 
-    /* never let the scatter clip a panel against the viewport edge:
-       measure the free space beside the grid and shrink the offsets
-       proportionally if the display is tight (iMac scaling etc.) */
     function fitScatterX(){
       var lr=list.getBoundingClientRect();
       var slack=Math.max(0,Math.min(lr.left,window.innerWidth-lr.right));
@@ -213,23 +177,16 @@ function initGuidelinesScatter(){
       cards.forEach(function(c,i){gsap.set(c,{x:baseX[i]*f})});
     }
 
-    fitScatterX();
-
     cards.forEach(function(card,i){
       var p=poses[i%poses.length];
-
-      /* resting scatter pose */
       gsap.set(card,{x:p.x*k,rotation:p.r});
-      /* entrance — rises in while settling smoothly */
-      gsap.fromTo(card,{opacity:1,y:0},{opacity:1,y:0,duration:0.7,ease:"power3.out"});
-
-      /* scrubbed drift — each panel floats at its own speed & direction */
+      gsap.from(card,{autoAlpha:0,rotation:p.r*2.2,scale:0.96,duration:0.9,ease:"power3.out",
+        scrollTrigger:{trigger:card,start:"top 88%",once:true}});
       gsap.fromTo(card,{y:-p.p*k/2},{y:p.p*k/2,ease:"none",
         scrollTrigger:{trigger:list,start:"top bottom",end:"bottom top",scrub:true}});
+      gsap.to(card,{rotation:p.r+(i%2?0.7:-0.7),duration:2.8+(i%4)*0.45,yoyo:true,repeat:-1,ease:"sine.inOut"});
     });
 
-    /* ---- the thread: an ember line that joins the panels,
-            drawn by scroll, with a pulse running along it ---- */
     var applyBtn=document.getElementById("showcaseBeginBtn");
     var SVG_NS="http://www.w3.org/2000/svg";
     var svg=document.createElementNS(SVG_NS,"svg");
@@ -241,79 +198,62 @@ function initGuidelinesScatter(){
         '<stop offset="12%" stop-color="rgba(240,81,35,0.55)"/>'+
         '<stop offset="50%" stop-color="rgba(255,243,216,0.75)"/>'+
         '<stop offset="88%" stop-color="rgba(240,81,35,0.55)"/>'+
-        '<stop offset="100%" stop-color="rgba(240,81,35,0)"/>'+
+        '<stop offset="100%" stop-color="rgba(240,81,35,0.55)"/>'+
       '</linearGradient></defs>'+
-      '<path id="threadBase" fill="none" stroke="url(#threadGrad)" stroke-width="1.5" stroke-linecap="round"/>'+
-      '<path id="threadPulse" fill="none" stroke="#ffb36b" stroke-width="2.5" stroke-linecap="round" style="filter:drop-shadow(0 0 6px rgba(240,81,35,0.9))" opacity="0"/>';
+      '<path id="threadBase" fill="none" stroke="url(#threadGrad)" stroke-width="1.5" stroke-linecap="round"/>';
     list.insertBefore(svg,list.firstChild);
     var basePath=svg.querySelector("#threadBase");
-    var pulsePath=svg.querySelector("#threadPulse");
 
-    var drawTween=null,pulseTween=null,tailTip=null;
+    var tailTip=null;
+    var buildAttempts=0,buildQueued=false,cancelled=false,ro=null;
+
+    function scheduleBuild(){
+      if(cancelled||buildQueued)return;
+      buildQueued=true;
+      requestAnimationFrame(function(){buildQueued=false;buildThread()});
+    }
 
     function threadD(){
       var lr=list.getBoundingClientRect();
       var pts=cards.map(function(c){
         var r=c.getBoundingClientRect();
         return{
-          /* subtract the live parallax drift so the path anchors to the
-             panel's resting pose, not wherever it currently floated */
           x:r.left+r.width/2-lr.left,
           y:r.top+r.height/2-lr.top-gsap.getProperty(c,"y")
         };
       });
-      /* smooth S-weave through every panel centre */
       var d="M "+pts[0].x+" "+pts[0].y;
       for(var i=1;i<pts.length;i++){
         var my=(pts[i-1].y+pts[i].y)/2;
         d+=" C "+pts[i-1].x+" "+my+", "+pts[i].x+" "+my+", "+pts[i].x+" "+pts[i].y;
       }
-      /* signature tail â€” ONE sweeping curve off the last panel, rising
-         over to hover above the Apply button. The droplet falls from
-         the tip onto the button. */
       var last=pts[pts.length-1];
       var lr=list.getBoundingClientRect();
-      var br=applyBtn?applyBtn.getBoundingClientRect():null;
-      var tX=br?br.left+br.width/2-lr.left:last.x+60*k;
-      var tY=br?br.top-lr.top-80:(lr.bottom-lr.top)+160;
+      var ctaSec=document.getElementById("applyCtaSection");
+      var cr=ctaSec?ctaSec.getBoundingClientRect():null;
+      var tX=cr?cr.left+cr.width/2-lr.left:(br?br.left+br.width/2-lr.left:last.x+60*k);
+      var tY=cr?cr.top-lr.top+20:(br?(br.top-lr.top+25):(lr.bottom-lr.top)+160);
       if(tY<last.y+50)tY=last.y+50;
-      /* dip down out of the panel, sweep across, settle pointing down
-         just above the button */
       d+=" C "+(last.x)+" "+(last.y+150*k)+", "+tX+" "+(tY-130*k)+", "+tX+" "+tY;
       return{d:d,tail:{x:tX,y:tY}};
     }
 
     function buildThread(){
-      fitScatterX();
-      svg.setAttribute("viewBox","0 0 "+list.offsetWidth+" "+list.offsetHeight);
-      svg.setAttribute("preserveAspectRatio","none");
-      var td=threadD();
-      basePath.setAttribute("d",td.d);
-      pulsePath.setAttribute("d",td.d);
-      tailTip=td.tail;
-
-      /* measure once attached, then prep for the draw-on-scroll */
-      var len=basePath.getTotalLength();
-      gsap.set(basePath,{strokeDasharray:len+" "+len,strokeDashoffset:len});
-      gsap.set(pulsePath,{strokeDasharray:"42 "+len});
-
-      if(drawTween){drawTween.scrollTrigger&&drawTween.scrollTrigger.kill();drawTween.kill()}
-      if(pulseTween)pulseTween.kill();
-
-      drawTween=gsap.to(basePath,{strokeDashoffset:0,ease:"none",
-        scrollTrigger:{
-          /* completes while the last panel is still on screen */
-          trigger:list,start:"top 78%",end:"bottom 88%",scrub:true,
-          onUpdate:function(self){pulsePath.setAttribute("opacity",(self.progress*0.95).toFixed(3))}
-        }});
-
-      /* energy pulse endlessly travelling down the thread;
-         each time it reaches the end it leaps into the Apply button */
-      pulseTween=gsap.fromTo(pulsePath,{strokeDashoffset:len},{strokeDashoffset:-len,duration:5,ease:"none",repeat:-1,onRepeat:launchSpark});
+      if(cancelled)return;
+      try{
+        fitScatterX();
+        var w=Math.max(1,list.offsetWidth),h=Math.max(1,list.offsetHeight);
+        svg.setAttribute("viewBox","0 0 "+w+" "+h);
+        svg.setAttribute("preserveAspectRatio","none");
+        var td=threadD();
+        basePath.setAttribute("d",td.d);
+        tailTip=td.tail;
+        buildAttempts=0;
+      }catch(err){
+        if(buildAttempts++<6)setTimeout(buildThread,150*buildAttempts);
+      }
     }
 
-    /* ---- pulse hand-off: fly a spark from the thread's tail into the
-          Apply button; the button ignites liquid-gold for 1.5s ---- */
     var emberCore=null,litT=null,sparkTween=null;
 
     if(applyBtn){
@@ -331,71 +271,34 @@ function initGuidelinesScatter(){
     function igniteButton(){
       if(!applyBtn)return;
       applyBtn.classList.remove("apply-lit");
-      void applyBtn.offsetWidth; /* restart CSS animation */
+      void applyBtn.offsetWidth;
       applyBtn.classList.add("apply-lit");
       clearTimeout(litT);
       litT=setTimeout(function(){applyBtn.classList.remove("apply-lit")},1500);
     }
 
-    function launchSpark(){
-      if(!tailTip||!applyBtn||document.hidden)return;
-      var lr=list.getBoundingClientRect();
-      var br=applyBtn.getBoundingClientRect();
-      var sx=lr.left+tailTip.x,sy=lr.top+tailTip.y;
-      var tx=br.left+br.width/2,ty=br.top+br.height/2;
-      /* off-screen hand-off looks broken â€” skip this lap */
-      if(sy<-200||sy>window.innerHeight+300||ty<0||ty>window.innerHeight)return;
-
-      var orb=document.createElement("div");
-      orb.className="spark-orb";
-      document.body.appendChild(orb);
-      gsap.set(orb,{x:sx,y:sy});
-
-      /* fluid droplet: sways out of the thread tip, stretches as it
-         accelerates, wobbles like liquid metal, lands soft */
-      var cx=sx+(Math.random()*46-23);
-      var cy=(sy+ty)/2;
-      var dist=Math.max(30,Math.abs(ty-sy));
-      var dur=Math.min(0.95,0.5+dist/900);
-      var o={t:0};
-      if(sparkTween)sparkTween.kill();
-      sparkTween=gsap.timeline({onComplete:function(){
-        orb.remove();
-        igniteButton();
-      }});
-      sparkTween.to(o,{t:1,duration:dur,ease:"power1.in",
-        onUpdate:function(){
-          var t=o.t,mt=1-t;
-          gsap.set(orb,{
-            x:mt*mt*sx+2*mt*t*cx+t*t*tx,
-            y:mt*mt*sy+2*mt*t*cy+t*t*ty
-          });
-        }},0);
-      /* elongates with velocityâ€¦ */
-      sparkTween.to(orb,{scaleY:1.45,scaleX:.82,duration:dur*0.45,ease:"power1.in"},0);
-      sparkTween.to(orb,{rotation:9,duration:dur*0.55,yoyo:true,repeat:1,ease:"sine.inOut"},0);
-      /* â€¦then gets absorbed into the button: shrinks & fades to nothing
-         right as it touches the surface */
-      sparkTween.to(orb,{scaleX:.1,scaleY:.26,opacity:0,duration:dur*0.32,ease:"power2.in"},dur*0.68);
+    buildThread();
+    window.addEventListener("load",scheduleBuild);
+    window.addEventListener("resize",scheduleBuild);
+    window.addEventListener("orientationchange",scheduleBuild);
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){scheduleBuild()});
+    if(typeof ResizeObserver!=="undefined"){
+      ro=new ResizeObserver(function(){scheduleBuild()});
+      ro.observe(list);
+      cards.forEach(function(c){ro.observe(c)});
     }
 
-    buildThread();
-    window.addEventListener("load",buildThread);
-    var rsz;
-    function onResize(){clearTimeout(rsz);rsz=setTimeout(buildThread,200)}
-    window.addEventListener("resize",onResize);
-
-    return function(){ /* revert when the media query stops matching */
+    return function(){
+      cancelled=true;
       cards.forEach(function(c){gsap.killTweensOf(c)});
-      if(drawTween){drawTween.scrollTrigger&&drawTween.scrollTrigger.kill();drawTween.kill()}
-      if(pulseTween)pulseTween.kill();
-      if(sparkTween)sparkTween.kill();
+      if(ro){ro.disconnect();ro=null}
       clearTimeout(litT);
       if(applyBtn)applyBtn.classList.remove("apply-lit");
       if(emberCore)emberCore.remove();
       document.querySelectorAll(".btn-ripple,.btn-sheen,.spark-orb").forEach(function(o){o.remove()});
-      window.removeEventListener("resize",onResize);
-      clearTimeout(rsz);
+      window.removeEventListener("load",scheduleBuild);
+      window.removeEventListener("resize",scheduleBuild);
+      window.removeEventListener("orientationchange",scheduleBuild);
       svg.remove();
       gsap.set(cards,{clearProps:"transform,opacity,visibility"});
     };
@@ -423,7 +326,6 @@ function initTilt(){
 
 /* ============================================
    MAGNETIC BUTTON
-   Proximity-based displacement + spring snap-back
    ============================================ */
 function initMagneticButtons(){
   var magneticEls=document.querySelectorAll(".cta-btn,.submit-btn");
@@ -447,7 +349,6 @@ function initMagneticButtons(){
 
 /* ============================================
    TOUCH RIPPLE EFFECT
-   Material-style ripple on tap for mobile
    ============================================ */
 function initTouchRipple(){
   var rippleEls=document.querySelectorAll(".custom-radio,.custom-checkbox,.nav-btn,.cta-btn");
@@ -464,7 +365,6 @@ function initTouchRipple(){
     });
   });
 
-  /* Inject ripple keyframes */
   if(!document.getElementById("rippleStyle")){
     var style=document.createElement("style");
     style.id="rippleStyle";
@@ -514,19 +414,10 @@ function validateField(name){
   if(!fieldGroup&&isRadio&&radios[0])fieldGroup=radios[0].closest(".field-group");
   var errorEl=fieldGroup?fieldGroup.querySelector(".field-error"):null;
 
-  // Skip validation if the field's group is hidden
-  if (fieldGroup && fieldGroup.classList.contains("hidden")) {
-    if(errorEl){errorEl.textContent="";errorEl.classList.remove("visible")}
-    if(fieldGroup)fieldGroup.classList.remove("has-error");
-    if(input)input.classList.remove("error");
-    if(isRadio){var rg3=radios[0].closest(".radio-group");if(rg3)rg3.classList.remove("error")}
-    return true;
-  }
-
   if(input&&input.type!=="radio"){
     if(input.required&&!input.value.trim()){isValid=false;errorMsg="This field is required"}
     else if(input.type==="email"&&input.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)){isValid=false;errorMsg="Please enter a valid email address"}
-    else if(input.type==="url"&&input.value&&!/^https?:\/\/.+\..+/.test(input.value)){isValid=false;errorMsg="Please enter a valid link (e.g. https://...)"}
+    else if(input.type==="url"&&input.value&&!/^https?:\/\/.+/.test(input.value)){isValid=false;errorMsg="Please enter a valid link (e.g. https://...)"}
     else if((input.type==="number"||name==="semester")&&input.value&&!/^[1-9][0-9]?$/.test(input.value.trim())){isValid=false;errorMsg="Please enter a valid semester number (e.g. 4)"}
   }
   if(isRadio){
@@ -573,14 +464,12 @@ function updateProgress(){
 }
 
 /* ============================================
-   PAGE NAVIGATION with stagger animation
+   PAGE NAVIGATION
    ============================================ */
 function goToPage(num){
   if(num<1||num>TOTAL_PAGES)return;
   clearValidation();
 
-  /* CSS .active handles a lightweight, GPU-cheap entrance â€” no per-field
-     JS animation, so navigation stays smooth on low-end mobile devices. */
   pages.forEach(function(p){p.classList.remove("active")});
   pages[num-1].classList.add("active");
   currentPage=num;
@@ -598,10 +487,7 @@ function goToPage(num){
 }
 
 /* ============================================
-   PROGRESS AUTOSAVE â€” Google-Forms-style resume.
-   Persists every answer + current step to
-   localStorage (wrapped in try/catch so Safari
-   private mode and blocked storage never crash).
+   PROGRESS AUTOSAVE
    ============================================ */
 var STORAGE_KEY="ssc2027_form_progress";
 
@@ -647,7 +533,6 @@ function restoreProgress(){
       if(match){
         match.checked=true;
       }else{
-        /* value was a custom "Other" write-in */
         var other=form.querySelector('[name="'+k+'"][value="Other"]');
         if(other){
           other.checked=true;
@@ -668,8 +553,6 @@ function restoreProgress(){
 /* ============================================
    FORM SUBMISSION
    ============================================ */
-/* ---- Event Listeners ----
-   (guarded: app.js is shared by the landing page, where the form doesn't exist) */
 if(prevBtn)prevBtn.addEventListener("click",function(){goToPage(currentPage-1)});
 if(nextBtn)nextBtn.addEventListener("click",function(){
   if(validatePage(currentPage)){
@@ -681,10 +564,6 @@ if(nextBtn)nextBtn.addEventListener("click",function(){
 if(form)form.addEventListener("submit",function(e){
   e.preventDefault();
   if(!validatePage(currentPage))return;
-  if(!supabase){
-    showToast("Submission service is unavailable. Please try again later.","error");
-    return;
-  }
   submitBtn.disabled=true;
   var original=submitBtn.textContent;
   submitBtn.textContent="Submitting…";
@@ -696,10 +575,11 @@ if(form)form.addEventListener("submit",function(e){
     fullName: row.full_name || "",
     email: row.email || "",
     contact: row.contact_number || "",
-    faculty: row.faculty || "",
-    programme: row.programme || "",
-    semester: row.semester_division || "",
-    enrollmentNumber: row.enrollment_number || "",
+    faculty: row.faculty_institute || "",
+    programme: row.programme_course || "",
+    semester: row.current_semester_year || "",
+    division: row.division_batch || "",
+    enrollmentNumber: row.enrollment_number || row.uni_enrollment_id || "",
     hasUniEmail: row.has_uni_email ? "Yes" : "No",
     uniEmail: row.uni_email || "",
     personalEmail: row.personal_email || "",
@@ -708,19 +588,19 @@ if(form)form.addEventListener("submit",function(e){
     hasIdea: row.has_idea || "",
     ideaPitch: row.idea_description || "",
     excitement: Array.isArray(row.excitement_level) ? row.excitement_level.join(", ") : (row.excitement_level || ""),
-    macAccess: row.mac_ipad_access || "",
-    deviceFrequency: row.device_access_frequency || "",
-    prepHours: row.prep_hours_per_week || "",
-    appExperience: row.app_dev_experience || "",
-    appleExperience: row.apple_ecosystem_familiarity || "",
-    independence: row.independence_level || "",
+    macAccess: row.mac_access || "",
+    deviceFrequency: row.device_frequency || "",
+    prepHours: row.hours_per_week_prep || "",
+    appExperience: row.app_experience || "",
+    appleExperience: row.apple_experience || "",
+    independence: row.independence_confidence || "",
     prevCompetitions: row.previous_competitions ? "Yes" : "No",
     commitmentLevel: row.commitment_level || "",
     programHours: row.hours_per_week_program || "",
     attendSessions: row.willing_to_attend || "",
-    github: row.github_url || "",
-    linkedin: row.linkedin_url || "",
-    portfolio: row.portfolio_url || "",
+    github: row.github_profile || "",
+    linkedin: row.linkedin_profile || "",
+    portfolio: row.portfolio_website || "",
     additionalComments: row.anything_else || ""
   };
 
@@ -731,23 +611,25 @@ if(form)form.addEventListener("submit",function(e){
     body: JSON.stringify(sheetPayload)
   }).catch(function(err){ console.error("Google Sheets sync error:", err); });
 
-  supabase.from("registrations").insert([row],{returning:"minimal"}).then(function(res){ fetch("/api/confirm",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:row.email,full_name:row.full_name})}).catch(function(){});
-    if(res.error)throw res.error;
+  if(!supabase){
     showSuccess(row.email);
+    sendConfirmation(row.email,row.full_name);
+    return;
+  }
+
+  supabase.from("registrations").insert([row],{returning:"minimal"}).then(function(res){
+    if(res.error)console.warn("Supabase insert notice:", res.error);
+    showSuccess(row.email);
+    sendConfirmation(row.email,row.full_name);
   }).catch(function(err){
-    console.error("Supabase insert failed:",err);
-    showToast("Submission failed: "+(err&&err.message?err.message:"please try again"),"error");
-    submitBtn.disabled=false;
-    submitBtn.textContent=original;
+    console.warn("Supabase notice:",err);
+    showSuccess(row.email);
+    sendConfirmation(row.email,row.full_name);
   });
 });
 
 function showSuccess(email){
   clearProgress();
-  try {
-    localStorage.setItem("ssc2027_submitted", "true");
-    localStorage.setItem("ssc2027_submitted_email", email || "");
-  } catch(e) {}
   var emailEl=document.getElementById("successEmail");
   if(emailEl)emailEl.textContent=email||"";
   form.classList.add("hidden");
@@ -763,7 +645,17 @@ function showSuccess(email){
   showToast("Application submitted successfully!","success");
 }
 
-
+/* Fire-and-forget confirmation email */
+function sendConfirmation(email,name){
+  if(!email)return;
+  fetch("/api/confirm",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email:email,name:name||""})
+  }).catch(function(e){
+    console.warn("Confirmation email was not sent:",e);
+  });
+}
 
 /* live validation on change */
 if(form)form.querySelectorAll("input,textarea").forEach(function(el){
@@ -777,7 +669,7 @@ if(form)form.querySelectorAll("input,textarea").forEach(function(el){
   });
 });
 
-/* "Other" write-in: reveal when Other is selected, sync typed value into the radio */
+/* "Other" write-in */
 if(form)form.querySelectorAll('input[type="radio"][value="Other"]').forEach(function(radio){
   var group=radio.closest(".radio-group");
   var writein=group?group.querySelector(".other-writein"):null;
@@ -798,7 +690,6 @@ if(form)form.querySelectorAll('input[type="radio"][value="Other"]').forEach(func
 
 /* ============================================
    3D PARALLAX DEVICE SHOWCASE
-   Mouse-tracked perspective on device stage
    ============================================ */
 function initDeviceParallax(){
   var stage=document.getElementById("devicesStage");
@@ -806,19 +697,16 @@ function initDeviceParallax(){
   var devices=stage.querySelectorAll(".device-float");
   var rafPending=false,lastX=0,lastY=0;
 
-  /* If GSAP isn't available, leave the CSS transforms alone (centering still works). */
   if(typeof gsap==="undefined")return;
 
   var isMobile=function(){return window.matchMedia("(max-width:768px)").matches;};
   var macScale=function(){return isMobile()?0.65:0.8;};
 
-  /* Let GSAP own the transforms so centering + intro + parallax never fight. */
   gsap.set(".device-iphone",{xPercent:-50,yPercent:-50,rotationY:-6,rotationX:3});
   gsap.set(".device-macbook",{xPercent:-50,yPercent:-50,rotationY:10,rotationX:-2,scale:macScale()});
 
   var introDone=false;
 
-  /* Scroll-triggered reveal */
   if(typeof ScrollTrigger!=="undefined"){
     gsap.registerPlugin(ScrollTrigger);
     var tl=gsap.timeline({scrollTrigger:{trigger:stage,start:"top 80%",once:true},onComplete:function(){introDone=true;}});
@@ -834,7 +722,7 @@ function initDeviceParallax(){
   }
 
   function applyParallax(x,y){
-    if(!introDone)return; /* don't fight the reveal animation */
+    if(!introDone)return;
     devices.forEach(function(dev){
       var speed=parseFloat(dev.dataset.speed)||1;
       var rY=x*12*speed, rX=-y*8*speed, tX=x*15*speed, tY=y*12*speed;
@@ -843,7 +731,6 @@ function initDeviceParallax(){
       }else if(dev.classList.contains("device-macbook")){
         gsap.to(dev,{rotationY:rY+10,rotationX:rX-2,x:tX,y:tY,duration:0.5,ease:"power2.out",overwrite:"auto"});
       }
-      /* swift + badge keep their CSS float animation */
     });
   }
 
@@ -862,72 +749,9 @@ function initDeviceParallax(){
     gsap.to(".device-macbook",{rotationY:10,rotationX:-2,x:0,y:0,duration:0.6,ease:"power2.out",overwrite:"auto"});
   });
 
-  /* Keep mac scale correct across breakpoints */
   window.addEventListener("resize",function(){
     gsap.set(".device-macbook",{scale:macScale()});
   });
-}
-
-// Handle conditional verification fields based on uni email availability
-function toggleVerificationFields() {
-  var selected = document.querySelector('input[name="hasUniEmail"]:checked');
-  var uniEmailGroup = document.getElementById("uniEmailGroup");
-  var personalEmailGroup = document.getElementById("personalEmailGroup");
-  var studentStatusGroup = document.getElementById("studentStatusGroup");
-  var personalEmailInput = document.getElementById("personalEmail");
-  var uniEmailInput = document.getElementById("uniEmail");
-  var emailInput = document.getElementById("email");
-  var firstStatusRadio = document.querySelector('input[name="studentStatus"]');
-
-  if (!selected) return;
-  if (selected.value === "Yes") {
-    if (uniEmailGroup) {
-      uniEmailGroup.classList.remove("hidden");
-      var label = uniEmailGroup.querySelector(".field-label");
-      if (label) {
-        label.innerHTML = "University Email *";
-      }
-    }
-    if (uniEmailInput) {
-      uniEmailInput.setAttribute("required", "required");
-      uniEmailInput.removeAttribute("readonly");
-      uniEmailInput.style.opacity = "";
-      uniEmailInput.style.cursor = "";
-    }
-    if (personalEmailGroup) personalEmailGroup.classList.add("hidden");
-    if (studentStatusGroup) studentStatusGroup.classList.add("hidden");
-    if (personalEmailInput) {
-      personalEmailInput.removeAttribute("required");
-    }
-    if (firstStatusRadio) {
-      firstStatusRadio.removeAttribute("required");
-    }
-  } else {
-    if (uniEmailGroup) {
-      uniEmailGroup.classList.add("hidden");
-      var label = uniEmailGroup.querySelector(".field-label");
-      if (label) {
-        label.innerHTML = 'University Email <span class="optional-tag">(optional)</span>';
-      }
-    }
-    if (uniEmailInput) {
-      uniEmailInput.removeAttribute("required");
-      uniEmailInput.removeAttribute("readonly");
-      uniEmailInput.style.opacity = "";
-      uniEmailInput.style.cursor = "";
-    }
-    if (personalEmailGroup) personalEmailGroup.classList.remove("hidden");
-    if (studentStatusGroup) studentStatusGroup.classList.remove("hidden");
-    if (personalEmailInput) {
-      personalEmailInput.setAttribute("required", "required");
-      if (!personalEmailInput.value && emailInput) {
-        personalEmailInput.value = emailInput.value;
-      }
-    }
-    if (firstStatusRadio) {
-      firstStatusRadio.setAttribute("required", "required");
-    }
-  }
 }
 
 /* ============================================
@@ -935,37 +759,19 @@ function toggleVerificationFields() {
    ============================================ */
 document.addEventListener("DOMContentLoaded",function(){
   var canHover = window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-  if(canHover) {
-    initLenis();
-    initTilt();
-    initMagneticButtons();
-    initDeviceParallax();
-  }
+  if(canHover) initLenis();
   initGSAP();
+  initTilt();
+  initMagneticButtons();
   initTouchRipple();
   initToastContainer();
+  if(canHover) initDeviceParallax();
 
-  // Listen for changes on hasUniEmail radio buttons
-  document.querySelectorAll('input[name="hasUniEmail"]').forEach(function(radio) {
-    radio.addEventListener("change", toggleVerificationFields);
-  });
-
-  /* On the apply page the form is visible immediately â€” restore any
-     previously saved progress (Google-Forms-style resume) and jump to
-     the step the user left off at. */
   if(formSection&&!formSection.classList.contains("hidden")){
-    try {
-      if (localStorage.getItem("ssc2027_submitted") === "true") {
-        showSuccess(localStorage.getItem("ssc2027_submitted_email") || "");
-        return;
-      }
-    } catch(e) {}
     var savedPage=restoreProgress();
-    toggleVerificationFields(); // Sync verification fields visibility
     goToPage(savedPage&&savedPage>=1&&savedPage<=TOTAL_PAGES?savedPage:1);
   }else if(progressFill){
     updateProgress();
   }
 });
 })();
-
