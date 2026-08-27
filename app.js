@@ -88,7 +88,7 @@ function buildRegistrationRow(){
   return row;
 }
 
-var TOTAL_PAGES=8,currentPage=1,lenis=null;
+var TOTAL_PAGES=4,currentPage=1,lenis=null;
 var heroSection=document.getElementById("heroSection");
 var formSection=document.getElementById("formSection");
 var showcaseSection=document.getElementById("showcaseSection");
@@ -103,14 +103,10 @@ var form=document.getElementById("registrationForm");
 var pages=document.querySelectorAll(".form-page");
 
 var pageValidation={
-  1:["email"],
-  2:["whyInterested","hasIdea"],
-  3:["fullName","contact","faculty","programme","semester","hasUniEmail"],
-  4:["uniEmail","personalEmail","studentStatus","enrollmentNumber"],
-  5:["macAccess","deviceFrequency","prepHours"],
-  6:["appExperience","appleExperience","independence","prevCompetitions"],
-  7:["commitmentLevel","programHours","attendSessions"],
-  8:["confirmAccuracy","noGuarantee","agreeContact"]
+  1:["email","whyInterested","hasIdea"],
+  2:["fullName","contact","faculty","programme","semester","hasUniEmail","uniEmail","personalEmail","studentStatus","enrollmentNumber"],
+  3:["macAccess","deviceFrequency","prepHours","appExperience","appleExperience","independence","prevCompetitions","commitmentLevel","programHours","attendSessions"],
+  4:["confirmAccuracy","noGuarantee","agreeContact"]
 };
 
 /* ============================================

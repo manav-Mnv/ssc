@@ -67,34 +67,26 @@
 
     <div class="progress-wrapper">
       <div class="progress-bar">
-        <div id="progressFill" class="progress-fill" style="width: 12.5%"></div>
+        <div id="progressFill" class="progress-fill" style="width: 25%"></div>
       </div>
       <div class="progress-info">
-        <span id="progressStep">Step 1 of 8</span>
-        <span id="progressPercent">12%</span>
+        <span id="progressStep">Step 1 of 4</span>
+        <span id="progressPercent">25%</span>
       </div>
     </div>
 
     <form id="registrationForm" novalidate>
-      <!-- Page 1: Before You Apply -->
+      <!-- Page 1: Idea Pitch & Motivation -->
       <div class="form-page active" data-page="1">
         <div class="glass-card liquid-glass">
-          <h2 class="step-title">Before You Apply</h2>
-          <p class="step-desc">Let's start with your email so we can track your application.</p>
+          <h2 class="step-title">Step 1: Idea Pitch &amp; Motivation</h2>
+          <p class="step-desc"><strong>Important:</strong> Selection and shortlisting for this cohort will be primarily based on your app playground concept and motivation. Show us your vision!</p>
 
           <div class="field-group">
-            <label class="field-label" for="email">Email Address *</label>
+            <label class="field-label" for="email">Primary Contact Email *</label>
             <input class="field-input" type="email" id="email" name="email" placeholder="you@example.com" required>
             <span class="field-error"></span>
           </div>
-        </div>
-      </div>
-
-      <!-- Page 2: Idea & Motivation -->
-      <div class="form-page" data-page="2">
-        <div class="glass-card liquid-glass">
-          <h2 class="step-title">Idea &amp; Motivation</h2>
-          <p class="step-desc"><strong>Important:</strong> Selection and shortlisting for this cohort will be primarily based on your app playground concept and motivation. Show us your vision!</p>
 
           <div class="field-group">
             <label class="field-label" for="whyInterested">Why are you interested in this challenge? *</label>
@@ -205,11 +197,11 @@
         </div>
       </div>
 
-      <!-- Page 3: About You -->
-      <div class="form-page" data-page="3">
+      <!-- Page 2: Personal Information & Student Verification -->
+      <div class="form-page" data-page="2">
         <div class="glass-card liquid-glass">
-          <h2 class="step-title">About You</h2>
-          <p class="step-desc">Tell us about yourself and your academic background.</p>
+          <h2 class="step-title">Step 2: Personal Information &amp; Verification</h2>
+          <p class="step-desc">Tell us about yourself, your academic background, and student status.</p>
 
           <div class="field-group">
             <label class="field-label" for="fullName">Full Name *</label>
@@ -294,14 +286,6 @@
             </div>
             <span class="field-error"></span>
           </div>
-        </div>
-      </div>
-
-      <!-- Page 4: Student Verification (Merged & Dynamic) -->
-      <div class="form-page" data-page="4">
-        <div class="glass-card liquid-glass">
-          <h2 class="step-title">Student Verification</h2>
-          <p class="step-desc">Verify your enrollment and student status.</p>
 
           <div class="field-group" id="uniEmailGroup">
             <label class="field-label" for="uniEmail">University Email <span class="optional-tag">(optional)</span></label>
@@ -347,11 +331,11 @@
         </div>
       </div>
 
-      <!-- Page 5: Device & Access -->
-      <div class="form-page" data-page="5">
+      <!-- Page 3: Device, Experience & Commitment -->
+      <div class="form-page" data-page="3">
         <div class="glass-card liquid-glass">
-          <h2 class="step-title">Device &amp; Access</h2>
-          <p class="step-desc">Tell us about the hardware you have access to for development.</p>
+          <h2 class="step-title">Step 3: Device, Experience &amp; Commitment</h2>
+          <p class="step-desc">Help us understand your hardware access, background, and availability.</p>
 
           <div class="field-group">
             <label class="field-label">Mac Access *</label>
@@ -438,14 +422,6 @@
             </div>
             <span class="field-error"></span>
           </div>
-        </div>
-      </div>
-
-      <!-- Page 6: Starting Point -->
-      <div class="form-page" data-page="6">
-        <div class="glass-card liquid-glass">
-          <h2 class="step-title">Starting Point</h2>
-          <p class="step-desc">Help us understand your experience level and interests.</p>
 
           <div class="field-group">
             <label class="field-label">App Development Experience *</label>
@@ -580,14 +556,6 @@
             <label class="field-label" for="competitionDetails">Competition Details</label>
             <textarea class="field-textarea" id="competitionDetails" name="competitionDetails" rows="3" placeholder="Tell us about any previous competitions you've participated in..."></textarea>
           </div>
-        </div>
-      </div>
-
-      <!-- Page 7: Commitment -->
-      <div class="form-page" data-page="7">
-        <div class="glass-card liquid-glass">
-          <h2 class="step-title">Commitment</h2>
-          <p class="step-desc">How committed are you to this challenge?</p>
 
           <div class="field-group">
             <label class="field-label">Commitment Level *</label>
@@ -688,11 +656,11 @@
         </div>
       </div>
 
-      <!-- Page 8: Consent -->
-      <div class="form-page" data-page="8">
+      <!-- Page 4: Confirmation & Consent -->
+      <div class="form-page" data-page="4">
         <div class="glass-card liquid-glass">
-          <h2 class="step-title">Consent</h2>
-          <p class="step-desc">Please review and confirm the following.</p>
+          <h2 class="step-title">Step 4: Confirmation &amp; Consent</h2>
+          <p class="step-desc">Please review and confirm your details before submitting.</p>
 
           <div class="field-group">
             <label class="field-label">I confirm all information provided is accurate *</label>
