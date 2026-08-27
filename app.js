@@ -1,4 +1,4 @@
-﻿/* SSC 2027 — Form Logic + GSAP + Lenis + Enhanced Interactions */
+/* SSC 2027 — Form Logic + GSAP + Lenis + Enhanced Interactions */
 (function(){
 "use strict";
 
@@ -227,15 +227,13 @@ function initGuidelinesScatter(){
         '<stop offset="12%" stop-color="rgba(240,81,35,0.55)"/>'+
         '<stop offset="50%" stop-color="rgba(255,243,216,0.75)"/>'+
         '<stop offset="88%" stop-color="rgba(240,81,35,0.55)"/>'+
-        '<stop offset="100%" stop-color="rgba(240,81,35,0)"/>'+
+        '<stop offset="100%" stop-color="rgba(240,81,35,0.55)"/>'+
       '</linearGradient></defs>'+
-      '<path id="threadBase" fill="none" stroke="url(#threadGrad)" stroke-width="1.5" stroke-linecap="round"/>'+
-      '<path id="threadPulse" fill="none" stroke="#ffb36b" stroke-width="2.5" stroke-linecap="round" style="filter:drop-shadow(0 0 6px rgba(240,81,35,0.9))" opacity="0"/>';
+      '<path id="threadBase" fill="none" stroke="url(#threadGrad)" stroke-width="1.5" stroke-linecap="round"/>';
     list.insertBefore(svg,list.firstChild);
     var basePath=svg.querySelector("#threadBase");
-    var pulsePath=svg.querySelector("#threadPulse");
 
-    var drawTween=null,pulseTween=null,tailTip=null;
+    var tailTip=null;
     var buildAttempts=0,buildQueued=false,cancelled=false,ro=null;
 
     /* coalesce every rebuild trigger (resize, fonts, RO, load) into one rAF */
@@ -267,9 +265,10 @@ function initGuidelinesScatter(){
          the tip onto the button. */
       var last=pts[pts.length-1];
       var lr=list.getBoundingClientRect();
-      var br=applyBtn?applyBtn.getBoundingClientRect():null;
-      var tX=br?br.left+br.width/2-lr.left:last.x+60*k;
-      var tY=br?br.top-lr.top-80:(lr.bottom-lr.top)+160;
+      var ctaSec=document.getElementById("applyCtaSection");
+      var cr=ctaSec?ctaSec.getBoundingClientRect():null;
+      var tX=cr?cr.left+cr.width/2-lr.left:(br?br.left+br.width/2-lr.left:last.x+60*k);
+      var tY=cr?cr.top-lr.top+20:(br?(br.top-lr.top+25):(lr.bottom-lr.top)+160);
       if(tY<last.y+50)tY=last.y+50;
       /* dip down out of the panel, sweep across, settle pointing down
          just above the button */
@@ -286,41 +285,9 @@ function initGuidelinesScatter(){
         svg.setAttribute("preserveAspectRatio","none");
         var td=threadD();
         basePath.setAttribute("d",td.d);
-        pulsePath.setAttribute("d",td.d);
         tailTip=td.tail;
 
-        /* measure once attached, then prep for the draw-on-scroll;
-           a zero/NaN length means layout wasn't ready — retry below */
-        var len=basePath.getTotalLength();
-        if(!len||!isFinite(len))throw new Error("thread length unavailable");
         buildAttempts=0;
-        gsap.set(basePath,{strokeDasharray:len+" "+len,strokeDashoffset:len});
-        gsap.set(pulsePath,{strokeDasharray:"42 "+len});
-
-        if(drawTween){drawTween.scrollTrigger&&drawTween.scrollTrigger.kill();drawTween.kill()}
-        if(pulseTween)pulseTween.kill();
-
-        drawTween=gsap.to(basePath,{strokeDashoffset:0,ease:"none",
-          scrollTrigger:{
-            trigger:list,start:"top 80%",
-            /* function-based end: a FIXED scroll distance past the start,
-               so the draw range can never invert on short sections /
-               very tall viewports (the old top/bottom-percentage pair
-               collapsed to <=0 range and froze the thread invisible) */
-            end:function(){return "+="+Math.max(window.innerHeight*0.4,list.offsetHeight*0.8)},
-            scrub:true,invalidateOnRefresh:true,
-            onUpdate:function(self){pulsePath.setAttribute("opacity",(self.progress*0.95).toFixed(3))}
-          }});
-
-        /* sync the ember glow to wherever the draw already is (mid-page
-           refresh restores scroll, breakpoint flips) so the pulse is never
-           stranded at opacity 0 */
-        var p=drawTween.scrollTrigger?drawTween.scrollTrigger.progress:0;
-        pulsePath.setAttribute("opacity",(p*0.95).toFixed(3));
-
-        /* energy pulse endlessly travelling down the thread;
-           each time it reaches the end it leaps into the Apply button */
-        pulseTween=gsap.fromTo(pulsePath,{strokeDashoffset:len},{strokeDashoffset:-len,duration:5,ease:"none",repeat:-1,onRepeat:launchSpark});
       }catch(err){
         /* transient layout state (fonts swapping, grid not sized yet) —
            bounded retries instead of silently dying */
