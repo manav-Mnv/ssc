@@ -72,7 +72,7 @@ function generateAntiSpamHtml(name, refId) {
     <p style="margin:0 0 22px;color:#F05138;font-weight:700;letter-spacing:.6px;font-size:12px;text-transform:uppercase;">Swift Student Challenge 2027 · Parul University</p>
     <h1 style="margin:0 0 14px;color:#111418;font-size:22px;line-height:1.3;font-weight:700;">Your response has been recorded</h1>
     <p style="margin:0 0 16px;color:#3f4651;font-size:15px;line-height:1.65;">
-      ${chosenGreeting} thank you for registering for the Swift Student Challenge 2027 at Parul University. Your response has been recorded and our team at <strong style="color:#111418;">AATCe, Parul University</strong> is now reviewing it.
+      ${chosenGreeting} thank you for registering for the Swift Student Challenge 2027 at Parul University. Your response has been recorded and our team at <strong style="color:#111418;">Swift Coding Club, Parul University</strong> is now reviewing it.
     </p>
     <p style="margin:0 0 16px;color:#3f4651;font-size:15px;line-height:1.65;">
       ${chosenClosing}
@@ -81,7 +81,7 @@ function generateAntiSpamHtml(name, refId) {
       If you have any questions, reply directly to this mail or reach out at <a href="mailto:aatcepu@gmail.com" style="color:#F05138;text-decoration:none;">aatcepu@gmail.com</a>.
     </p>
     <div style="margin-top:28px;padding-top:18px;border-top:1px solid #eceef1;color:#9aa1ab;font-size:11px;display:flex;justify-content:between;">
-      <span>AATCe · Parul University</span>
+      <span>Swift Coding Club · Parul University</span>
       <span style="color:#e2e8f0;margin-left:auto;">REF: #${uniqueHash}</span>
     </div>
   </div>
@@ -128,9 +128,9 @@ async function runQueue() {
 
       // Send the email
       await transporter.sendMail({
-        from: process.env.SMTP_FROM || `"AATCe Parul University" <${process.env.SMTP_USER}>`,
+        from: process.env.SMTP_FROM || `"Swift Coding Club Parul University" <${process.env.SMTP_USER}>`,
         to: email,
-        subject: "Application Recorded — AATCe Parul University · Swift Student Challenge 2027",
+        subject: "Application Recorded — Swift Coding Club Parul University · Swift Student Challenge 2027",
         html: html,
       });
 

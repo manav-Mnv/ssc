@@ -1,4 +1,4 @@
-﻿const { createClient } = require("@supabase/supabase-js");
+const { createClient } = require("@supabase/supabase-js");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 
@@ -77,20 +77,20 @@ module.exports = async function handler(req, res) {
         <div style="max-width:560px;margin:0 auto;border:1px solid #e2e8f0;border-radius:12px;padding:32px;background:#ffffff;">
           <h2 style="color:#f05138;margin-top:0;">Swift Student Challenge 2027</h2>
           <p style="font-size:16px;">Hi <strong>${first}</strong>,</p>
-          <p>Your registration for the <strong>Swift Student Challenge 2027</strong> at Parul University (AATCe) has been successfully recorded!</p>
+          <p>Your registration for the <strong>Swift Student Challenge 2027</strong> at Swift Coding Club, Parul University has been successfully recorded!</p>
           <p>Our mentor team is reviewing your app playground idea. We will reach out to you with upcoming workshop schedules and challenge guidance.</p>
           <div style="margin:24px 0;padding:16px;background:#f8fafc;border-left:4px solid #f05138;border-radius:4px;">
             <p style="margin:0;font-size:14px;color:#475569;"><strong>Status:</strong> Registration Verified & Received</p>
           </div>
           <hr style="border:0;border-top:1px solid #e2e8f0;margin:24px 0;"/>
-          <p style="font-size:12px;color:#94a3b8;margin:0;">Ref ID: #${uniqueHash} · Apple Authorised Training Center for Education (AATCe), Parul University</p>
+          <p style="font-size:12px;color:#94a3b8;margin:0;">Ref ID: #${uniqueHash} · Swift Coding Club, Parul University</p>
         </div>
       </body>
     `;
 
     // Send Mail
     await transporter.sendMail({
-      from: process.env.SMTP_FROM || `"AATCe Parul University" <${process.env.SMTP_USER}>`,
+      from: process.env.SMTP_FROM || `"Swift Coding Club Parul University" <${process.env.SMTP_USER}>`,
       to: email,
       subject: "Registration Confirmed — Swift Student Challenge 2027",
       html: html,

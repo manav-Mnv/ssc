@@ -1,4 +1,4 @@
-﻿
+
 /* SSC 2027 â€” Form Logic + GSAP + Lenis + Enhanced Interactions */
 (function(){
 "use strict";
@@ -88,7 +88,7 @@ function buildRegistrationRow(){
   return row;
 }
 
-var TOTAL_PAGES=4,currentPage=1,lenis=null;
+var TOTAL_PAGES=5,currentPage=1,lenis=null;
 var heroSection=document.getElementById("heroSection");
 var formSection=document.getElementById("formSection");
 var showcaseSection=document.getElementById("showcaseSection");
@@ -105,8 +105,9 @@ var pages=document.querySelectorAll(".form-page");
 var pageValidation={
   1:["email","whyInterested","hasIdea"],
   2:["fullName","contact","faculty","programme","semester","hasUniEmail","uniEmail","personalEmail","studentStatus","enrollmentNumber"],
-  3:["macAccess","deviceFrequency","prepHours","appExperience","appleExperience","independence","prevCompetitions","commitmentLevel","programHours","attendSessions"],
-  4:["confirmAccuracy","noGuarantee","agreeContact"]
+  3:["macAccess","deviceFrequency","prepHours"],
+  4:["appExperience","appleExperience","independence","prevCompetitions"],
+  5:["commitmentLevel","programHours","attendSessions","confirmAccuracy","noGuarantee","agreeContact"]
 };
 
 /* ============================================
@@ -212,21 +213,19 @@ function initGuidelinesScatter(){
       cards.forEach(function(c,i){gsap.set(c,{x:baseX[i]*f})});
     }
 
+    fitScatterX();
+
     cards.forEach(function(card,i){
       var p=poses[i%poses.length];
 
       /* resting scatter pose */
       gsap.set(card,{x:p.x*k,rotation:p.r});
-      /* entrance â€” rises in while settling from a stronger tilt */
-      gsap.from(card,{autoAlpha:0,rotation:p.r*2.2,scale:0.96,duration:0.9,ease:"power3.out",
-        scrollTrigger:{trigger:card,start:"top 88%",once:true}});
+      /* entrance — rises in while settling smoothly */
+      gsap.fromTo(card,{opacity:1,y:0},{opacity:1,y:0,duration:0.7,ease:"power3.out"});
 
-      /* scrubbed drift â€” each panel floats at its own speed & direction */
+      /* scrubbed drift — each panel floats at its own speed & direction */
       gsap.fromTo(card,{y:-p.p*k/2},{y:p.p*k/2,ease:"none",
         scrollTrigger:{trigger:list,start:"top bottom",end:"bottom top",scrub:true}});
-
-      /* idle liquid wobble â€” rotation composes with the drift */
-      gsap.to(card,{rotation:p.r+(i%2?0.7:-0.7),duration:2.8+(i%4)*0.45,yoyo:true,repeat:-1,ease:"sine.inOut"});
     });
 
     /* ---- the thread: an ember line that joins the panels,
@@ -526,20 +525,9 @@ function validateField(name){
 
   if(input&&input.type!=="radio"){
     if(input.required&&!input.value.trim()){isValid=false;errorMsg="This field is required"}
-    else if(input.type==="email"&&input.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)){isValid=false;errorMsg="Please enter a valid email"}
-    else if(input.type==="url"&&input.value&&!/^https?:\/\/.+/.test(input.value)){isValid=false;errorMsg="Please enter a valid URL"}
-    
-    // Custom check: University email must match [Enrollment Number]@paruluniversity.ac.in
-    if(isValid && name === "uniEmail" && input.value.trim()){
-      var enrollInput = form.querySelector('[name="enrollmentNumber"]');
-      if(enrollInput && enrollInput.value.trim()){
-        var expected = (enrollInput.value.trim() + "@paruluniversity.ac.in").toLowerCase();
-        if(input.value.trim().toLowerCase() !== expected){
-          isValid = false;
-          errorMsg = "Must match [Enrollment]@paruluniversity.ac.in";
-        }
-      }
-    }
+    else if(input.type==="email"&&input.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)){isValid=false;errorMsg="Please enter a valid email address"}
+    else if(input.type==="url"&&input.value&&!/^https?:\/\/.+\..+/.test(input.value)){isValid=false;errorMsg="Please enter a valid link (e.g. https://...)"}
+    else if((input.type==="number"||name==="semester")&&input.value&&!/^[1-9][0-9]?$/.test(input.value.trim())){isValid=false;errorMsg="Please enter a valid semester number (e.g. 4)"}
   }
   if(isRadio){
     var checked=form.querySelector("[name=\""+name+"\"]:checked");
@@ -699,8 +687,50 @@ if(form)form.addEventListener("submit",function(e){
   }
   submitBtn.disabled=true;
   var original=submitBtn.textContent;
-  submitBtn.textContent="Submittingâ€¦";
+  submitBtn.textContent="Submitting…";
   var row=buildRegistrationRow();
+
+  // Send real-time data payload to Google Sheets Webhook
+  var sheetWebhookUrl = "https://script.google.com/macros/s/AKfycbyiocTwcWP6Fc2obdIuWnX7M8X62DtkEDKpY1q0iH3l8UOk4uokopCyKi-z5wM9bqrOvg/exec";
+  var sheetPayload = {
+    fullName: row.full_name || "",
+    email: row.email || "",
+    contact: row.contact_number || "",
+    faculty: row.faculty || "",
+    programme: row.programme || "",
+    semester: row.semester_division || "",
+    enrollmentNumber: row.enrollment_number || "",
+    hasUniEmail: row.has_uni_email ? "Yes" : "No",
+    uniEmail: row.uni_email || "",
+    personalEmail: row.personal_email || "",
+    studentStatus: row.student_status || "",
+    whyInterested: row.why_interested || "",
+    hasIdea: row.has_idea || "",
+    ideaPitch: row.idea_description || "",
+    excitement: Array.isArray(row.excitement_level) ? row.excitement_level.join(", ") : (row.excitement_level || ""),
+    macAccess: row.mac_ipad_access || "",
+    deviceFrequency: row.device_access_frequency || "",
+    prepHours: row.prep_hours_per_week || "",
+    appExperience: row.app_dev_experience || "",
+    appleExperience: row.apple_ecosystem_familiarity || "",
+    independence: row.independence_level || "",
+    prevCompetitions: row.previous_competitions ? "Yes" : "No",
+    commitmentLevel: row.commitment_level || "",
+    programHours: row.hours_per_week_program || "",
+    attendSessions: row.willing_to_attend || "",
+    github: row.github_url || "",
+    linkedin: row.linkedin_url || "",
+    portfolio: row.portfolio_url || "",
+    additionalComments: row.anything_else || ""
+  };
+
+  fetch(sheetWebhookUrl, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(sheetPayload)
+  }).catch(function(err){ console.error("Google Sheets sync error:", err); });
+
   supabase.from("registrations").insert([row],{returning:"minimal"}).then(function(res){ fetch("/api/confirm",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:row.email,full_name:row.full_name})}).catch(function(){});
     if(res.error)throw res.error;
     showSuccess(row.email);
@@ -860,13 +890,9 @@ function toggleVerificationFields() {
     }
     if (uniEmailInput) {
       uniEmailInput.setAttribute("required", "required");
-      uniEmailInput.setAttribute("readonly", "readonly");
-      uniEmailInput.style.opacity = "0.75";
-      uniEmailInput.style.cursor = "not-allowed";
-      var enrollVal = document.getElementById("enrollmentNumber") ? document.getElementById("enrollmentNumber").value.trim() : "";
-      if (enrollVal) {
-        uniEmailInput.value = enrollVal.toLowerCase() + "@paruluniversity.ac.in";
-      }
+      uniEmailInput.removeAttribute("readonly");
+      uniEmailInput.style.opacity = "";
+      uniEmailInput.style.cursor = "";
     }
     if (personalEmailGroup) personalEmailGroup.classList.add("hidden");
     if (studentStatusGroup) studentStatusGroup.classList.add("hidden");
@@ -894,7 +920,6 @@ function toggleVerificationFields() {
     if (studentStatusGroup) studentStatusGroup.classList.remove("hidden");
     if (personalEmailInput) {
       personalEmailInput.setAttribute("required", "required");
-      // Pre-fill with main email if currently blank
       if (!personalEmailInput.value && emailInput) {
         personalEmailInput.value = emailInput.value;
       }
@@ -909,48 +934,21 @@ function toggleVerificationFields() {
    INIT
    ============================================ */
 document.addEventListener("DOMContentLoaded",function(){
-  /* Lenis smooth-scroll and the mouse-driven parallax are desktop-only.
-     On touch / low-end devices they either misbehave (Lenis) or just burn
-     frames for no benefit, so we fall back to native scroll + no parallax. */
   var canHover = window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-  if(canHover) initLenis();
+  if(canHover) {
+    initLenis();
+    initTilt();
+    initMagneticButtons();
+    initDeviceParallax();
+  }
   initGSAP();
-  initTilt();
-  initMagneticButtons();
   initTouchRipple();
   initToastContainer();
-  if(canHover) initDeviceParallax();
 
   // Listen for changes on hasUniEmail radio buttons
   document.querySelectorAll('input[name="hasUniEmail"]').forEach(function(radio) {
     radio.addEventListener("change", toggleVerificationFields);
   });
-
-  // Dynamically sync university email to match [enrollment]@paruluniversity.ac.in
-  var enrollInput = document.getElementById("enrollmentNumber");
-  var uniEmailInput = document.getElementById("uniEmail");
-  if (enrollInput && uniEmailInput) {
-    enrollInput.addEventListener("input", function() {
-      var selected = document.querySelector('input[name="hasUniEmail"]:checked');
-      if (selected && selected.value === "Yes") {
-        var val = enrollInput.value.trim();
-        if (val) {
-          uniEmailInput.value = val.toLowerCase() + "@paruluniversity.ac.in";
-          // Clear validation errors on uniEmail since it's auto-generated correctly
-          var fieldGroup = uniEmailInput.closest(".field-group");
-          var errorEl = fieldGroup ? fieldGroup.querySelector(".field-error") : null;
-          if (errorEl) {
-            errorEl.textContent = "";
-            errorEl.classList.remove("visible");
-          }
-          uniEmailInput.classList.remove("error");
-          if (fieldGroup) fieldGroup.classList.remove("has-error");
-        } else {
-          uniEmailInput.value = "";
-        }
-      }
-    });
-  }
 
   /* On the apply page the form is visible immediately â€” restore any
      previously saved progress (Google-Forms-style resume) and jump to

@@ -67,11 +67,11 @@
 
     <div class="progress-wrapper">
       <div class="progress-bar">
-        <div id="progressFill" class="progress-fill" style="width: 25%"></div>
+        <div id="progressFill" class="progress-fill" style="width: 20%"></div>
       </div>
       <div class="progress-info">
-        <span id="progressStep">Step 1 of 4</span>
-        <span id="progressPercent">25%</span>
+        <span id="progressStep">Step 1 of 5</span>
+        <span id="progressPercent">20%</span>
       </div>
     </div>
 
@@ -101,17 +101,17 @@
               <label class="custom-radio">
                 <input type="radio" name="hasIdea" value="Yes" required>
                 <span class="radio-mark"></span>
-                Yes
+                Yes, I have an app idea
               </label>
               <label class="custom-radio">
-                <input type="radio" name="hasIdea" value="No">
+                <input type="radio" name="hasIdea" value="A few ideas">
                 <span class="radio-mark"></span>
-                No
+                I have a few ideas
               </label>
               <label class="custom-radio">
-                <input type="radio" name="hasIdea" value="Rough concept">
+                <input type="radio" name="hasIdea" value="Not yet">
                 <span class="radio-mark"></span>
-                Rough concept
+                Not yet, looking for inspiration
               </label>
             </div>
             <span class="field-error"></span>
@@ -245,29 +245,32 @@
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="semester">Semester *</label>
-            <input class="field-input" type="text" id="semester" name="semester" placeholder="e.g. 4th" required>
+            <label class="field-label" for="semester">Semester (Number Only) *</label>
+            <input class="field-input" type="number" id="semester" name="semester" min="1" max="10" placeholder="e.g. 4" required>
             <span class="field-error"></span>
           </div>
 
           <div class="field-group">
             <label class="field-label" for="division">Division</label>
-            <input class="field-input" type="text" id="division" name="division" placeholder="e.g. A">
+            <input class="field-input" type="text" id="division" name="division" placeholder="e.g. 3AIML13">
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="github">GitHub Profile</label>
+            <label class="field-label" for="github">GitHub Profile Link</label>
             <input class="field-input" type="url" id="github" name="github" placeholder="https://github.com/username">
+            <span class="field-error"></span>
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="linkedin">LinkedIn Profile</label>
+            <label class="field-label" for="linkedin">LinkedIn Profile Link</label>
             <input class="field-input" type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/username">
+            <span class="field-error"></span>
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="portfolio">Portfolio Website</label>
+            <label class="field-label" for="portfolio">Portfolio Website Link</label>
             <input class="field-input" type="url" id="portfolio" name="portfolio" placeholder="https://yoursite.com">
+            <span class="field-error"></span>
           </div>
 
           <div class="field-group">
@@ -287,55 +290,63 @@
             <span class="field-error"></span>
           </div>
 
-          <div class="field-group" id="uniEmailGroup">
-            <label class="field-label" for="uniEmail">University Email <span class="optional-tag">(optional)</span></label>
-            <span class="field-hint">Only if you have one — leave blank otherwise.</span>
-            <input class="field-input" type="email" id="uniEmail" name="uniEmail" placeholder="yourname@paruluniversity.ac.in">
-            <span class="field-error"></span>
-          </div>
+          <!-- Student Verification & Enrollment Section -->
+          <div class="verification-box glass-card sub-card" style="margin-top:24px;padding:22px;border:1px solid rgba(255,255,255,0.12);border-radius:12px;background:rgba(255,255,255,0.03);">
+            <h3 style="font-size:16px;font-weight:600;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--swift)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              Student Verification &amp; Enrollment Details
+            </h3>
 
-          <div class="field-group" id="personalEmailGroup">
-            <label class="field-label" for="personalEmail">Personal Email *</label>
-            <input class="field-input" type="email" id="personalEmail" name="personalEmail" placeholder="your.email@gmail.com" required>
-            <span class="field-error"></span>
-          </div>
-
-          <div class="field-group" id="studentStatusGroup">
-            <label class="field-label">Student Status *</label>
-            <div class="radio-group">
-              <label class="custom-radio">
-                <input type="radio" name="studentStatus" value="Fresher" required>
-                <span class="radio-mark"></span>
-                Fresher
-              </label>
-              <label class="custom-radio">
-                <input type="radio" name="studentStatus" value="D2D">
-                <span class="radio-mark"></span>
-                D2D
-              </label>
-              <label class="custom-radio">
-                <input type="radio" name="studentStatus" value="Other">
-                <span class="radio-mark"></span>
-                Other
-              </label>
-              <input class="field-input other-writein hidden" type="text" placeholder="Please specify your status">
+            <div class="field-group">
+              <label class="field-label" for="enrollmentNumber">Enrollment Number / Student ID *</label>
+              <input class="field-input" type="text" id="enrollmentNumber" name="enrollmentNumber" placeholder="Enter your enrollment number (e.g. 23030412345)" required>
+              <span class="field-error"></span>
             </div>
-            <span class="field-error"></span>
-          </div>
 
-          <div class="field-group">
-            <label class="field-label" for="enrollmentNumber">Enrollment Number / ID *</label>
-            <input class="field-input" type="text" id="enrollmentNumber" name="enrollmentNumber" placeholder="Your enrollment number or ID" required>
-            <span class="field-error"></span>
+            <div class="field-group" id="uniEmailGroup">
+              <label class="field-label" for="uniEmail">University Email *</label>
+              <span class="field-hint">Enter your official university email (e.g. yourname@paruluniversity.ac.in).</span>
+              <input class="field-input" type="email" id="uniEmail" name="uniEmail" placeholder="yourname@paruluniversity.ac.in">
+              <span class="field-error"></span>
+            </div>
+
+            <div class="field-group" id="personalEmailGroup">
+              <label class="field-label" for="personalEmail">Personal Email *</label>
+              <input class="field-input" type="email" id="personalEmail" name="personalEmail" placeholder="your.email@gmail.com" required>
+              <span class="field-error"></span>
+            </div>
+
+            <div class="field-group" id="studentStatusGroup">
+              <label class="field-label">Student Status *</label>
+              <div class="radio-group">
+                <label class="custom-radio">
+                  <input type="radio" name="studentStatus" value="Fresher" required>
+                  <span class="radio-mark"></span>
+                  Fresher
+                </label>
+                <label class="custom-radio">
+                  <input type="radio" name="studentStatus" value="D2D">
+                  <span class="radio-mark"></span>
+                  D2D
+                </label>
+                <label class="custom-radio">
+                  <input type="radio" name="studentStatus" value="Other">
+                  <span class="radio-mark"></span>
+                  Other
+                </label>
+                <input class="field-input other-writein hidden" type="text" placeholder="Please specify your status">
+              </div>
+              <span class="field-error"></span>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Page 3: Device, Experience & Commitment -->
+      <!-- Page 3: Hardware & Device Access -->
       <div class="form-page" data-page="3">
         <div class="glass-card liquid-glass">
-          <h2 class="step-title">Step 3: Device, Experience &amp; Commitment</h2>
-          <p class="step-desc">Help us understand your hardware access, background, and availability.</p>
+          <h2 class="step-title">Step 3: Hardware &amp; Device Access</h2>
+          <p class="step-desc">Help us understand your hardware access and weekly preparation availability.</p>
 
           <div class="field-group">
             <label class="field-label">Mac Access *</label>
@@ -422,6 +433,14 @@
             </div>
             <span class="field-error"></span>
           </div>
+        </div>
+      </div>
+
+      <!-- Page 4: Experience & Ecosystem Background -->
+      <div class="form-page" data-page="4">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Step 4: Experience &amp; Ecosystem Background</h2>
+          <p class="step-desc">Tell us about your development experience, Apple platform familiarity, and interests.</p>
 
           <div class="field-group">
             <label class="field-label">App Development Experience *</label>
@@ -556,6 +575,14 @@
             <label class="field-label" for="competitionDetails">Competition Details</label>
             <textarea class="field-textarea" id="competitionDetails" name="competitionDetails" rows="3" placeholder="Tell us about any previous competitions you've participated in..."></textarea>
           </div>
+        </div>
+      </div>
+
+      <!-- Page 5: Commitment, Consent & Submission -->
+      <div class="form-page" data-page="5">
+        <div class="glass-card liquid-glass">
+          <h2 class="step-title">Step 5: Commitment, Consent &amp; Submission</h2>
+          <p class="step-desc">Please review your program commitment and confirm your application details before submitting.</p>
 
           <div class="field-group">
             <label class="field-label">Commitment Level *</label>
@@ -633,17 +660,12 @@
           </div>
 
           <div class="field-group">
-            <label class="field-label">Can you attend regular sessions? *</label>
+            <label class="field-label">Willing to attend guided sessions? *</label>
             <div class="radio-group">
               <label class="custom-radio">
                 <input type="radio" name="attendSessions" value="Yes" required>
                 <span class="radio-mark"></span>
                 Yes
-              </label>
-              <label class="custom-radio">
-                <input type="radio" name="attendSessions" value="Maybe">
-                <span class="radio-mark"></span>
-                Maybe
               </label>
               <label class="custom-radio">
                 <input type="radio" name="attendSessions" value="No">
@@ -653,14 +675,6 @@
             </div>
             <span class="field-error"></span>
           </div>
-        </div>
-      </div>
-
-      <!-- Page 4: Confirmation & Consent -->
-      <div class="form-page" data-page="4">
-        <div class="glass-card liquid-glass">
-          <h2 class="step-title">Step 4: Confirmation &amp; Consent</h2>
-          <p class="step-desc">Please review and confirm your details before submitting.</p>
 
           <div class="field-group">
             <label class="field-label">I confirm all information provided is accurate *</label>
@@ -733,7 +747,7 @@
 <div class="success-card glass-card liquid-glass guideline-card">
       <img src="assets/swift-nav.png" alt="Swift" class="success-swift" style="display:block;margin:0 auto 1.5rem;width:72px;height:auto;">
       <div class="success-title">Application Recorded!</div>
-      <div class="success-desc">Your response has been recorded and is now with our team at AATCe, Parul University for review.</div>
+      <div class="success-desc">Your response has been recorded and is now with our team at Swift Coding Club, Parul University for review.</div>
       <div class="success-email-box">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 7 9-7"/></svg>
         <span>Confirmation email will be sent to <strong id="successEmail" class="success-email"></strong> shortly.</span>
@@ -746,7 +760,7 @@
     <div class="footer-inner">
       <img src="assets/swift-logo.svg" alt="Swift" class="footer-img">
       <p class="footer-title">Swift Student Challenge 2027</p>
-      <p class="footer-sub">AATCe Parul University</p>
+      <p class="footer-sub">Swift Coding Club · Parul University</p>
     </div>
   </footer>
 
