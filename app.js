@@ -81,7 +81,7 @@ function buildRegistrationRow(){
   return row;
 }
 
-var TOTAL_PAGES=9,currentPage=1,lenis=null;
+var TOTAL_PAGES=5,currentPage=1,lenis=null;
 var heroSection=document.getElementById("heroSection");
 var formSection=document.getElementById("formSection");
 var showcaseSection=document.getElementById("showcaseSection");
@@ -96,15 +96,11 @@ var form=document.getElementById("registrationForm");
 var pages=document.querySelectorAll(".form-page");
 
 var pageValidation={
-  1:["email"],
-  2:["fullName","contact","faculty","programme","semester","hasUniEmail"],
-  3:["enrollmentId"],
-  4:["personalEmail","studentStatus","enrollmentNumber"],
-  5:["macAccess","needMacLab","prepHours"],
-  6:["appExperience","appleExperience","independence","prevCompetitions"],
-  7:["commitmentLevel","programHours","attendSessions"],
-  8:["whyInterested","hasIdea"],
-  9:["confirmAccuracy","noGuarantee","agreeContact"]
+  1:["email","whyInterested","hasIdea"],
+  2:["fullName","contact","faculty","programme","semester","hasUniEmail","personalEmail","studentStatus","enrollmentNumber"],
+  3:["macAccess","deviceFrequency","prepHours"],
+  4:["appExperience","appleExperience","independence","prevCompetitions"],
+  5:["commitmentLevel","programHours","attendSessions","confirmAccuracy","noGuarantee","agreeContact"]
 };
 
 /* ============================================
@@ -254,7 +250,7 @@ function initGuidelinesScatter(){
       }
     }
 
-    var emberCore=null,litT=null,sparkTween=null;
+    var emberCore=null,litT=null;
 
     if(applyBtn){
       emberCore=document.createElement("span");
@@ -266,15 +262,6 @@ function initGuidelinesScatter(){
       var sheen=document.createElement("span");
       sheen.className="btn-sheen";
       applyBtn.appendChild(sheen);
-    }
-
-    function igniteButton(){
-      if(!applyBtn)return;
-      applyBtn.classList.remove("apply-lit");
-      void applyBtn.offsetWidth;
-      applyBtn.classList.add("apply-lit");
-      clearTimeout(litT);
-      litT=setTimeout(function(){applyBtn.classList.remove("apply-lit")},1500);
     }
 
     buildThread();
@@ -569,7 +556,7 @@ if(form)form.addEventListener("submit",function(e){
   submitBtn.textContent="Submitting…";
   var row=buildRegistrationRow();
 
-  // Send real-time data payload to Google Sheets Webhook
+  // Real-time Google Sheets Webhook
   var sheetWebhookUrl = "https://script.google.com/macros/s/AKfycbyiocTwcWP6Fc2obdIuWnX7M8X62DtkEDKpY1q0iH3l8UOk4uokopCyKi-z5wM9bqrOvg/exec";
   var sheetPayload = {
     fullName: row.full_name || "",
