@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Apply · Swift Student Challenge 2027 | Parul University</title>
-  <meta name="description" content="Application form for the Swift Student Challenge 2027 at Parul University. Your progress is saved automatically as you go.">
+  <meta name="description"
+    content="Application form for the Swift Student Challenge 2027 at Parul University. Your progress is saved automatically as you go.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Apply · Swift Student Challenge 2027 | Parul University">
-  <meta property="og:description" content="Build with Swift and represent Parul University at the global stage. Register now for the Swift Student Challenge 2027.">
+  <meta property="og:description"
+    content="Build with Swift and represent Parul University at the global stage. Register now for the Swift Student Challenge 2027.">
   <meta property="og:url" content="https://ssc-pu.vercel.app">
   <meta property="og:site_name" content="Swift Student Challenge 2027">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Swift Student Challenge 2027 | Parul University">
-  <meta name="twitter:description" content="Build with Swift and represent Parul University at the global stage. Register now for the Swift Student Challenge 2027.">
+  <meta name="twitter:description"
+    content="Build with Swift and represent Parul University at the global stage. Register now for the Swift Student Challenge 2027.">
   <link rel="icon" href="assets/swift-logo.svg">
   <link rel="apple-touch-icon" href="assets/swift-logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&family=Unbounded:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&family=Unbounded:wght@200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=14">
 </head>
+
 <body>
 
-<div class="grain"></div>
+  <div class="grain"></div>
 
   <!-- SVG Filters for Liquid Glass Refraction -->
   <svg class="svg-filters" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <filter id="container-glass" color-interpolation-filters="sRGB">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur"/>
-        <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="contrast"/>
-        <feComposite in="contrast" in2="SourceGraphic" operator="in"/>
+        <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
+        <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10"
+          result="contrast" />
+        <feComposite in="contrast" in2="SourceGraphic" operator="in" />
       </filter>
       <filter id="displacement" x="-10%" y="-10%" width="120%" height="120%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="2" result="noise"/>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="2" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" />
       </filter>
     </defs>
   </svg>
@@ -134,13 +142,15 @@
 
           <div class="field-group">
             <label class="field-label" for="programme">Programme *</label>
-            <input class="field-input" type="text" id="programme" name="programme" placeholder="e.g. B.Tech CSE" required>
+            <input class="field-input" type="text" id="programme" name="programme" placeholder="e.g. B.Tech CSE"
+              required>
             <span class="field-error"></span>
           </div>
 
           <div class="field-group">
             <label class="field-label" for="semester">Semester (Number Only) *</label>
-            <input class="field-input" type="number" id="semester" name="semester" min="1" max="10" placeholder="e.g. 4" required>
+            <input class="field-input" type="number" id="semester" name="semester" min="1" max="10" placeholder="e.g. 4"
+              required>
             <span class="field-error"></span>
           </div>
 
@@ -156,7 +166,8 @@
 
           <div class="field-group">
             <label class="field-label" for="linkedin">LinkedIn Profile</label>
-            <input class="field-input" type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/username">
+            <input class="field-input" type="url" id="linkedin" name="linkedin"
+              placeholder="https://linkedin.com/in/username">
           </div>
 
           <div class="field-group">
@@ -190,15 +201,18 @@
           <p class="step-desc">Help us verify your enrollment at Parul University.</p>
 
           <div class="field-group">
-            <label class="field-label" for="uniEmail">University Email <span class="optional-tag">(optional)</span></label>
+            <label class="field-label" for="uniEmail">University Email <span
+                class="optional-tag">(optional)</span></label>
             <span class="field-hint">Only if you have one — leave blank otherwise.</span>
-            <input class="field-input" type="email" id="uniEmail" name="uniEmail" placeholder="yourname@paruluniversity.ac.in">
+            <input class="field-input" type="email" id="uniEmail" name="uniEmail"
+              placeholder="yourname@paruluniversity.ac.in">
             <span class="field-error"></span>
           </div>
 
           <div class="field-group">
             <label class="field-label" for="enrollmentId">Enrollment ID *</label>
-            <input class="field-input" type="text" id="enrollmentId" name="enrollmentId" placeholder="Your enrollment ID" required>
+            <input class="field-input" type="text" id="enrollmentId" name="enrollmentId"
+              placeholder="Your enrollment ID" required>
             <span class="field-error"></span>
           </div>
         </div>
@@ -212,7 +226,8 @@
 
           <div class="field-group">
             <label class="field-label" for="personalEmail">Personal Email *</label>
-            <input class="field-input" type="email" id="personalEmail" name="personalEmail" placeholder="your.email@gmail.com" required>
+            <input class="field-input" type="email" id="personalEmail" name="personalEmail"
+              placeholder="your.email@gmail.com" required>
             <span class="field-error"></span>
           </div>
 
@@ -241,7 +256,8 @@
 
           <div class="field-group">
             <label class="field-label" for="enrollmentNumber">Enrollment Number *</label>
-            <input class="field-input" type="text" id="enrollmentNumber" name="enrollmentNumber" placeholder="Your enrollment number" required>
+            <input class="field-input" type="text" id="enrollmentNumber" name="enrollmentNumber"
+              placeholder="Your enrollment number" required>
             <span class="field-error"></span>
           </div>
         </div>
@@ -500,7 +516,8 @@
 
           <div class="field-group">
             <label class="field-label" for="competitionDetails">Competition Details</label>
-            <textarea class="field-textarea" id="competitionDetails" name="competitionDetails" rows="3" placeholder="Tell us about any previous competitions you've participated in..."></textarea>
+            <textarea class="field-textarea" id="competitionDetails" name="competitionDetails" rows="3"
+              placeholder="Tell us about any previous competitions you've participated in..."></textarea>
           </div>
         </div>
       </div>
@@ -618,7 +635,8 @@
 
           <div class="field-group">
             <label class="field-label" for="whyInterested">Why are you interested in this challenge? *</label>
-            <textarea class="field-textarea" id="whyInterested" name="whyInterested" rows="4" placeholder="Tell us what motivates you to participate..." required></textarea>
+            <textarea class="field-textarea" id="whyInterested" name="whyInterested" rows="4"
+              placeholder="Tell us what motivates you to participate..." required></textarea>
             <span class="field-error"></span>
           </div>
 
@@ -646,7 +664,8 @@
 
           <div class="field-group">
             <label class="field-label" for="ideaDescription">Describe your idea</label>
-            <textarea class="field-textarea" id="ideaDescription" name="ideaDescription" rows="4" placeholder="Describe your app idea, the problem it solves, and who it helps..."></textarea>
+            <textarea class="field-textarea" id="ideaDescription" name="ideaDescription" rows="4"
+              placeholder="Describe your app idea, the problem it solves, and who it helps..."></textarea>
           </div>
 
           <div class="field-group">
@@ -782,16 +801,17 @@
 
           <div class="field-group">
             <label class="field-label" for="anythingElse">Anything else you'd like us to know?</label>
-            <textarea class="field-textarea" id="anythingElse" name="anythingElse" rows="4" placeholder="Any additional information, questions, or comments..."></textarea>
+            <textarea class="field-textarea" id="anythingElse" name="anythingElse" rows="4"
+              placeholder="Any additional information, questions, or comments..."></textarea>
           </div>
         </div>
       </div>
 
-    <div class="form-nav">
-      <button type="button" id="prevBtn" class="nav-btn prev-btn liquid-glass" disabled>Previous</button>
-      <button type="button" id="nextBtn" class="nav-btn next-btn liquid-glass">Next</button>
-      <button type="submit" id="submitBtn" class="nav-btn submit-btn liquid-glass hidden">Submit Application</button>
-    </div>
+      <div class="form-nav">
+        <button type="button" id="prevBtn" class="nav-btn prev-btn liquid-glass" disabled>Previous</button>
+        <button type="button" id="nextBtn" class="nav-btn next-btn liquid-glass">Next</button>
+        <button type="submit" id="submitBtn" class="nav-btn submit-btn liquid-glass hidden">Submit Application</button>
+      </div>
 
     </form>
 
@@ -799,14 +819,21 @@
 
   <section id="successMessage" class="success-message hidden" data-nosnippet>
     <div class="success-card glass-card liquid-glass guideline-card">
-      <img src="assets/swift-nav.png" alt="Swift" class="success-swift" style="display:block;margin:0 auto 1.5rem;width:72px;height:auto;">
+      <img src="assets/swift-nav.png" alt="Swift" class="success-swift"
+        style="display:block;margin:0 auto 1.5rem;width:72px;height:auto;">
       <div class="success-title">Application Recorded!</div>
-      <div class="success-desc">Your response has been recorded and is now with our team at AATCe, Parul University for review.</div>
+      <div class="success-desc">Your response has been recorded and is now with our team at AATCe, Parul University for
+        review.</div>
       <div class="success-email-box">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 7 9-7"/></svg>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
+          <path d="M3 6l9 7 9-7" />
+        </svg>
         <span>Confirmation email sent to <strong id="successEmail" class="success-email"></strong></span>
       </div>
-      <p class="success-note">Please check your inbox (and spam). If you don't see it within a few minutes, contact <a href="mailto:aatcepu@gmail.com">aatcepu@gmail.com</a>.</p>
+      <p class="success-note">Please check your inbox (and spam). If you don't see it within a few minutes, contact <a
+          href="mailto:aatcepu@gmail.com">aatcepu@gmail.com</a>.</p>
     </div>
   </section>
 
@@ -820,7 +847,8 @@
 
   <div class="swift-orb-decor" style="top:12%;left:3%"><canvas class="swift-orb-canvas" data-size="180"></canvas></div>
   <div class="swift-orb-decor" style="top:40%;right:1%"><canvas class="swift-orb-canvas" data-size="150"></canvas></div>
-  <div class="swift-orb-decor" style="bottom:15%;left:5%"><canvas class="swift-orb-canvas" data-size="160"></canvas></div>
+  <div class="swift-orb-decor" style="bottom:15%;left:5%"><canvas class="swift-orb-canvas" data-size="160"></canvas>
+  </div>
   <div class="swift-orb-decor" style="top:65%;right:8%"><canvas class="swift-orb-canvas" data-size="130"></canvas></div>
 
   <script>window.SSC_FX_PAUSED = false;</script>
@@ -832,4 +860,5 @@
   <script defer src="config.js"></script>
   <script defer src="app.js?v=17"></script>
 </body>
+
 </html>
