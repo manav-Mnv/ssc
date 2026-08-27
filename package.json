@@ -1,9 +1,1 @@
-﻿{
-  "name": "ssc-registration",
-  "version": "1.0.0",
-  "description": "Swift Student Challenge 2027 Registration Portal",
-  "dependencies": {
-    "@supabase/supabase-js": "^2.39.8",
-    "nodemailer": "^6.9.9"
-  }
-}
+{"name":"ssc-registration","version":"1.0.0","dependencies":{"@supabase/supabase-js":"^2.39.8","nodemailer":"^6.9.9"}}
