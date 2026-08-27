@@ -60,7 +60,7 @@
   </header>
 
   <div class="apply-topbar">
-    <a href="/" class="nav-btn prev-btn liquid-glass">&larr; Back to Site</a>
+    <button type="button" class="nav-btn back-to-site-btn liquid-glass" onclick="history.length > 1 ? history.back() : (location.href = '/')">&larr; Back to Site</button>
   </div>
 
   <section id="formSection" class="form-section">
@@ -212,7 +212,8 @@
 
           <div class="field-group">
             <label class="field-label" for="contact">Contact / WhatsApp Number *</label>
-            <input class="field-input" type="tel" id="contact" name="contact" placeholder="+91 XXXXX XXXXX" required>
+            <span class="field-hint">Enter your 10-digit mobile number (e.g. 9876543210).</span>
+            <input class="field-input" type="tel" id="contact" name="contact" placeholder="10-digit mobile number" required>
             <span class="field-error"></span>
           </div>
 
@@ -306,8 +307,8 @@
 
             <div class="field-group" id="uniEmailGroup">
               <label class="field-label" for="uniEmail">University Email *</label>
-              <span class="field-hint">Enter your official university email (e.g. yourname@paruluniversity.ac.in).</span>
-              <input class="field-input" type="email" id="uniEmail" name="uniEmail" placeholder="yourname@paruluniversity.ac.in">
+              <span class="field-hint">Enter your official university email (e.g. enrollment@paruluniversity.ac.in).</span>
+              <input class="field-input" type="email" id="uniEmail" name="uniEmail" placeholder="enrollment@paruluniversity.ac.in">
               <span class="field-error"></span>
             </div>
 
@@ -520,28 +521,6 @@
           </div>
 
           <div class="field-group">
-            <label class="field-label">Independence Level *</label>
-            <div class="radio-group">
-              <label class="custom-radio">
-                <input type="radio" name="independence" value="Low" required>
-                <span class="radio-mark"></span>
-                Low
-              </label>
-              <label class="custom-radio">
-                <input type="radio" name="independence" value="Medium">
-                <span class="radio-mark"></span>
-                Medium
-              </label>
-              <label class="custom-radio">
-                <input type="radio" name="independence" value="High">
-                <span class="radio-mark"></span>
-                High
-              </label>
-            </div>
-            <span class="field-error"></span>
-          </div>
-
-          <div class="field-group">
             <label class="field-label">Interests</label>
             <div class="checkbox-group">
               <label class="custom-checkbox">
@@ -597,6 +576,17 @@
           <div class="field-group">
             <label class="field-label" for="competitionDetails">Competition Details</label>
             <textarea class="field-textarea" id="competitionDetails" name="competitionDetails" rows="3" placeholder="Tell us about any previous competitions you've participated in..."></textarea>
+          </div>
+
+          <!-- Apple Lab Notice -->
+          <div class="apple-lab-notice">
+            <div class="apple-lab-notice-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="apple-lab-notice-text">
+              <strong>Need help or have questions?</strong>
+              <p>Feel free to visit the <strong>Apple Lab</strong> at C.V. Raman Building, Parul University — our team is happy to guide you through the process.</p>
+            </div>
           </div>
         </div>
       </div>

@@ -38,12 +38,64 @@ html.lenis,html.lenis body{height:auto}
 
 body{
   background:#0a0a0a;
+  background-image:
+    radial-gradient(ellipse at 30% 20%, rgba(240,81,35,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 80%, rgba(242,150,60,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 40%, rgba(30,10,5,0.8) 0%, transparent 70%);
   color:#fff;
   font-family:var(--font-body);
   font-size:clamp(1rem,.9rem + .3vw,1.125rem);
   line-height:1.6;
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
+}
+
+/* ---- Back to Site Button ---- */
+.back-to-site-btn{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-family:var(--font-body);
+  font-size:0.85rem;
+  color:rgba(255,255,255,0.75);
+  padding:0.45rem 1rem;
+  border-radius:var(--radius-sm);
+  transition:color .2s,transform .2s;
+}
+.back-to-site-btn:hover{
+  color:#fff;
+  transform:translateX(-2px);
+}
+
+/* ---- Apple Lab Notice ---- */
+.apple-lab-notice{
+  display:flex;
+  align-items:flex-start;
+  gap:0.75rem;
+  margin-top:1.5rem;
+  padding:1rem 1.25rem;
+  border-radius:var(--radius-sm);
+  background:rgba(240,81,35,0.08);
+  border:1px solid rgba(240,81,35,0.22);
+  color:rgba(255,255,255,0.85);
+  font-size:0.88rem;
+  line-height:1.5;
+}
+.apple-lab-notice-icon{
+  flex-shrink:0;
+  color:var(--swift);
+  margin-top:2px;
+}
+.apple-lab-notice-text strong{
+  display:block;
+  color:#fff;
+  font-weight:600;
+  margin-bottom:0.25rem;
+  font-size:0.9rem;
+}
+.apple-lab-notice-text p{
+  color:rgba(255,255,255,0.7);
+  margin:0;
 }
 
 ::selection{background:var(--hot);color:#fff}
