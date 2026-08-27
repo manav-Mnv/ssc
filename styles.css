@@ -166,8 +166,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   60%{transform:translate(12%,0)}70%{transform:translate(0,12%)}80%{transform:translate(3%,18%)}90%{transform:translate(-8%,8%)}
 }
 
-/* ---- Ambient Blobs ---- */
-.blobs{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+/* ---- Ambient Blobs (disabled to let pure WebGL plasma shader render cleanly) ---- */
+.blobs{display:none !important}
 .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.45;will-change:transform}
 .b1{width:55vmax;height:55vmax;background:var(--pink);top:-18%;left:-14%;animation:drift1 26s ease-in-out infinite alternate}
 .b2{width:50vmax;height:50vmax;background:var(--blue);bottom:-24%;right:-16%;animation:drift2 32s ease-in-out infinite alternate}

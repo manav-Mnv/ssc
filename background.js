@@ -193,13 +193,13 @@ void main(){
 }`;
 
     const U = {
-      colors: [[0.04,0.04,0.05],[0.05,0.05,0.06],[0.06,0.06,0.07],[0.04,0.04,0.05],[0.04,0.04,0.05],[0.04,0.04,0.05],[0.04,0.04,0.05],[0.04,0.04,0.05]],
-      colorCount: 4, scale: 1.5, intensity: 0.1, warp: 0.0,
-      detail: 2.4, contrast: 0.90, brightness: -0.45, saturation: 0.8,
-      hue: 0.0, vignette: 0.70, blur: 0.0, grain: 0.25,
-      seed: 7.0, rotate: 0.0, offsetX: 0.0, offsetY: 0.0, drift: 0.0,
-      cursorEffect: 0.0, cursorStrength: 0.0, cursorRadius: 0.0,
-      timeScale: 0.0
+      colors: [[0.12,0.02,0.01],[0.65,0.12,0.04],[0.85,0.35,0.08],[0.95,0.75,0.45],[0.95,0.75,0.45],[0.95,0.75,0.45],[0.95,0.75,0.45],[0.95,0.75,0.45]],
+      colorCount: 4, scale: 1.5, intensity: 0.48, warp: 0.0,
+      detail: 2.4, contrast: 0.924, brightness: -0.45, saturation: 1.1,
+      hue: 0.0, vignette: 0.61, blur: 0.016, grain: 0.3,
+      seed: 7.0, rotate: 0.0, offsetX: 0.0, offsetY: 0.0, drift: 0.1,
+      cursorEffect: 4.0, cursorStrength: 0.65, cursorRadius: 0.297,
+      timeScale: 0.4
     };
 
     const compile = (type, src) => {
