@@ -1,10 +1,10 @@
-
-/* SSC 2027 — Form Logic + GSAP + Lenis + Enhanced Interactions */
+﻿
+/* SSC 2027 â€” Form Logic + GSAP + Lenis + Enhanced Interactions */
 (function(){
 "use strict";
 
 /* ============================================
-   SUPABASE — insert-only anon client
+   SUPABASE â€” insert-only anon client
    ============================================ */
 var SUPABASE_URL=window.SUPABASE_URL||"";
 var SUPABASE_ANON_KEY=window.SUPABASE_ANON_KEY||"";
@@ -128,7 +128,7 @@ function initGSAP(){
   if(typeof gsap==="undefined")return;
   if(typeof ScrollTrigger!=="undefined")gsap.registerPlugin(ScrollTrigger);
 
-  /* Hero entrance — staggered reveal (landing page only) */
+  /* Hero entrance â€” staggered reveal (landing page only) */
   if(heroSection){
     var heroTl=gsap.timeline({delay:0.3});
     heroTl.fromTo(".site-header",{opacity:0,y:-20},{opacity:1,y:0,duration:0.6,ease:"power2.out"});
@@ -138,7 +138,7 @@ function initGSAP(){
     heroTl.fromTo(".hero-desc",{opacity:0,y:20},{opacity:1,y:0,duration:0.5,ease:"power2.out"},"-=0.3");
   }
 
-  /* Guideline cards — scroll-triggered stagger reveal.
+  /* Guideline cards â€” scroll-triggered stagger reveal.
      On large fine-pointer displays the cards get the full scattered
      collage treatment instead (see initGuidelinesScatter). */
   if(typeof ScrollTrigger!=="undefined"){
@@ -151,7 +151,7 @@ function initGSAP(){
   }
 }
 
-/* Desktop-only gate for the scattered panels — strictly no touch/mobile,
+/* Desktop-only gate for the scattered panels â€” strictly no touch/mobile,
    no reduced-motion, and only on genuinely wide viewports. */
 function scatterGuidesOK(){
   return !!(window.matchMedia
@@ -160,13 +160,13 @@ function scatterGuidesOK(){
 }
 
 /* ============================================
-   GUIDELINES SCATTER — desktop / Mac / PC only.
+   GUIDELINES SCATTER â€” desktop / Mac / PC only.
    The panels keep their order and content, but each one
    gets a resting pose (lateral offset + tilt), settles in
    with a scroll-triggered entrance, drifts at its own speed
    while the section scrolls through the viewport (scrubbed
-   parallax à la Codrops' scattered galleries), and wobbles
-   gently at idle. Transform/opacity only — GPU-cheap.
+   parallax Ã  la Codrops' scattered galleries), and wobbles
+   gently at idle. Transform/opacity only â€” GPU-cheap.
    gsap.matchMedia() reverts everything below 1100px.
    ============================================ */
 function initGuidelinesScatter(){
@@ -187,7 +187,7 @@ function initGuidelinesScatter(){
     var cards=gsap.utils.toArray(".guideline-card");
     if(!list||!cards.length)return;
 
-    /* [xOffset px, tilt deg, drift px] — hand-tuned per card so the
+    /* [xOffset px, tilt deg, drift px] â€” hand-tuned per card so the
        collage feels composed, not random */
     var poses=[
       {x:-26,r:-1.3,p: 70},
@@ -217,15 +217,15 @@ function initGuidelinesScatter(){
 
       /* resting scatter pose */
       gsap.set(card,{x:p.x*k,rotation:p.r});
-      /* entrance — rises in while settling from a stronger tilt */
+      /* entrance â€” rises in while settling from a stronger tilt */
       gsap.from(card,{autoAlpha:0,rotation:p.r*2.2,scale:0.96,duration:0.9,ease:"power3.out",
         scrollTrigger:{trigger:card,start:"top 88%",once:true}});
 
-      /* scrubbed drift — each panel floats at its own speed & direction */
+      /* scrubbed drift â€” each panel floats at its own speed & direction */
       gsap.fromTo(card,{y:-p.p*k/2},{y:p.p*k/2,ease:"none",
         scrollTrigger:{trigger:list,start:"top bottom",end:"bottom top",scrub:true}});
 
-      /* idle liquid wobble — rotation composes with the drift */
+      /* idle liquid wobble â€” rotation composes with the drift */
       gsap.to(card,{rotation:p.r+(i%2?0.7:-0.7),duration:2.8+(i%4)*0.45,yoyo:true,repeat:-1,ease:"sine.inOut"});
     });
 
@@ -269,7 +269,7 @@ function initGuidelinesScatter(){
         var my=(pts[i-1].y+pts[i].y)/2;
         d+=" C "+pts[i-1].x+" "+my+", "+pts[i].x+" "+my+", "+pts[i].x+" "+pts[i].y;
       }
-      /* signature tail — ONE sweeping curve off the last panel, rising
+      /* signature tail â€” ONE sweeping curve off the last panel, rising
          over to hover above the Apply button. The droplet falls from
          the tip onto the button. */
       var last=pts[pts.length-1];
@@ -344,7 +344,7 @@ function initGuidelinesScatter(){
       var br=applyBtn.getBoundingClientRect();
       var sx=lr.left+tailTip.x,sy=lr.top+tailTip.y;
       var tx=br.left+br.width/2,ty=br.top+br.height/2;
-      /* off-screen hand-off looks broken — skip this lap */
+      /* off-screen hand-off looks broken â€” skip this lap */
       if(sy<-200||sy>window.innerHeight+300||ty<0||ty>window.innerHeight)return;
 
       var orb=document.createElement("div");
@@ -372,10 +372,10 @@ function initGuidelinesScatter(){
             y:mt*mt*sy+2*mt*t*cy+t*t*ty
           });
         }},0);
-      /* elongates with velocity… */
+      /* elongates with velocityâ€¦ */
       sparkTween.to(orb,{scaleY:1.45,scaleX:.82,duration:dur*0.45,ease:"power1.in"},0);
       sparkTween.to(orb,{rotation:9,duration:dur*0.55,yoyo:true,repeat:1,ease:"sine.inOut"},0);
-      /* …then gets absorbed into the button: shrinks & fades to nothing
+      /* â€¦then gets absorbed into the button: shrinks & fades to nothing
          right as it touches the surface */
       sparkTween.to(orb,{scaleX:.1,scaleY:.26,opacity:0,duration:dur*0.32,ease:"power2.in"},dur*0.68);
     }
@@ -591,7 +591,7 @@ function goToPage(num){
   if(num<1||num>TOTAL_PAGES)return;
   clearValidation();
 
-  /* CSS .active handles a lightweight, GPU-cheap entrance — no per-field
+  /* CSS .active handles a lightweight, GPU-cheap entrance â€” no per-field
      JS animation, so navigation stays smooth on low-end mobile devices. */
   pages.forEach(function(p){p.classList.remove("active")});
   pages[num-1].classList.add("active");
@@ -610,7 +610,7 @@ function goToPage(num){
 }
 
 /* ============================================
-   PROGRESS AUTOSAVE — Google-Forms-style resume.
+   PROGRESS AUTOSAVE â€” Google-Forms-style resume.
    Persists every answer + current step to
    localStorage (wrapped in try/catch so Safari
    private mode and blocked storage never crash).
@@ -699,9 +699,9 @@ if(form)form.addEventListener("submit",function(e){
   }
   submitBtn.disabled=true;
   var original=submitBtn.textContent;
-  submitBtn.textContent="Submitting…";
+  submitBtn.textContent="Submittingâ€¦";
   var row=buildRegistrationRow();
-  supabase.from("registrations").insert([row],{returning:"minimal"}).then(function(res){
+  supabase.from("registrations").insert([row],{returning:"minimal"}).then(function(res){ fetch("/api/confirm",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:row.email,full_name:row.full_name})}).catch(function(){});
     if(res.error)throw res.error;
     showSuccess(row.email);
   }).catch(function(err){
@@ -952,7 +952,7 @@ document.addEventListener("DOMContentLoaded",function(){
     });
   }
 
-  /* On the apply page the form is visible immediately — restore any
+  /* On the apply page the form is visible immediately â€” restore any
      previously saved progress (Google-Forms-style resume) and jump to
      the step the user left off at. */
   if(formSection&&!formSection.classList.contains("hidden")){
@@ -970,3 +970,4 @@ document.addEventListener("DOMContentLoaded",function(){
   }
 });
 })();
+
