@@ -121,7 +121,18 @@
   (() => {
     const canvas = document.getElementById("shaderBg");
     if (!canvas) return;
-    const gl = canvas.getContext("webgl", { antialias: false });
+
+    /* ---- Frame Cache: paint saved JPEG instantly before WebGL draws ---- */
+    const CACHE_KEY = "ssc_bg_frame_v2";
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        document.body.style.backgroundImage =
+          `url(${cached}), ` + getComputedStyle(document.body).backgroundImage;
+      }
+    } catch(e) {}
+
+    const gl = canvas.getContext("webgl", { antialias: false, preserveDrawingBuffer: true });
     if (!gl) return;
 
     const _mq = (q) => window.matchMedia(q).matches;
@@ -297,6 +308,22 @@ void main(){
       gl.uniform4f(uni.space, U.offsetX, U.offsetY, 0, 0);
       gl.uniform4f(uni.cursor, 0, U.cursorEffect, U.cursorStrength, U.cursorRadius);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+      /* ---- Snapshot frame 5 → localStorage cache ---- */
+      if (!render._cached && render._frameCount === undefined) render._frameCount = 0;
+      if (!render._cached) {
+        render._frameCount++;
+        if (render._frameCount === 5) {
+          render._cached = true;
+          try {
+            const snap = canvas.toDataURL("image/jpeg", 0.55);
+            localStorage.setItem(CACHE_KEY, snap);
+            /* once live WebGL is running, remove the static bg fallback */
+            document.body.style.backgroundImage = "";
+          } catch(e) {}
+        }
+      }
+
       requestAnimationFrame(render);
     }
     requestAnimationFrame(render);
