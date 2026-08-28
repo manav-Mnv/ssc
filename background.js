@@ -193,10 +193,10 @@ void main(){
 }`;
 
     const U = {
-      colors: [[0.12,0.02,0.01],[0.65,0.12,0.04],[0.85,0.35,0.08],[0.95,0.75,0.45],[0.95,0.75,0.45],[0.95,0.75,0.45],[0.95,0.75,0.45],[0.95,0.75,0.45]],
+      colors: [[0.22,0.06,0.02],[0.62,0.14,0.04],[0.84,0.36,0.08],[0.95,0.72,0.42],[0.95,0.72,0.42],[0.95,0.72,0.42],[0.95,0.72,0.42],[0.95,0.72,0.42]],
       colorCount: 4, scale: 1.5, intensity: 0.48, warp: 0.0,
-      detail: 2.4, contrast: 0.924, brightness: -0.45, saturation: 1.1,
-      hue: 0.0, vignette: 0.61, blur: 0.016, grain: 0.3,
+      detail: 2.4, contrast: 0.88, brightness: -0.18, saturation: 1.1,
+      hue: 0.0, vignette: 0.42, blur: 0.016, grain: 0.25,
       seed: 7.0, rotate: 0.0, offsetX: 0.0, offsetY: 0.0, drift: 0.1,
       cursorEffect: 4.0, cursorStrength: 0.65, cursorRadius: 0.297,
       timeScale: 0.4
@@ -279,25 +279,12 @@ void main(){
       }
 
       // Live FPS Performance profiling over the first 30 frames (unthrottled to measure raw GPU speed)
-      if (!performanceCheckDone && _lastFrame > 0) {
-        frameTimes.push(now - _lastFrame);
-        if (frameTimes.length >= 30) {
-          performanceCheckDone = true;
-          const avgFrameTime = frameTimes.reduce((a, b) => a + b, 0) / frameTimes.length;
-          
-          if (avgFrameTime > 55) { // < ~18 FPS: Severe lag, reduce to minimum
-            console.warn("Low performance detected (" + Math.round(1000/avgFrameTime) + " FPS). Minimising background shader.");
-            canvas.style.transition = "opacity 2s ease";
-            canvas.style.opacity = "0.18"; // keep a hint of glow, never fully black
-            resolutionScale *= 0.25;
-            resize(resolutionScale);
-          } else if (avgFrameTime > 33) { // < ~30 FPS: Moderate lag, halve resolution
-            console.warn("Low frame rate detected (" + Math.round(1000/avgFrameTime) + " FPS). Reducing WebGL resolution.");
-            resolutionScale *= 0.5;
-            resize(resolutionScale);
-          }
-        }
+      // Immediate quality reduction on confirmed low-power devices (no benchmark delay)
+      if (SSC_LOW) {
+        resolutionScale *= 0.6;
+        resize(resolutionScale);
       }
+      performanceCheckDone = true;
 
       // Apply the 30fps battery-saving throttle ONLY after the benchmark completes
       if (performanceCheckDone) {
