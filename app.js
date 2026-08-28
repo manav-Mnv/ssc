@@ -401,7 +401,16 @@ function validateField(name, silent){
   if(!fieldGroup&&isRadio&&radios[0])fieldGroup=radios[0].closest(".field-group");
   var errorEl=fieldGroup?fieldGroup.querySelector(".field-error"):null;
 
-  // Skip validation if the field's group is hidden
+  // Skip validation if verification box or field group is hidden
+  var verificationBox = document.getElementById("verificationBox");
+  if (verificationBox && verificationBox.classList.contains("hidden") && (input && input.closest("#verificationBox") || (isRadio && radios[0] && radios[0].closest("#verificationBox")))) {
+    if(errorEl){errorEl.textContent="";errorEl.classList.remove("visible")}
+    if(fieldGroup)fieldGroup.classList.remove("has-error");
+    if(input)input.classList.remove("error");
+    if(isRadio){var rg0=radios[0].closest(".radio-group");if(rg0)rg0.classList.remove("error")}
+    return true;
+  }
+
   if (fieldGroup && fieldGroup.classList.contains("hidden")) {
     if(errorEl){errorEl.textContent="";errorEl.classList.remove("visible")}
     if(fieldGroup)fieldGroup.classList.remove("has-error");
@@ -412,6 +421,10 @@ function validateField(name, silent){
 
   if(input&&input.type!=="radio"){
     if(input.required&&!input.value.trim()){isValid=false;errorMsg="This field is required"}
+    else if(name==="uniEmail"&&input.value&&!/^[a-zA-Z0-9._%+-]+@paruluniversity\.ac\.in$/i.test(input.value.trim())){
+      isValid=false;
+      errorMsg="Please enter a valid university email ending with @paruluniversity.ac.in";
+    }
     else if((name==="contact")&&input.value&&!/^(\+91[\s-]?)?[6-9][0-9]{9}$/.test(input.value.replace(/\s/g,""))){isValid=false;errorMsg="Please enter a valid 10-digit mobile number"}
     else if(input.type==="email"&&input.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)){isValid=false;errorMsg="Please enter a valid email address"}
     else if(input.type==="url"&&input.value&&!/^https?:\/\/.+/.test(input.value)){isValid=false;errorMsg="Please enter a valid link (e.g. https://...)"}
@@ -463,15 +476,28 @@ function validatePage(num){
 // Handle conditional verification fields based on uni email availability
 function toggleVerificationFields() {
   var selected = document.querySelector('input[name="hasUniEmail"]:checked');
+  var verificationBox = document.getElementById("verificationBox");
   var uniEmailGroup = document.getElementById("uniEmailGroup");
   var personalEmailGroup = document.getElementById("personalEmailGroup");
   var studentStatusGroup = document.getElementById("studentStatusGroup");
   var personalEmailInput = document.getElementById("personalEmail");
   var uniEmailInput = document.getElementById("uniEmail");
+  var enrollmentNumberInput = document.getElementById("enrollmentNumber");
   var emailInput = document.getElementById("email");
   var firstStatusRadio = document.querySelector('input[name="studentStatus"]');
 
-  if (!selected) return;
+  if (!selected) {
+    if (verificationBox) verificationBox.classList.add("hidden");
+    if (uniEmailInput) uniEmailInput.removeAttribute("required");
+    if (personalEmailInput) personalEmailInput.removeAttribute("required");
+    if (enrollmentNumberInput) enrollmentNumberInput.removeAttribute("required");
+    if (firstStatusRadio) firstStatusRadio.removeAttribute("required");
+    return;
+  }
+
+  if (verificationBox) verificationBox.classList.remove("hidden");
+  if (enrollmentNumberInput) enrollmentNumberInput.setAttribute("required", "required");
+
   if (selected.value === "Yes") {
     if (uniEmailGroup) uniEmailGroup.classList.remove("hidden");
     if (uniEmailInput) uniEmailInput.setAttribute("required", "required");
@@ -724,7 +750,7 @@ if(form)form.querySelectorAll("input,textarea").forEach(function(el){
     }
   });
   el.addEventListener("input",function(){
-    if(el.classList.contains("error"))validateField(el.name, true);
+    if(el.classList.contains("error") || el.name === "uniEmail") validateField(el.name, true);
   });
 });
 

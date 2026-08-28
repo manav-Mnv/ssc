@@ -300,8 +300,8 @@
             <span class="field-error"></span>
           </div>
 
-          <!-- Verification Box -->
-          <div class="verification-box glass-card sub-card" style="margin-top:24px;padding:22px;border:1px solid rgba(255,255,255,0.12);border-radius:12px;background:rgba(255,255,255,0.03);">
+          <!-- Verification Box (Revealed upon Yes/No selection) -->
+          <div id="verificationBox" class="verification-box glass-card sub-card hidden" style="margin-top:24px;padding:22px;border:1px solid rgba(255,255,255,0.12);border-radius:12px;background:rgba(255,255,255,0.03);">
             <h3 style="font-size:16px;font-weight:600;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--swift)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
               Student Verification &amp; Enrollment Details
@@ -585,17 +585,6 @@
             <label class="field-label" for="competitionDetails">Competition Details</label>
             <textarea class="field-textarea" id="competitionDetails" name="competitionDetails" rows="3" placeholder="Tell us about any previous competitions you've participated in..."></textarea>
           </div>
-
-          <!-- Apple Lab Notice -->
-          <div class="apple-lab-notice">
-            <div class="apple-lab-notice-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            </div>
-            <div class="apple-lab-notice-text">
-              <strong>Need help or have questions?</strong>
-              <p>Feel free to visit the <strong>Apple Lab</strong> at C.V. Raman Building, Parul University — our team is happy to guide you through the process.</p>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -779,7 +768,17 @@
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 7 9-7"/></svg>
         <span>Confirmation email sent to <strong id="successEmail" class="success-email"></strong></span>
       </div>
-      <p class="success-note">Please check your inbox (and spam). If you don't see it within a few minutes, contact <a href="mailto:aatcepu@gmail.com">aatcepu@gmail.com</a>.</p>
+
+      <!-- Apple Lab Visit Card on Success -->
+      <div class="apple-lab-notice" style="margin-top:24px;text-align:left;">
+        <div class="apple-lab-notice-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="apple-lab-notice-text">
+          <strong style="font-size:15px;color:#fff;">Need help or have questions?</strong>
+          <p style="margin-top:4px;color:rgba(255,255,255,0.75);">Feel free to visit the <strong>Apple Lab</strong> at C.V. Raman Building, Parul University — our team is happy to guide you through the process.</p>
+        </div>
+      </div>
     </div>
   </section>
 
