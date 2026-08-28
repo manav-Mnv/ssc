@@ -1447,9 +1447,9 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
     align-items:start;
     position:relative;
   }
-  /* right column pushed down — staggered, scattered editorial rhythm */
-  .guidelines-list .guideline-card:nth-child(even){margin-top:120px}
-  .guidelines-list .guideline-card.looking-for{margin-top:220px}
+  /* right column subtle editorial stagger */
+  .guidelines-list .guideline-card:nth-child(even){margin-top:40px}
+  .guidelines-list .guideline-card.looking-for{margin-top:40px}
   .guidelines-list .guideline-card{will-change:transform;backface-visibility:hidden;position:relative;z-index:1}
 
   /* the thread that joins the panels (path built by app.js) */
@@ -1459,13 +1459,12 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
   }
 }
 
-/* Ultra-wide displays (27"+ / iMac) — stretch the collage further.
-   14–16" laptops (~1440–1800px) stay on the normal layout. */
+/* Ultra-wide displays (27"+ / iMac) */
 @media (min-width:1900px) and (hover:hover) and (pointer:fine){
   .guidelines-section{max-width:1780px;padding-left:110px;padding-right:110px}
-  .guidelines-list{gap:96px 150px}
-  .guidelines-list .guideline-card:nth-child(even){margin-top:160px}
-  .guidelines-list .guideline-card.looking-for{margin-top:260px}
+  .guidelines-list{gap:72px 120px}
+  .guidelines-list .guideline-card:nth-child(even){margin-top:50px}
+  .guidelines-list .guideline-card.looking-for{margin-top:50px}
 }
 .guideline-card h2{font-family:var(--font-display);font-size:21px;font-weight:700;letter-spacing:-.02em;color:#fff;margin-bottom:16px;display:flex;align-items:center}
 .guideline-card h2::before{content:'';width:9px;height:9px;border-radius:2px;background:var(--swift);transform:rotate(45deg);flex:none;margin-right:12px}

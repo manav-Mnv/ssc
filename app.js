@@ -144,7 +144,7 @@ function initGuidelinesScatter(){
     motion:"(prefers-reduced-motion: no-preference)"
   },function(ctx){
     if(!ctx.conditions.desktop||!ctx.conditions.motion){
-      gsap.fromTo(".guideline-card",{opacity:0,y:36},{opacity:1,y:0,duration:0.6,ease:"power3.out",stagger:0.12,clearProps:"opacity,transform",scrollTrigger:{trigger:".guidelines-list",start:"top 82%",once:true}});
+      gsap.fromTo(".guideline-card",{opacity:0,y:24},{opacity:1,y:0,duration:0.45,ease:"power2.out",stagger:0.06,clearProps:"opacity,transform",scrollTrigger:{trigger:".guidelines-list",start:"top 90%",once:true}});
       return;
     }
 
@@ -176,8 +176,8 @@ function initGuidelinesScatter(){
     cards.forEach(function(card,i){
       var p=poses[i%poses.length];
       gsap.set(card,{x:p.x*k,rotation:p.r});
-      gsap.from(card,{autoAlpha:0,rotation:p.r*2.2,scale:0.96,duration:0.9,ease:"power3.out",
-        scrollTrigger:{trigger:card,start:"top 88%",once:true}});
+      gsap.from(card,{autoAlpha:0,rotation:p.r*1.2,scale:0.98,duration:0.5,ease:"power2.out",
+        scrollTrigger:{trigger:card,start:"top 95%",once:true}});
       gsap.fromTo(card,{y:-p.p*k/2},{y:p.p*k/2,ease:"none",
         scrollTrigger:{trigger:list,start:"top bottom",end:"bottom top",scrub:true}});
       gsap.to(card,{rotation:p.r+(i%2?0.7:-0.7),duration:2.8+(i%4)*0.45,yoyo:true,repeat:-1,ease:"sine.inOut"});
