@@ -285,15 +285,15 @@ void main(){
           performanceCheckDone = true;
           const avgFrameTime = frameTimes.reduce((a, b) => a + b, 0) / frameTimes.length;
           
-          if (avgFrameTime > 36) { // < 28 FPS: Severe lag, disable WebGL completely
+          if (avgFrameTime > 55) { // < ~18 FPS: Severe lag, disable WebGL
             console.warn("Low performance detected (" + Math.round(1000/avgFrameTime) + " FPS). Disabling background shader.");
-            canvas.style.transition = "opacity 1.2s ease";
+            canvas.style.transition = "opacity 2s ease";
             canvas.style.opacity = "0";
             setTimeout(() => {
               window.SSC_FX_PAUSED = true;
               canvas.style.display = "none";
-            }, 1200);
-          } else if (avgFrameTime > 20) { // < 50 FPS: Moderate lag, reduce resolution scale
+            }, 2000);
+          } else if (avgFrameTime > 33) { // < ~30 FPS: Moderate lag, halve resolution
             console.warn("Low frame rate detected (" + Math.round(1000/avgFrameTime) + " FPS). Reducing WebGL resolution.");
             resolutionScale *= 0.5;
             resize(resolutionScale);
