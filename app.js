@@ -392,7 +392,7 @@ function showToast(message,type){
 /* ============================================
    FIELD VALIDATION
    ============================================ */
-function validateField(name){
+function validateField(name, silent){
   var isValid=true,errorMsg="";
   var radios=form.querySelectorAll("[name=\""+name+"\"]");
   var isRadio=radios.length>0&&radios[0].type==="radio";
@@ -426,7 +426,7 @@ function validateField(name){
     if(fieldGroup)fieldGroup.classList.add("has-error");
     if(input&&input.type!=="radio")input.classList.add("error");
     if(isRadio){var rg=radios[0].closest(".radio-group");if(rg)rg.classList.add("error")}
-    showToast(errorMsg,"error");
+    if(!silent) showToast(errorMsg,"error");
   }else{
     if(errorEl){errorEl.textContent="";errorEl.classList.remove("visible")}
     if(fieldGroup)fieldGroup.classList.remove("has-error");
@@ -434,6 +434,25 @@ function validateField(name){
     if(isRadio){var rg2=radios[0].closest(".radio-group");if(rg2)rg2.classList.remove("error")}
   }
   return isValid;
+}
+
+function clearValidation(){
+  form.querySelectorAll(".field-error").forEach(function(el){el.textContent="";el.classList.remove("visible")});
+  form.querySelectorAll(".has-error").forEach(function(el){el.classList.remove("has-error")});
+  form.querySelectorAll(".error").forEach(function(el){el.classList.remove("error")});
+  form.querySelectorAll(".radio-group.error").forEach(function(el){el.classList.remove("error")});
+}
+
+function validatePage(num){
+  var fields=pageValidation[num]||[];
+  var allValid=true;
+  fields.forEach(function(name){
+    if(!validateField(name, true)) allValid=false;
+  });
+  if(!allValid){
+    showToast("Please complete all required fields correctly to proceed.","error");
+  }
+  return allValid;
 }
 
 // Handle conditional verification fields based on uni email availability
@@ -696,11 +715,11 @@ function sendConfirmation(email,name){
 if(form)form.querySelectorAll("input,textarea").forEach(function(el){
   el.addEventListener("change",function(){
     if(el.closest(".field-group")&&el.closest(".field-group").classList.contains("has-error")){
-      validateField(el.name);
+      validateField(el.name, true);
     }
   });
   el.addEventListener("input",function(){
-    if(el.classList.contains("error"))validateField(el.name);
+    if(el.classList.contains("error"))validateField(el.name, true);
   });
 });
 
