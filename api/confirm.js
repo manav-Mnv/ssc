@@ -69,7 +69,7 @@ module.exports = async function handler(req, res) {
       },
     });
 
-    const first = (full_name || "Student").trim().split(" ")[0];
+    const first = (full_name || "Student").trim().split(" ")[0].replace(/[&<>"']/g, "");
     const uniqueHash = crypto.randomBytes(4).toString("hex").toUpperCase();
 
     const html = `
