@@ -642,12 +642,37 @@ if(nextBtn)nextBtn.addEventListener("click",function(){
   }
 });
 
+var confirmModal=document.getElementById("confirmModal");
+var cancelConfirmBtn=document.getElementById("cancelConfirmBtn");
+var finalSubmitBtn=document.getElementById("finalSubmitBtn");
+
 if(form)form.addEventListener("submit",function(e){
   e.preventDefault();
   if(!validatePage(currentPage))return;
-  submitBtn.disabled=true;
-  var original=submitBtn.textContent;
-  submitBtn.textContent="Submitting…";
+  if(confirmModal){
+    confirmModal.classList.remove("hidden");
+  }else{
+    executeSubmission();
+  }
+});
+
+if(cancelConfirmBtn){
+  cancelConfirmBtn.addEventListener("click",function(){
+    if(confirmModal)confirmModal.classList.add("hidden");
+  });
+}
+
+if(finalSubmitBtn){
+  finalSubmitBtn.addEventListener("click",function(){
+    if(confirmModal)confirmModal.classList.add("hidden");
+    executeSubmission();
+  });
+}
+
+function executeSubmission(){
+  if(submitBtn)submitBtn.disabled=true;
+  if(finalSubmitBtn)finalSubmitBtn.disabled=true;
+  if(submitBtn)submitBtn.textContent="Submitting…";
   var row=buildRegistrationRow();
 
   // Real-time Google Sheets Webhook
@@ -711,7 +736,7 @@ if(form)form.addEventListener("submit",function(e){
     showSuccess(row.email);
     sendConfirmation(row.email,row.full_name);
   });
-});
+}
 
 function showSuccess(email){
   clearProgress();
