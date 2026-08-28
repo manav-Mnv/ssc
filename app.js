@@ -420,6 +420,11 @@ function validateField(name, silent){
   if(isRadio){
     var checked=form.querySelector("[name=\""+name+"\"]:checked");
     if(radios[0].required&&!checked){isValid=false;errorMsg="Please select an option"}
+    else if(checked && (checked.value==="Other" || checked.dataset.isOther==="true")){
+      var rg=checked.closest(".radio-group");
+      var win=rg?rg.querySelector(".other-writein"):null;
+      if(win && !win.value.trim()){isValid=false;errorMsg="Please specify your details"}
+    }
   }
   if(!isValid){
     if(errorEl){errorEl.textContent=errorMsg;errorEl.classList.add("visible")}
@@ -723,24 +728,52 @@ if(form)form.querySelectorAll("input,textarea").forEach(function(el){
   });
 });
 
-/* "Other" write-in */
-if(form)form.querySelectorAll('input[type="radio"][value="Other"]').forEach(function(radio){
-  var group=radio.closest(".radio-group");
-  var writein=group?group.querySelector(".other-writein"):null;
-  if(!writein)return;
-  radio.addEventListener("change",function(){
-    if(radio.checked){
-      writein.classList.remove("hidden");
-      if(writein.value.trim())radio.value=writein.value.trim();
-    }else{
-      writein.classList.add("hidden");
-      radio.value="Other";
+/* "Other" write-in dynamic visibility & binding */
+if(form){
+  form.querySelectorAll(".radio-group").forEach(function(group){
+    var writein = group.querySelector(".other-writein");
+    if(!writein) return;
+    var allRadios = group.querySelectorAll('input[type="radio"]');
+    var otherRadio = Array.from(allRadios).find(function(r){
+      return r.value === "Other" || r.dataset.isOther === "true";
+    });
+    if(!otherRadio) return;
+    otherRadio.dataset.isOther = "true";
+
+    function updateWriteinState(){
+      if(otherRadio.checked){
+        writein.classList.remove("hidden");
+        otherRadio.value = writein.value.trim() ? writein.value.trim() : "Other";
+      } else {
+        writein.classList.add("hidden");
+        writein.value = "";
+        otherRadio.value = "Other";
+      }
     }
+
+    allRadios.forEach(function(r){
+      r.addEventListener("change", function(){
+        updateWriteinState();
+        if(otherRadio.checked){
+          writein.focus();
+        }
+      });
+    });
+
+    writein.addEventListener("input", function(){
+      if(otherRadio.checked){
+        otherRadio.value = writein.value.trim() ? writein.value.trim() : "Other";
+      }
+    });
+
+    writein.addEventListener("focus", function(){
+      if(!otherRadio.checked){
+        otherRadio.checked = true;
+        updateWriteinState();
+      }
+    });
   });
-  writein.addEventListener("input",function(){
-    radio.value=writein.value.trim()?writein.value.trim():"Other";
-  });
-});
+}
 
 /* ============================================
    3D PARALLAX DEVICE SHOWCASE
