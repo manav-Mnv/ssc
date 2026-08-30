@@ -499,9 +499,17 @@ function toggleVerificationFields() {
   if (verificationBox) verificationBox.classList.remove("hidden");
   if (enrollmentNumberInput) enrollmentNumberInput.setAttribute("required", "required");
 
+  var isParulEmail = emailInput && /^[a-zA-Z0-9._%+-]+@paruluniversity\.ac\.in$/i.test(emailInput.value.trim());
+
   if (selected.value === "Yes") {
     if (uniEmailGroup) uniEmailGroup.classList.remove("hidden");
-    if (uniEmailInput) uniEmailInput.setAttribute("required", "required");
+    if (uniEmailInput) {
+      uniEmailInput.setAttribute("required", "required");
+      if (isParulEmail && (!uniEmailInput.value.trim() || /@paruluniversity\.ac\.in$/i.test(uniEmailInput.value.trim()))) {
+        uniEmailInput.value = emailInput.value.trim();
+        validateField("uniEmail", true);
+      }
+    }
     if (personalEmailGroup) personalEmailGroup.classList.add("hidden");
     if (studentStatusGroup) studentStatusGroup.classList.add("hidden");
     if (personalEmailInput) personalEmailInput.removeAttribute("required");
@@ -514,25 +522,12 @@ function toggleVerificationFields() {
     if (personalEmailInput) {
       personalEmailInput.setAttribute("required", "required");
       if (!personalEmailInput.value && emailInput) {
-        personalEmailInput.value = emailInput.value;
+        personalEmailInput.value = emailInput.value.trim();
+        validateField("personalEmail", true);
       }
     }
     if (firstStatusRadio) firstStatusRadio.setAttribute("required", "required");
   }
-}
-
-function clearValidation(){
-  form.querySelectorAll(".field-error").forEach(function(el){el.textContent="";el.classList.remove("visible")});
-  form.querySelectorAll(".has-error").forEach(function(el){el.classList.remove("has-error")});
-  form.querySelectorAll(".error").forEach(function(el){el.classList.remove("error")});
-  form.querySelectorAll(".radio-group.error").forEach(function(el){el.classList.remove("error")});
-}
-
-function validatePage(num){
-  var fields=pageValidation[num]||[];
-  var allValid=true;
-  fields.forEach(function(name){if(!validateField(name))allValid=false});
-  return allValid;
 }
 
 /* ============================================
@@ -564,6 +559,9 @@ function goToPage(num){
   }else{
     nextBtn.classList.remove("hidden");
     submitBtn.classList.add("hidden");
+  }
+  if(num===2){
+    toggleVerificationFields();
   }
   window.scrollTo({top:0,behavior:"smooth"});
 }
