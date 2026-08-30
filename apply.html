@@ -785,20 +785,37 @@
   <!-- Submission Confirmation Modal -->
   <div id="confirmModal" class="confirm-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
     <div class="confirm-modal-card glass-card liquid-glass">
-      <div class="confirm-modal-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-          <line x1="12" y1="9" x2="12" y2="13"/>
-          <line x1="12" y1="17" x2="12.01" y2="17"/>
+      <button type="button" id="closeConfirmBtn" class="confirm-modal-close" aria-label="Close dialog">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
+      </button>
+
+      <div class="confirm-modal-icon-wrap">
+        <div class="confirm-icon-ambient"></div>
+        <div class="confirm-modal-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
       </div>
+
       <h3 id="confirmModalTitle" class="confirm-modal-title">Confirm Your Submission</h3>
       <p class="confirm-modal-desc">
-        Are you sure you want to submit? Once submitted, your application <strong>cannot be edited or modified</strong>. Please double-check your enrollment and contact details.
+        Are you sure you want to submit? Once submitted, your application <span class="confirm-warn-pill">cannot be edited or modified</span>. Please double-check your enrollment and contact details.
       </p>
+
       <div class="confirm-modal-actions">
         <button type="button" id="cancelConfirmBtn" class="confirm-modal-btn cancel-btn">Review Application</button>
-        <button type="button" id="finalSubmitBtn" class="confirm-modal-btn submit-btn-confirm">Yes, Submit Application</button>
+        <button type="button" id="finalSubmitBtn" class="confirm-modal-btn submit-btn-confirm">
+          <span>Yes, Submit Application</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -823,6 +840,6 @@
   <script defer src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="config.js"></script>
-  <script defer src="app.js?v=18"></script>
+  <script defer src="app.js?v=19"></script>
 </body>
 </html>

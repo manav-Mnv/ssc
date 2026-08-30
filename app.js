@@ -225,10 +225,11 @@ function initGuidelinesScatter(){
       }
       var last=pts[pts.length-1];
       var lr=list.getBoundingClientRect();
+      var br=applyBtn?applyBtn.getBoundingClientRect():null;
       var ctaSec=document.getElementById("applyCtaSection");
       var cr=ctaSec?ctaSec.getBoundingClientRect():null;
-      var tX=cr?cr.left+cr.width/2-lr.left:(br?br.left+br.width/2-lr.left:last.x+60*k);
-      var tY=cr?cr.top-lr.top+20:(br?(br.top-lr.top+25):(lr.bottom-lr.top)+160);
+      var tX=br?br.left+br.width/2-lr.left:(cr?cr.left+cr.width/2-lr.left:last.x+60*k);
+      var tY=br?br.top-lr.top+2:(cr?cr.top-lr.top+48:(lr.bottom-lr.top)+160);
       if(tY<last.y+50)tY=last.y+50;
       d+=" C "+(last.x)+" "+(last.y+150*k)+", "+tX+" "+(tY-130*k)+", "+tX+" "+tY;
       return{d:d,tail:{x:tX,y:tY}};
@@ -644,27 +645,52 @@ if(nextBtn)nextBtn.addEventListener("click",function(){
 
 var confirmModal=document.getElementById("confirmModal");
 var cancelConfirmBtn=document.getElementById("cancelConfirmBtn");
+var closeConfirmBtn=document.getElementById("closeConfirmBtn");
 var finalSubmitBtn=document.getElementById("finalSubmitBtn");
+
+function hideConfirmModal(){
+  if(confirmModal)confirmModal.classList.add("hidden");
+}
+
+function showConfirmModal(){
+  if(confirmModal)confirmModal.classList.remove("hidden");
+}
 
 if(form)form.addEventListener("submit",function(e){
   e.preventDefault();
   if(!validatePage(currentPage))return;
   if(confirmModal){
-    confirmModal.classList.remove("hidden");
+    showConfirmModal();
   }else{
     executeSubmission();
   }
 });
 
 if(cancelConfirmBtn){
-  cancelConfirmBtn.addEventListener("click",function(){
-    if(confirmModal)confirmModal.classList.add("hidden");
+  cancelConfirmBtn.addEventListener("click",hideConfirmModal);
+}
+
+if(closeConfirmBtn){
+  closeConfirmBtn.addEventListener("click",hideConfirmModal);
+}
+
+if(confirmModal){
+  confirmModal.addEventListener("click",function(e){
+    if(e.target===confirmModal){
+      hideConfirmModal();
+    }
   });
 }
 
+window.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&confirmModal&&!confirmModal.classList.contains("hidden")){
+    hideConfirmModal();
+  }
+});
+
 if(finalSubmitBtn){
   finalSubmitBtn.addEventListener("click",function(){
-    if(confirmModal)confirmModal.classList.add("hidden");
+    hideConfirmModal();
     executeSubmission();
   });
 }
