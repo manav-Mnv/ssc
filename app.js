@@ -180,7 +180,8 @@ function initGuidelinesScatter(){
         scrollTrigger:{trigger:card,start:"top 95%",once:true}});
       gsap.fromTo(card,{y:-p.p*k/2},{y:p.p*k/2,ease:"none",
         scrollTrigger:{trigger:list,start:"top bottom",end:"bottom top",scrub:true}});
-      gsap.to(card,{rotation:p.r+(i%2?0.7:-0.7),duration:2.8+(i%4)*0.45,yoyo:true,repeat:-1,ease:"sine.inOut"});
+      var yoyoTween=gsap.to(card,{rotation:p.r+(i%2?0.7:-0.7),duration:2.8+(i%4)*0.45,yoyo:true,repeat:-1,ease:"sine.inOut",paused:true});
+      ScrollTrigger.create({trigger:list,start:"top bottom",end:"bottom top",onEnter:function(){yoyoTween.play()},onLeave:function(){yoyoTween.pause()},onEnterBack:function(){yoyoTween.play()},onLeaveBack:function(){yoyoTween.pause()}});
     });
 
     var applyBtn=document.getElementById("showcaseBeginBtn");
@@ -203,10 +204,15 @@ function initGuidelinesScatter(){
     var tailTip=null;
     var buildAttempts=0,buildQueued=false,cancelled=false,ro=null;
 
+    var _buildTimer=null;
     function scheduleBuild(){
-      if(cancelled||buildQueued)return;
-      buildQueued=true;
-      requestAnimationFrame(function(){buildQueued=false;buildThread()});
+      if(cancelled)return;
+      clearTimeout(_buildTimer);
+      _buildTimer=setTimeout(function(){
+        if(cancelled||buildQueued)return;
+        buildQueued=true;
+        requestAnimationFrame(function(){buildQueued=false;buildThread()});
+      },150);
     }
 
     function threadD(){
@@ -229,7 +235,7 @@ function initGuidelinesScatter(){
       var ctaSec=document.getElementById("applyCtaSection");
       var cr=ctaSec?ctaSec.getBoundingClientRect():null;
       var tX=br?br.left+br.width/2-lr.left:(cr?cr.left+cr.width/2-lr.left:last.x+60*k);
-      var tY=br?br.top-lr.top+2:(cr?cr.top-lr.top+48:(lr.bottom-lr.top)+160);
+      var tY=br?br.top-lr.top:(cr?cr.top-lr.top+48:(lr.bottom-lr.top)+160);
       if(tY<last.y+50)tY=last.y+50;
       d+=" C "+(last.x)+" "+(last.y+150*k)+", "+tX+" "+(tY-130*k)+", "+tX+" "+tY;
       return{d:d,tail:{x:tX,y:tY}};

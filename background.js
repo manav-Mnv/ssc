@@ -248,16 +248,15 @@ void main(){
     const isMobileFX = window.matchMedia('(max-width:768px)').matches;
     const isAndroid = /Android/i.test(navigator.userAgent);
 
-    if (isMobileFX) {
-      U.blur = 0.0;
-      gl.uniform4f(uni.finish, U.hue, U.vignette, U.blur, U.grain);
-    }
+    // Fix 2: Disable shader blur on ALL devices — removes 4 extra shade() calls per pixel
+    U.blur = 0.0;
+    gl.uniform4f(uni.finish, U.hue, U.vignette, U.blur, U.grain);
 
     // Android mid-range GPUs struggle with heavy fragment shaders. Start Android at 55% scale.
     let resolutionScale = isAndroid ? 0.55 : 1.0;
 
     const resize = (scaleFactor = 1.0) => {
-      let dpr = Math.min(window.devicePixelRatio || 1, isMobileFX ? 1.5 : 2);
+      let dpr = Math.min(window.devicePixelRatio || 1, 1.5); // Fix 1: Cap DPR to 1.5 on all devices
       if (isMobileFX) dpr *= 0.75; // lower internal resolution on phones (~44% fewer fragments, imperceptible on a 6" screen)
       if (SSC_LOW) dpr *= 0.8; // extra reduction for low-power devices
       dpr *= scaleFactor; // Apply dynamic quality scaling
@@ -270,7 +269,7 @@ void main(){
 
     const start = performance.now();
     let _lastFrame = 0;
-    const _targetDt = SSC_LOW ? (1000 / 30) : 0;
+    const _targetDt = 1000 / 30; // Fix 1: Cap ALL devices to 30fps — plasma is slow-moving, no visible difference
 
     let frameTimes = [];
     let performanceCheckDone = false;
