@@ -250,6 +250,13 @@
         window.SSC_FX_PAUSED = false; // resume WebGL FX now that boot is gone
         setTimeout(() => boot.remove(), 850);
       };
+      
+      const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+      if (isMobile) {
+        hide();
+        return;
+      }
+
       // logo entrance ends ~1.4s; hold a beat, then exit
       if (logo) logo.addEventListener('animationend', () => setTimeout(hide, 900));
       setTimeout(hide, 4200); // safety net
