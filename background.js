@@ -330,6 +330,8 @@ void main(){
         }
       }
 
+      if (isMobileFX && render._cached) return; // Stop animating on mobile once cached (static background)
+
       requestAnimationFrame(render);
     }
     requestAnimationFrame(render);
