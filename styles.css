@@ -1612,15 +1612,39 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
     font-size: 16px !important;
   }
 
-  /* Lighten backdrop-filter blur for silky 60fps scrolling on budget phones */
-  .glass-card, .liquid-glass, .sub-card, .site-header, .confirm-mark, .check-mark {
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
+  /* Static mode: remove ALL backdrop-filter on mobile — biggest GPU savings */
+  .glass-card, .liquid-glass, .sub-card, .site-header, .confirm-mark, .check-mark,
+  .toast, .glass-button, .phone-dock, .confirm-modal-backdrop,
+  .back-to-site-btn, .guideline-cta .cta-btn, .confirm-box .confirm-check .check-mark {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Slightly increase background opacity to compensate for no blur */
+  .liquid-glass {
+    background: linear-gradient(155deg, rgba(18,22,32,0.55) 0%, rgba(13,16,24,0.45) 50%, rgba(9,11,17,0.35) 100%) !important;
+  }
+  .site-header {
+    background: linear-gradient(155deg, rgba(20,24,34,0.65) 0%, rgba(15,18,27,0.55) 50%, rgba(11,13,20,0.45) 100%) !important;
   }
 
   /* Disable continuous background repaints on mobile GPUs */
   .grain, .blob {
     display: none !important;
+  }
+
+  /* Hide WebGL canvas — CSS gradient background is the fallback */
+  .shader-bg {
+    display: none !important;
+  }
+
+  /* Force all content visible since GSAP won't animate opacity in */
+  .site-header, .hero-inner, .hero-eyebrow, .hero-title, .hero-desc,
+  .guidelines-head, .guideline-card, .showcase-eyebrow, .showcase-title,
+  .showcase-desc, .device-iphone, .device-macbook, .device-swift, .device-badge {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
   }
 
   /* Remove default mobile tap highlight flash */
@@ -1635,6 +1659,18 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 
   .form-section {
     padding: 16px 14px 80px !important;
+  }
+
+  /* Kill all animations and transitions on mobile */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Exceptions: keep form page transitions functional */
+  .form-page.active {
+    animation-duration: 0.3s !important;
   }
 }
 

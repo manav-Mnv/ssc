@@ -927,13 +927,18 @@ function initDeviceParallax(){
    ============================================ */
 document.addEventListener("DOMContentLoaded",function(){
   var canHover = window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-  if(canHover) initLenis();
-  initGSAP();
-  initTilt();
-  initMagneticButtons();
-  initTouchRipple();
+  var isMobile = window.matchMedia && window.matchMedia('(max-width:768px)').matches;
+
+  /* Mobile: skip ALL visual FX — pure static page, only form logic runs */
+  if(!isMobile){
+    if(canHover) initLenis();
+    initGSAP();
+    initTilt();
+    initMagneticButtons();
+    initTouchRipple();
+    if(canHover) initDeviceParallax();
+  }
   initToastContainer();
-  if(canHover) initDeviceParallax();
 
   document.querySelectorAll('input[name="hasUniEmail"]').forEach(function(radio) {
     radio.addEventListener("change", toggleVerificationFields);

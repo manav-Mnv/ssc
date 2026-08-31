@@ -8,6 +8,9 @@
     const SSC_REDUCED = _mq('(prefers-reduced-motion: reduce)');
     const SSC_MOBILE = _mq('(max-width: 768px)');
     const SSC_LOW = SSC_REDUCED || SSC_MOBILE || ((navigator.deviceMemory && navigator.deviceMemory <= 4) && (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4));
+
+    /* ---- Mobile: skip ALL canvas/WebGL FX — pure static page ---- */
+    if (SSC_MOBILE) return;
     let _orbLast = 0;
     const SWIFT_PATH = "M13.543 3.41c4.114 2.47 6.545 7.162 5.549 11.131-.024.093-.05.181-.076.272l.002.001c2.062 2.538 1.5 5.258 1.236 4.745-1.072-2.086-3.066-1.568-4.088-1.043a6.803 6.803 0 0 1-.281.158l-.02.012-.002.002c-2.115 1.123-4.957 1.205-7.812-.022a12.568 12.568 0 0 1-5.64-4.838c.649.48 1.35.902 2.097 1.252 3.019 1.414 6.051 1.311 8.197-.002C9.651 12.73 7.101 9.67 5.146 7.191a10.628 10.628 0 0 1-1.005-1.384c2.34 2.142 6.038 4.83 7.365 5.576C8.69 8.408 6.208 4.743 6.324 4.86c4.436 4.47 8.528 6.996 8.528 6.996.154.085.27.154.36.213.085-.215.16-.437.224-.668.708-2.588-.09-5.548-1.893-7.992z";
     const maskCache = new Map();
@@ -121,6 +124,10 @@
   (() => {
     const canvas = document.getElementById("shaderBg");
     if (!canvas) return;
+
+    /* ---- Mobile: skip WebGL entirely, rely on CSS background ---- */
+    const _mq2 = (q) => window.matchMedia(q).matches;
+    if (_mq2('(max-width: 768px)')) { canvas.style.display = 'none'; return; }
 
     /* ---- Frame Cache: paint saved JPEG instantly before WebGL draws ---- */
     const CACHE_KEY = "ssc_bg_frame_v2";
