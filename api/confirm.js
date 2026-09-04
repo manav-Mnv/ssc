@@ -83,8 +83,14 @@ module.exports = async function handler(req, res) {
             <p style="margin:0;font-size:14px;color:#475569;"><strong>Status:</strong> Registration Verified & Received</p>
           </div>
           <hr style="border:0;border-top:1px solid #e2e8f0;margin:24px 0;"/>
+          <p style="margin:16px 0 12px;font-size:14px;color:#0f172a;font-weight:600;">Stay Connected For Updates:</p>
+          <div style="margin-bottom:16px;">
+            <a href="https://chat.whatsapp.com/FXLcmWvxJbP24jZIn4B3Il" style="display:inline-block;padding:8px 16px;margin:0 8px 8px 0;background:#25D366;color:#ffffff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">WhatsApp Community</a>
+            <a href="https://whatsapp.com/channel/0029VbDO8OGD8SE0NtyZbN3h" style="display:inline-block;padding:8px 16px;margin:0 8px 8px 0;background:#25D366;color:#ffffff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">WhatsApp Channel</a>
+            <a href="https://www.instagram.com/swiftcodingclub_pu/" style="display:inline-block;padding:8px 16px;margin:0 8px 8px 0;background:#E1306C;color:#ffffff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">Instagram</a>
+            <a href="https://www.linkedin.com/company/scc-pu/" style="display:inline-block;padding:8px 16px;margin:0 0 8px 0;background:#0077b5;color:#ffffff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">LinkedIn</a>
+          </div>
           <p style="font-size:12px;color:#94a3b8;margin:0;">Ref ID: #${uniqueHash} · Swift Coding Club, Parul University</p>
-          <p style="margin:16px 0 0;font-size:13px;color:#475569;">Join our WhatsApp community for updates: <a href="https://chat.whatsapp.com/CcloLPWCvr0DaT107ijT6w" style="color:#f05138;text-decoration:underline;">Join Group</a></p>
         </div>
       </body>
     `;

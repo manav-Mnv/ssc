@@ -1,5 +1,9 @@
 # Swift Student Challenge 2027 — Registration Platform
 
+![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel)
+![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?style=for-the-badge&logo=supabase)
+![Vanilla JS](https://img.shields.io/badge/Vanilla_JS-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+
 The official registration portal for the **Swift Coding Club** at **Parul University** (Apple Authorized Training Center for Education). This platform facilitates student applications, requirement verification, and registration processing for the global Swift Student Challenge 2027.
 
 ---
@@ -19,7 +23,7 @@ The official registration portal for the **Swift Coding Club** at **Parul Univer
 
 | Layer | Technologies |
 | :--- | :--- |
-| **Frontend UI** | Vanilla HTML5, Vanilla CSS3 (Liquid Glass, Custom CSS Variables), Vanilla JS |
+| **Frontend UI** | Vanilla HTML5, Vanilla CSS3 (Liquid Glass), Vanilla JS (ES6) |
 | **Animations & FX** | GSAP 3, ScrollTrigger, Lenis Smooth Scroll, Custom WebGL Shader Background |
 | **Database** | Supabase (PostgreSQL) with strict Row-Level Security (RLS) policies |
 | **Serverless API** | Vercel Serverless Functions (`/api/confirm`), Node.js, Nodemailer |
@@ -36,19 +40,20 @@ The official registration portal for the **Swift Coding Club** at **Parul Univer
 ├── vercel.json               # Vercel deployment & build configuration
 ├── index.html                # Landing page with guidelines, eligibility criteria & CTA
 ├── apply.html                # Multi-step interactive student application form
-├── app.js                    # Form validation, state preservation, & submission logic
-├── background.js             # WebGL specular fluid background shader animation
-├── config.js.example         # Template for client-side Supabase configuration
-├── styles.css                # Design system, liquid glass aesthetics, & responsive styling
-├── api/
+├── src/                      # Source Code (Modular Architecture)
+│   ├── js/                   # Frontend Javascript Logic
+│   │   ├── app.js            # Main Application Logic
+│   │   ├── background.js     # WebGL specular fluid background shader animation
+│   │   └── config.js         # Build-generated config file
+│   └── css/                  # Styling
+│       └── styles.css        # Design system & responsive styles
+├── api/                      # Backend APIs
 │   └── confirm.js            # Serverless function for sending confirmation emails safely
-├── docs/
-│   ├── ARCHITECTURE.md       # Technical design & dual-pipeline ingestion architecture
-│   └── data-model.md         # Supabase database schema & field mapping specification
-├── logs/
-│   ├── 2026-08-22.md         # Form frontend construction log
-│   └── 2026-08-28.md         # Production audit, stress tests, header updates, & security log
-├── scripts/
+├── docs/                     # Documentation
+│   ├── ARCHITECTURE.md       # Technical design & architecture
+│   └── data-model.md         # Supabase database schema
+├── logs/                     # Maintenance logs
+├── scripts/                  # Utilities
 │   ├── build-config.js       # Vercel build hook generating config.js from env vars
 │   └── send-confirmations.js # Batch processor for sending queued confirmation emails
 └── assets/                   # SVG icons, university logos, and brand graphics

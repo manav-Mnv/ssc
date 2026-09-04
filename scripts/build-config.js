@@ -6,7 +6,7 @@ const url = process.env.SUPABASE_URL || "";
 const key = process.env.SUPABASE_ANON_KEY || "";
 
 fs.writeFileSync(
-  "config.js",
+  "src/js/config.js",
   "/* generated at build time from Vercel env vars — do not edit */\n" +
     "window.SUPABASE_URL = " + JSON.stringify(url) + ";\n" +
     "window.SUPABASE_ANON_KEY = " + JSON.stringify(key) + ";\n"

@@ -12,6 +12,7 @@ The Swift Student Challenge (SSC) 2027 Registration platform utilizes a dual-pip
 ┌─────────────────────────────────────────────────────────────┐
 │                    STUDENT CLIENT (BROWSER)                 │
 │  - Vanilla HTML5 / CSS3 / JavaScript                        │
+│  - Modularized src/ directory (CSS & JS)                    │
 │  - Lenis Smooth Scroll + GSAP ScrollTrigger                 │
 │  - WebGL Specular Background Canvas                         │
 │  - LocalStorage Draft Recovery ('ssc2027_form_progress')    │
