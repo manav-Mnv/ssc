@@ -637,14 +637,40 @@ function restoreProgress(){
 }
 
 /* ============================================
+   DUPLICATE EMAIL CHECK
+   ============================================ */
+function checkEmailExists(email){
+  if(!email)return Promise.resolve(false);
+  return fetch("/api/check-email",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email:email})
+  }).then(function(r){return r.json()}).then(function(d){return !!d.exists}).catch(function(){return false});
+}
+
+/* ============================================
    FORM SUBMISSION
    ============================================ */
 if(prevBtn)prevBtn.addEventListener("click",function(){goToPage(currentPage-1)});
 if(nextBtn)nextBtn.addEventListener("click",function(){
-  if(validatePage(currentPage)){
-    showToast("Progress saved","success");
-    goToPage(currentPage+1);
+  if(!validatePage(currentPage))return;
+  if(currentPage===1){
+    var emailInput=form.querySelector("[name=\"email\"]");
+    var emailVal=emailInput?emailInput.value.trim():"";
+    if(emailVal){
+      checkEmailExists(emailVal).then(function(exists){
+        if(exists){
+          showToast("You have already registered with this email.","error");
+          return;
+        }
+        showToast("Progress saved","success");
+        goToPage(currentPage+1);
+      });
+      return;
+    }
   }
+  showToast("Progress saved","success");
+  goToPage(currentPage+1);
 });
 
 var confirmModal=document.getElementById("confirmModal");
@@ -758,7 +784,16 @@ function executeSubmission(){
   }
 
   supabase.from("registrations").insert([row],{returning:"minimal"}).then(function(res){
-    if(res.error)console.warn("Supabase insert notice:", res.error);
+    if(res.error){
+      if(res.error.code==="23505"){
+        showToast("You have already registered with this email.","error");
+        if(submitBtn)submitBtn.disabled=false;
+        if(finalSubmitBtn)finalSubmitBtn.disabled=false;
+        if(submitBtn)submitBtn.textContent="Submit Application";
+        return;
+      }
+      console.warn("Supabase insert notice:", res.error);
+    }
     showSuccess(row.email);
     sendConfirmation(row.email,row.full_name);
   }).catch(function(err){
