@@ -84,6 +84,7 @@ module.exports = async function handler(req, res) {
           </div>
           <hr style="border:0;border-top:1px solid #e2e8f0;margin:24px 0;"/>
           <p style="font-size:12px;color:#94a3b8;margin:0;">Ref ID: #${uniqueHash} · Swift Coding Club, Parul University</p>
+          <p style="margin:16px 0 0;font-size:13px;color:#475569;">Join our WhatsApp community for updates: <a href="https://chat.whatsapp.com/CcloLPWCvr0DaT107ijT6w" style="color:#f05138;text-decoration:underline;">Join Group</a></p>
         </div>
       </body>
     `;
