@@ -58,11 +58,12 @@ module.exports = async function handler(req, res) {
     return res.status(429).json({ error: "Too many requests. Please try again later." });
   }
 
-  const { rowData, turnstileResponse } = req.body || {};
-  const email = rowData?.email;
-  const full_name = rowData?.full_name;
+  const { rowData, row, turnstileResponse } = req.body || {};
+  const rowPayload = rowData || row;
+  const email = rowPayload?.email;
+  const full_name = rowPayload?.full_name;
 
-  if (!email || !rowData) {
+  if (!email || !rowPayload) {
     return res.status(400).json({ error: "Missing required registration data." });
   }
 
@@ -102,7 +103,7 @@ module.exports = async function handler(req, res) {
   try {
     const { data, error } = await supabase
       .from("registrations")
-      .insert([rowData])
+      .insert([rowPayload])
       .select("id");
 
     if (error) {
