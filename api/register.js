@@ -8,7 +8,7 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 // Rate limiting in-memory map (per-instance)
 const rateLimitMap = new Map();
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
-const MAX_REQUESTS = 3;
+const MAX_REQUESTS = 5;
 
 // Cloudflare Turnstile Secret Key (Fallback to dummy testing key if not set)
 const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY || "1x0000000000000000000000000000000AA";

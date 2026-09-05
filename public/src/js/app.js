@@ -78,6 +78,11 @@ function buildRegistrationRow(){
   if (!row.personal_email && row.email) {
     row.personal_email = row.email;
   }
+  // Ensure NOT NULL array columns always have a value
+  if (!row.work_schedule) row.work_schedule = [];
+  if (!row.interests_improving) row.interests_improving = [];
+  if (!row.excitement_level) row.excitement_level = [];
+  if (!row.build_interest) row.build_interest = [];
   return row;
 }
 
@@ -756,15 +761,24 @@ window.turnstileError=function(code){
 
 if(finalSubmitBtn){
   finalSubmitBtn.addEventListener("click",function(){
-    var token="";
-    var el=form.querySelector('[name="cf-turnstile-response"]');
-    if(el)token=el.value;
-    if(!token){
-      showToast("Please complete the CAPTCHA check.","error");
-      return;
+    // Reset Turnstile to get a fresh token before submitting
+    var container=form?form.querySelector(".cf-turnstile"):document.querySelector(".cf-turnstile");
+    if(container && typeof turnstile!=="undefined"){
+      try{turnstile.reset(container);}catch(e){}
     }
-    hideConfirmModal();
-    executeSubmission();
+    // Wait briefly for fresh token, then read it
+    setTimeout(function(){
+      var token="";
+      var el=form.querySelector('[name="cf-turnstile-response"]');
+      if(el)token=el.value;
+      if(!token){
+        showToast("Please complete the CAPTCHA check.","error");
+        if(finalSubmitBtn)finalSubmitBtn.disabled=false;
+        return;
+      }
+      hideConfirmModal();
+      executeSubmission();
+    },800);
   });
 }
 
