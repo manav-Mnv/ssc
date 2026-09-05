@@ -5,11 +5,41 @@ const crypto = require("crypto");
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// Daily Instant Email Safety Threshold (Google SMTP limit is 500/day)
+// Rate limiting in-memory map (per-instance)
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+const MAX_REQUESTS = 3;
+
+// Cloudflare Turnstile Secret Key (Fallback to dummy testing key if not set)
+const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY || "1x0000000000000000000000000000000AA";
+
+// Daily Instant Email Safety Threshold
 const DAILY_INSTANT_LIMIT = 450;
 
+// Helper to check rate limit
+function checkRateLimit(ip) {
+  const now = Date.now();
+  if (!rateLimitMap.has(ip)) {
+    rateLimitMap.set(ip, { count: 1, firstRequest: now });
+    return true;
+  }
+
+  const record = rateLimitMap.get(ip);
+  if (now - record.firstRequest > RATE_LIMIT_WINDOW_MS) {
+    // Reset window
+    rateLimitMap.set(ip, { count: 1, firstRequest: now });
+    return true;
+  }
+
+  if (record.count >= MAX_REQUESTS) {
+    return false; // Rate limit exceeded
+  }
+
+  record.count += 1;
+  return true;
+}
+
 module.exports = async function handler(req, res) {
-  // CORS Headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -22,43 +52,86 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { email, id, full_name } = req.body || {};
-
-  if (!email) {
-    return res.status(400).json({ error: "Missing required parameter: email" });
+  // 1. IP Rate Limiting
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown";
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({ error: "Too many requests. Please try again later." });
   }
 
+  const { rowData, cfTurnstileResponse } = req.body || {};
+  const email = rowData?.email;
+  const full_name = rowData?.full_name;
+
+  if (!email || !rowData) {
+    return res.status(400).json({ error: "Missing required registration data." });
+  }
+
+  if (!cfTurnstileResponse) {
+    return res.status(400).json({ error: "CAPTCHA validation failed. Please refresh and try again." });
+  }
+
+  // 2. CAPTCHA Verification
+  try {
+    const cfVerify = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: TURNSTILE_SECRET_KEY,
+        response: cfTurnstileResponse,
+        remoteip: ip,
+      }),
+    });
+    
+    const cfResult = await cfVerify.json();
+    if (!cfResult.success) {
+      console.warn("Turnstile failed:", cfResult);
+      return res.status(400).json({ error: "CAPTCHA verification failed. Are you a bot?" });
+    }
+  } catch (err) {
+    console.error("Turnstile error:", err);
+    return res.status(500).json({ error: "Error verifying CAPTCHA." });
+  }
+
+  // 3. Supabase Insertion
   if (!supabaseUrl || !supabaseServiceKey) {
     return res.status(500).json({ error: "Supabase credentials not configured." });
   }
+  const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+  let insertedId = null;
   try {
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const { data, error } = await supabase
+      .from("registrations")
+      .insert([rowData])
+      .select("id");
 
-    // 1. Check how many emails were sent today (UTC start of day)
+    if (error) {
+      if (error.code === "23505") { // Unique constraint violation
+        return res.status(409).json({ error: "You have already registered with this email." });
+      }
+      throw error;
+    }
+    insertedId = data[0].id;
+  } catch (err) {
+    console.error("Supabase insert error:", err);
+    return res.status(500).json({ error: "Database error during registration." });
+  }
+
+  // 4. Send Email
+  try {
     const todayStart = new Date();
     todayStart.setUTCHours(0, 0, 0, 0);
 
-    const { count: sentTodayCount, error: countErr } = await supabase
+    const { count: sentTodayCount } = await supabase
       .from("registrations")
       .select("id", { count: "exact", head: true })
       .eq("email_sent", true)
       .gte("created_at", todayStart.toISOString());
 
-    if (countErr) {
-      console.warn("Could not calculate daily count:", countErr.message);
-    }
-
-    // 2. Check if daily quota threshold reached (450 emails)
     if (typeof sentTodayCount === "number" && sentTodayCount >= DAILY_INSTANT_LIMIT) {
-      console.log(`Daily instant threshold (${sentTodayCount}/${DAILY_INSTANT_LIMIT}) reached. Leaving in queue.`);
-      return res.status(200).json({ 
-        status: "queued", 
-        message: "Daily instant limit reached. Email queued for batch dispatch." 
-      });
+      return res.status(200).json({ status: "queued", message: "Registration successful. Email queued." });
     }
 
-    // 3. Configure Nodemailer Transporter
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || "smtp.gmail.com",
       port: parseInt(process.env.SMTP_PORT || "465"),
@@ -71,7 +144,7 @@ module.exports = async function handler(req, res) {
 
     const first = (full_name || "Student").trim().split(" ")[0].replace(/[&<>"']/g, "");
     const uniqueHash = crypto.randomBytes(4).toString("hex").toUpperCase();
-
+    
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -175,37 +248,18 @@ module.exports = async function handler(req, res) {
 </body>
 </html>`;
 
-    // Send Mail
     await transporter.sendMail({
-      from: process.env.SMTP_FROM || `"Swift Coding Club Parul University" <${process.env.SMTP_USER}>`,
+      from: process.env.SMTP_FROM || `"Swift Coding Club" <${process.env.SMTP_USER}>`,
       to: email,
       subject: "Registration Confirmed — Swift Student Challenge 2027",
       html: html,
     });
 
-    // 4. Update Supabase record as email_sent = true
-    if (id) {
-      await supabase
-        .from("registrations")
-        .update({ email_sent: true })
-        .eq("id", id);
-    } else {
-      await supabase
-        .from("registrations")
-        .update({ email_sent: true })
-        .eq("email", email);
-    }
+    await supabase.from("registrations").update({ email_sent: true }).eq("id", insertedId);
 
-    return res.status(200).json({ 
-      status: "sent", 
-      message: "Confirmation email sent instantly!" 
-    });
-
+    return res.status(200).json({ status: "sent", message: "Registration successful. Email sent!" });
   } catch (err) {
     console.error("Instant email error:", err);
-    return res.status(200).json({ 
-      status: "queued", 
-      message: "Email queued due to SMTP delay." 
-    });
+    return res.status(200).json({ status: "queued", message: "Registration successful. Email queued." });
   }
 };

@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 
-const confirmHandler = require("./api/confirm");
+const registerHandler = require("./api/register");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // API Routes
-app.post("/api/confirm", (req, res) => confirmHandler(req, res));
+app.post("/api/register", (req, res) => registerHandler(req, res));
 
 // Fallback to index.html
 app.use((req, res) => {

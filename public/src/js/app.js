@@ -777,29 +777,44 @@ function executeSubmission(){
     body: JSON.stringify(sheetPayload)
   }).catch(function(err){ console.error("Google Sheets sync error:", err); });
 
-  if(!supabase){
-    showSuccess(row.email);
-    sendConfirmation(row.email,row.full_name);
+  var turnstileResponse = "";
+  var turnstileElement = form.querySelector('[name="cf-turnstile-response"]');
+  if (turnstileElement) {
+    turnstileResponse = turnstileElement.value;
+  }
+
+  if (!turnstileResponse) {
+    showToast("Please complete the CAPTCHA check.", "error");
+    if(submitBtn)submitBtn.disabled=false;
+    if(finalSubmitBtn)finalSubmitBtn.disabled=false;
+    if(submitBtn)submitBtn.textContent="Submit Application";
     return;
   }
 
-  supabase.from("registrations").insert([row],{returning:"minimal"}).then(function(res){
-    if(res.error){
-      if(res.error.code==="23505"){
-        showToast("You have already registered with this email.","error");
+  fetch("/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      row: row,
+      turnstileResponse: turnstileResponse
+    })
+  }).then(function(res) {
+    return res.json().then(function(data) {
+      if (res.ok) {
+        showSuccess(row.email);
+      } else {
+        showToast(data.error || "An error occurred during registration.", "error");
         if(submitBtn)submitBtn.disabled=false;
         if(finalSubmitBtn)finalSubmitBtn.disabled=false;
         if(submitBtn)submitBtn.textContent="Submit Application";
-        return;
       }
-      console.warn("Supabase insert notice:", res.error);
-    }
-    showSuccess(row.email);
-    sendConfirmation(row.email,row.full_name);
+    });
   }).catch(function(err){
-    console.warn("Supabase notice:",err);
-    showSuccess(row.email);
-    sendConfirmation(row.email,row.full_name);
+    console.error("Submit error:", err);
+    showToast("A network error occurred. Please try again.", "error");
+    if(submitBtn)submitBtn.disabled=false;
+    if(finalSubmitBtn)finalSubmitBtn.disabled=false;
+    if(submitBtn)submitBtn.textContent="Submit Application";
   });
 }
 
@@ -820,17 +835,7 @@ function showSuccess(email){
   showToast("Application submitted successfully!","success");
 }
 
-/* Fire-and-forget confirmation email */
-function sendConfirmation(email,name){
-  if(!email)return;
-  fetch("/api/confirm",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({email:email,full_name:name||""})
-  }).catch(function(e){
-    console.warn("Confirmation email was not sent:",e);
-  });
-}
+
 
 /* live validation on change */
 if(form)form.querySelectorAll("input,textarea").forEach(function(el){

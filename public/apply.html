@@ -33,6 +33,9 @@
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
+  
+  <!-- Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -822,6 +825,8 @@
       <p class="confirm-modal-desc">
         Are you sure you want to submit? Once submitted, your application <span class="confirm-warn-pill">cannot be edited or modified</span>. Please double-check your enrollment and contact details.
       </p>
+
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAAAEob8LomrYFkELZU" style="margin: 20px auto; display: flex; justify-content: center;"></div>
 
       <div class="confirm-modal-actions">
         <button type="button" id="cancelConfirmBtn" class="confirm-modal-btn cancel-btn">Review Application</button>
