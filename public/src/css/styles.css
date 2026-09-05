@@ -1800,7 +1800,7 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 }
 
 /* ============================================
-   SUBMISSION CONFIRMATION MODAL (Brutalist + Neumorphic)
+   SUBMISSION CONFIRMATION MODAL (Liquid Glass)
    ============================================ */
 .confirm-modal-backdrop {
   position: fixed;
@@ -1809,11 +1809,13 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.82);
+  background: rgba(3, 2, 4, 0.76);
+  backdrop-filter: blur(12px) saturate(190%);
+  -webkit-backdrop-filter: blur(12px) saturate(190%);
   padding: 1.5rem;
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .confirm-modal-backdrop.hidden {
@@ -1823,281 +1825,220 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
   display: none !important;
 }
 
+.confirm-modal-backdrop:not(.hidden) .confirm-modal-card {
+  animation: modalPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalPopIn {
+  0% { opacity: 0; transform: scale(0.92) translateY(16px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.confirm-modal-backdrop.hidden .confirm-modal-card {
+  transform: scale(0.92) translateY(12px);
+  opacity: 0;
+}
+
 .confirm-modal-card {
-  max-width: 460px;
+  max-width: 480px;
   width: 100%;
-  padding: 0;
-  text-align: left;
-  border-radius: 0;
-  border: 2px solid #2b2b30;
-  background: #0c0c0e;
-  box-shadow: 6px 6px 0 #F05123;
+  padding: 2.4rem 2.2rem 2rem;
+  text-align: center;
   position: relative;
   overflow: hidden;
 }
 
-.confirm-modal-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-  opacity: 0.08;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.confirm-hazard {
-  height: 10px;
-  background: repeating-linear-gradient(-45deg, #F05123 0 12px, #0c0c0e 12px 24px);
-  border-bottom: 2px solid #2b2b30;
-}
-
-.confirm-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 26px 28px 0;
-  position: relative;
-  z-index: 6;
-}
-
-.confirm-kicker {
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.62rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.38);
-}
-
-.confirm-stamp {
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.68rem;
-  font-weight: 800;
-  line-height: 1.3;
-  letter-spacing: 0.12em;
-  text-align: center;
-  color: transparent;
-  -webkit-text-stroke: 1.5px #F05123;
-  border: 2px solid #F05123;
-  padding: 7px 10px;
-  transform: rotate(6deg);
-  opacity: 0.9;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.confirm-meta {
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.62rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.30);
-  padding: 14px 28px 0;
-  display: flex;
-  gap: 10px;
-  position: relative;
-  z-index: 6;
-}
-
-.confirm-sep {
-  color: rgba(240,81,35,0.6);
-}
-
-.confirm-modal-backdrop:not(.hidden) .confirm-modal-card {
-  animation: modalSlideIn 0.25s ease forwards;
-}
-
-@keyframes modalSlideIn {
-  0% { opacity: 0; transform: translateY(12px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-.confirm-modal-backdrop.hidden .confirm-modal-card {
-  transform: translateY(12px);
-  opacity: 0;
-}
+.confirm-modal-card > * { position: relative; z-index: 3; }
 
 .confirm-modal-close {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 32px;
-  height: 32px;
-  border-radius: 0;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.15);
+  top: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.12);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.55);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 5;
 }
 
 .confirm-modal-close:hover {
-  background: #fff;
-  border-color: #fff;
-  color: #000;
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.28);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.confirm-icon-wrap {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-icon-ambient {
+  position: absolute;
+  inset: -8px;
+  border-radius: 26px;
+  border: 1px solid rgba(240,81,35,0.22);
+  animation: confirmPulse 2.8s infinite cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+@keyframes confirmPulse {
+  0% { transform: scale(0.94); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 0.12; }
+  100% { transform: scale(0.94); opacity: 0.8; }
+}
+
+.confirm-icon-box {
+  width: 58px;
+  height: 58px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255,120,70,0.22) 0%, rgba(240,81,35,0.08) 100%);
+  border: 1px solid rgba(255,140,90,0.4);
+  box-shadow: 0 0 28px rgba(240,81,35,0.28), inset 0 1px 2px rgba(255,255,255,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff7e4d;
+  filter: drop-shadow(0 2px 8px rgba(240,81,35,0.5));
+}
+
+.confirm-kicker {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.5rem;
 }
 
 .confirm-modal-title {
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-size: 2rem;
-  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 1.38rem;
+  font-weight: 700;
   color: #fff;
-  margin: 6px 0 0;
-  letter-spacing: -0.01em;
-  line-height: 0.95;
-  text-transform: uppercase;
-  position: relative;
-  z-index: 6;
+  margin: 0;
+  letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #ffffff 40%, rgba(255,255,255,0.82) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.confirm-q {
-  color: #F05123;
+.confirm-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(240,81,35,0.3), transparent);
+  margin: 1rem 0;
 }
 
 .confirm-modal-desc {
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.78rem;
-  color: rgba(255,255,255,0.62);
-  line-height: 1.75;
-  margin: 0;
-  letter-spacing: 0.01em;
-  padding: 16px 28px 0;
-  position: relative;
-  z-index: 6;
-}
-
-.confirm-prompt {
-  color: #F05123;
-  font-weight: 700;
+  font-size: 0.94rem;
+  color: rgba(255,255,255,0.74);
+  line-height: 1.65;
+  margin: 0 0 1.5rem;
+  letter-spacing: -0.01em;
 }
 
 .confirm-warn-pill {
   display: inline;
-  color: #0c0c0e;
-  font-weight: 800;
-  background: #F05123;
-  border: none;
-  padding: 1px 6px;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
+  color: #ff9e80;
+  font-weight: 600;
+  background: rgba(240,81,35,0.14);
+  border: 1px solid rgba(240,81,35,0.28);
+  padding: 1px 7px;
+  border-radius: 6px;
+  letter-spacing: -0.01em;
 }
 
 .confirm-modal-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0;
-  padding: 22px 0 0;
   position: relative;
-  z-index: 6;
 }
 
 .confirm-modal-btn-row {
   display: flex;
-  border-top: 2px solid #2b2b30;
+  gap: 12px;
+  justify-content: center;
 }
 
 .confirm-modal-btn {
-  flex: 1;
-  padding: 17px 24px;
-  border-radius: 0;
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  padding: 13px 22px;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 0.94rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.1s ease, background 0.15s ease, color 0.15s ease;
+  transition: all 0.25s var(--spring);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
+  letter-spacing: -0.01em;
   text-decoration: none;
-  border: none;
 }
 
 .confirm-modal-btn.cancel-btn {
-  background: #111113;
-  color: rgba(255,255,255,0.55);
-  border-right: 2px solid #2b2b30;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%),
+    rgba(22, 18, 26, 0.55);
+  border: 1px solid rgba(255,255,255,0.16);
+  color: rgba(255,255,255,0.9);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.18), 0 4px 14px rgba(0,0,0,0.25);
 }
 
 .confirm-modal-btn.cancel-btn:hover {
-  background: #1b1b1f;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%),
+    rgba(32, 26, 38, 0.7);
+  border-color: rgba(255,255,255,0.32);
   color: #fff;
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.25);
 }
 
 .confirm-modal-btn.submit-btn-confirm {
-  background: #F05123;
+  background: linear-gradient(135deg, #F05123 0%, #FF6434 50%, #D83C10 100%);
+  border: 1px solid rgba(255,200,175,0.4);
   color: #fff;
-  font-weight: 800;
-  box-shadow: inset 0 -4px 0 rgba(0,0,0,0.35);
+  box-shadow: 0 6px 24px rgba(240,81,35,0.48), inset 0 1px 2px rgba(255,255,255,0.45), inset 0 -2px 6px rgba(0,0,0,0.2);
 }
 
 .confirm-modal-btn.submit-btn-confirm:hover {
-  background: #ff5e2b;
+  transform: translateY(-1.5px);
+  box-shadow: 0 10px 32px rgba(240,81,35,0.65), inset 0 1px 2px rgba(255,255,255,0.6);
+  background: linear-gradient(135deg, #f25c30 0%, #ff7347 50%, #e24518 100%);
 }
 
 .confirm-modal-btn:active {
-  transform: translateY(2px) !important;
-}
-
-.confirm-modal-btn.submit-btn-confirm:active {
-  box-shadow: inset 0 -1px 0 rgba(0,0,0,0.35);
-}
-
-.confirm-cursor {
-  display: inline-block;
-  margin-left: -4px;
-  animation: confirmBlink 1s steps(1) infinite;
-}
-
-@keyframes confirmBlink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-
-.confirm-foot {
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.22);
-  text-align: center;
-  padding: 12px 28px 14px;
-  border-top: 1px dashed #2b2b30;
-  position: relative;
-  z-index: 6;
+  transform: scale(0.97) translateY(0) !important;
 }
 
 @media (max-width: 480px) {
   .confirm-modal-card {
-    max-width: 100%;
+    padding: 2rem 1.4rem 1.6rem;
+    border-radius: 24px;
   }
-  .confirm-head {
-    padding: 22px 20px 0;
-  }
-  .confirm-meta {
-    padding: 12px 20px 0;
-  }
-  .confirm-modal-desc {
-    padding: 14px 20px 0;
+  .confirm-modal-title {
+    font-size: 1.22rem;
   }
   .confirm-modal-btn-row {
-    flex-direction: column;
+    flex-direction: column-reverse;
+    gap: 10px;
   }
   .confirm-modal-btn {
-    padding: 14px 18px;
-  }
-  .confirm-modal-btn.cancel-btn {
-    border-right: none;
-    border-bottom: 2px solid #2b2b30;
+    width: 100%;
+    padding: 13px 18px;
   }
 }
