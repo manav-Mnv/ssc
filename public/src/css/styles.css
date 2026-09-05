@@ -1807,13 +1807,81 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
   padding: 0;
   text-align: left;
   border-radius: 0;
-  border: 2px solid rgba(255,255,255,0.12);
+  border: 2px solid #2b2b30;
   background: #0c0c0e;
-  box-shadow:
-    8px 8px 0 rgba(240,81,35,0.15),
-    inset 0 1px 0 rgba(255,255,255,0.06);
+  box-shadow: 6px 6px 0 #F05123;
   position: relative;
   overflow: hidden;
+}
+
+.confirm-modal-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.confirm-hazard {
+  height: 10px;
+  background: repeating-linear-gradient(-45deg, #F05123 0 12px, #0c0c0e 12px 24px);
+  border-bottom: 2px solid #2b2b30;
+}
+
+.confirm-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 26px 28px 0;
+  position: relative;
+  z-index: 6;
+}
+
+.confirm-kicker {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+}
+
+.confirm-stamp {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: 0.12em;
+  text-align: center;
+  color: transparent;
+  -webkit-text-stroke: 1.5px #F05123;
+  border: 2px solid #F05123;
+  padding: 7px 10px;
+  transform: rotate(6deg);
+  opacity: 0.9;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.confirm-meta {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.30);
+  padding: 14px 28px 0;
+  display: flex;
+  gap: 10px;
+  position: relative;
+  z-index: 6;
+}
+
+.confirm-sep {
+  color: rgba(240,81,35,0.6);
 }
 
 .confirm-modal-backdrop:not(.hidden) .confirm-modal-card {
@@ -1849,85 +1917,54 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 }
 
 .confirm-modal-close:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(255,255,255,0.3);
-  color: #fff;
-}
-
-.confirm-modal-icon-wrap {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  padding: 28px 28px 0;
-}
-
-.confirm-modal-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 0;
-  background: #1a1a1e;
-  border: 2px solid rgba(240,81,35,0.4);
-  box-shadow:
-    inset 0 2px 6px rgba(0,0,0,0.5),
-    inset 0 -1px 0 rgba(255,255,255,0.04);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.confirm-icon-char {
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #F05123;
-  line-height: 1;
-}
-
-.confirm-modal-label {
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
-  padding: 18px 28px 0;
+  background: #fff;
+  border-color: #fff;
+  color: #000;
 }
 
 .confirm-modal-title {
   font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   color: #fff;
-  margin: 8px 0 0;
-  letter-spacing: 0.06em;
+  margin: 6px 0 0;
+  letter-spacing: -0.01em;
+  line-height: 0.95;
   text-transform: uppercase;
-  padding: 0 28px;
+  position: relative;
+  z-index: 6;
 }
 
-.confirm-modal-divider {
-  height: 2px;
-  background: rgba(240,81,35,0.25);
-  margin: 16px 28px;
+.confirm-q {
+  color: #F05123;
 }
 
 .confirm-modal-desc {
   font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
   font-size: 0.78rem;
-  color: rgba(255,255,255,0.55);
-  line-height: 1.7;
+  color: rgba(255,255,255,0.62);
+  line-height: 1.75;
   margin: 0;
-  letter-spacing: 0.02em;
-  padding: 0 28px;
+  letter-spacing: 0.01em;
+  padding: 16px 28px 0;
+  position: relative;
+  z-index: 6;
+}
+
+.confirm-prompt {
+  color: #F05123;
+  font-weight: 700;
 }
 
 .confirm-warn-pill {
   display: inline;
-  color: #F05123;
-  font-weight: 700;
-  background: none;
+  color: #0c0c0e;
+  font-weight: 800;
+  background: #F05123;
   border: none;
-  padding: 0;
+  padding: 1px 6px;
   letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 .confirm-modal-actions {
@@ -1935,25 +1972,27 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
   flex-direction: column;
   align-items: stretch;
   gap: 0;
-  padding: 20px 0 0;
+  padding: 22px 0 0;
+  position: relative;
+  z-index: 6;
 }
 
 .confirm-modal-btn-row {
   display: flex;
-  border-top: 2px solid rgba(255,255,255,0.10);
+  border-top: 2px solid #2b2b30;
 }
 
 .confirm-modal-btn {
   flex: 1;
-  padding: 16px 24px;
+  padding: 17px 24px;
   border-radius: 0;
   font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: transform 0.1s ease, background 0.15s ease, color 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1964,19 +2003,20 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 
 .confirm-modal-btn.cancel-btn {
   background: #111113;
-  color: rgba(255,255,255,0.6);
-  border-right: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.55);
+  border-right: 2px solid #2b2b30;
 }
 
 .confirm-modal-btn.cancel-btn:hover {
-  background: #181819;
+  background: #1b1b1f;
   color: #fff;
 }
 
 .confirm-modal-btn.submit-btn-confirm {
   background: #F05123;
   color: #fff;
-  font-weight: 700;
+  font-weight: 800;
+  box-shadow: inset 0 -4px 0 rgba(0,0,0,0.35);
 }
 
 .confirm-modal-btn.submit-btn-confirm:hover {
@@ -1984,12 +2024,49 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 }
 
 .confirm-modal-btn:active {
-  transform: scale(0.98) !important;
+  transform: translateY(2px) !important;
+}
+
+.confirm-modal-btn.submit-btn-confirm:active {
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,0.35);
+}
+
+.confirm-cursor {
+  display: inline-block;
+  margin-left: -4px;
+  animation: confirmBlink 1s steps(1) infinite;
+}
+
+@keyframes confirmBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.confirm-foot {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.22);
+  text-align: center;
+  padding: 12px 28px 14px;
+  border-top: 1px dashed #2b2b30;
+  position: relative;
+  z-index: 6;
 }
 
 @media (max-width: 480px) {
   .confirm-modal-card {
     max-width: 100%;
+  }
+  .confirm-head {
+    padding: 22px 20px 0;
+  }
+  .confirm-meta {
+    padding: 12px 20px 0;
+  }
+  .confirm-modal-desc {
+    padding: 14px 20px 0;
   }
   .confirm-modal-btn-row {
     flex-direction: column;
@@ -1999,6 +2076,6 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
   }
   .confirm-modal-btn.cancel-btn {
     border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,0.10);
+    border-bottom: 2px solid #2b2b30;
   }
 }

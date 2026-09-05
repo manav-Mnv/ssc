@@ -804,6 +804,7 @@
   <!-- Submission Confirmation Modal -->
   <div id="confirmModal" class="confirm-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
     <div class="confirm-modal-card">
+      <div class="confirm-hazard" aria-hidden="true"></div>
       <button type="button" id="closeConfirmBtn" class="confirm-modal-close" aria-label="Close dialog">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -811,27 +812,31 @@
         </svg>
       </button>
 
-      <div class="confirm-modal-icon-wrap">
-        <div class="confirm-modal-icon">
-          <span class="confirm-icon-char">!</span>
+      <div class="confirm-head">
+        <div>
+          <div class="confirm-kicker">SSC-2027 // FINAL CHECK</div>
+          <h3 id="confirmModalTitle" class="confirm-modal-title">SUBMIT<span class="confirm-q">?</span></h3>
         </div>
+        <div class="confirm-stamp" aria-hidden="true">NO<br>EDITS</div>
       </div>
 
-      <div class="confirm-modal-label">[ CONFIRM SUBMISSION ]</div>
-      <h3 id="confirmModalTitle" class="confirm-modal-title">ARE YOU SURE?</h3>
-      <div class="confirm-modal-divider"></div>
+      <div class="confirm-meta" aria-hidden="true">
+        <span>FORM/SSC-2027</span><span class="confirm-sep">///</span><span>REV 01</span>
+      </div>
+
       <p class="confirm-modal-desc">
-        Once submitted, your application <span class="confirm-warn-pill">CANNOT BE EDITED</span>. Double-check your enrollment and contact details before proceeding.
+        <span class="confirm-prompt">&gt;</span> This locks your application. <span class="confirm-warn-pill">CANNOT BE EDITED</span> after this point. Check enrollment + contact details, then commit.
       </p>
 
       <div class="confirm-modal-actions">
         <div class="confirm-modal-btn-row">
-          <button type="button" id="cancelConfirmBtn" class="confirm-modal-btn cancel-btn"><< REVIEW</button>
+          <button type="button" id="cancelConfirmBtn" class="confirm-modal-btn cancel-btn">&lt;&lt; BACK</button>
           <button type="button" id="finalSubmitBtn" class="confirm-modal-btn submit-btn-confirm">
-            <span>SUBMIT >>></span>
+            <span>SUBMIT</span><span class="confirm-cursor" aria-hidden="true">_</span>
           </button>
         </div>
       </div>
+      <div class="confirm-foot" aria-hidden="true">++ END OF CHECK ++</div>
     </div>
   </div>
 
