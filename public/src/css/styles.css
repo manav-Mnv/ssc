@@ -1809,9 +1809,9 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(3, 2, 4, 0.76);
-  backdrop-filter: blur(12px) saturate(190%);
-  -webkit-backdrop-filter: blur(12px) saturate(190%);
+  background: rgba(3, 2, 4, 0.70);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
   padding: 1.5rem;
   opacity: 1;
   visibility: visible;
@@ -1840,42 +1840,47 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 }
 
 .confirm-modal-card {
-  max-width: 480px;
+  max-width: 420px;
   width: 100%;
-  padding: 2.6rem 2.4rem 2.2rem;
+  padding: 2.4rem 2.2rem 2rem;
   text-align: center;
   position: relative;
   overflow: hidden;
-  border-top: 6px solid var(--swift);
+  border-radius: 28px;
+  background: rgba(10, 10, 14, 0.55);
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04) inset;
 }
 
 .confirm-modal-card > * { position: relative; z-index: 3; }
 
 .confirm-modal-close {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 34px;
-  height: 34px;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.10);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255,255,255,0.55);
+  color: rgba(255,255,255,0.45);
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease;
   z-index: 5;
 }
 
 .confirm-modal-close:hover {
-  background: rgba(255,255,255,0.14);
-  border-color: rgba(255,255,255,0.28);
-  color: #fff;
-  transform: scale(1.08);
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.85);
+  transform: scale(1.05);
 }
 
 .confirm-icon-wrap {
@@ -1888,12 +1893,12 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 }
 
 .confirm-icon-box {
-  width: 58px;
-  height: 58px;
-  border-radius: 20px;
-  background: rgba(240,81,56,0.10);
-  border: 1px solid rgba(240,81,56,0.35);
-  box-shadow: 0 0 24px rgba(240,81,35,0.20), inset 0 1px 1px rgba(255,255,255,0.20);
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: rgba(240,81,56,0.08);
+  border: 1px solid rgba(240,81,56,0.28);
+  box-shadow: 0 0 32px rgba(240,81,35,0.18), inset 0 1px 1px rgba(255,255,255,0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1902,40 +1907,40 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 
 .confirm-kicker {
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.20em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.42);
-  margin-bottom: 0.55rem;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 0.5rem;
 }
 
 .confirm-modal-title {
   font-family: var(--font-display);
-  font-size: 1.42rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: #fff;
-  margin: 0 0 0.7rem;
-  letter-spacing: -0.02em;
+  margin: 0 0 0.65rem;
+  letter-spacing: -0.03em;
 }
 
 .confirm-modal-desc {
-  font-size: 0.94rem;
-  color: rgba(255,255,255,0.60);
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.50);
   line-height: 1.6;
-  max-width: 400px;
-  margin: 0 auto 1.6rem;
+  max-width: 360px;
+  margin: 0 auto 1.5rem;
   letter-spacing: -0.01em;
 }
 
 .confirm-warn-pill {
   display: inline-block;
-  color: rgba(255,255,255,0.92);
+  color: rgba(255,255,255,0.85);
   font-weight: 600;
-  background: rgba(240,81,56,0.10);
-  border: 1px solid rgba(240,81,56,0.30);
-  padding: 2px 12px;
-  border-radius: 24px;
+  background: rgba(240,81,56,0.08);
+  border: 1px solid rgba(240,81,56,0.22);
+  padding: 2px 10px;
+  border-radius: 20px;
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
@@ -1951,13 +1956,13 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 }
 
 .confirm-modal-btn {
-  padding: 13px 22px;
+  padding: 12px 24px;
   border-radius: 50px;
   font-family: var(--font-body);
-  font-size: 0.94rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s var(--spring);
+  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1967,34 +1972,30 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
 }
 
 .confirm-modal-btn.cancel-btn {
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%),
-    rgba(22, 18, 26, 0.55);
-  border: 1px solid rgba(255,255,255,0.16);
-  color: rgba(255,255,255,0.9);
-  box-shadow: inset 0 1px 1px rgba(255,255,255,0.18), 0 4px 14px rgba(0,0,0,0.25);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.7);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .confirm-modal-btn.cancel-btn:hover {
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%),
-    rgba(32, 26, 38, 0.7);
-  border-color: rgba(255,255,255,0.32);
-  color: #fff;
-  transform: translateY(-1.5px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.95);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
 }
 
 .confirm-modal-btn.submit-btn-confirm {
   background: linear-gradient(135deg, #F05123 0%, #FF6434 50%, #D83C10 100%);
-  border: 1px solid rgba(255,200,175,0.4);
+  border: 1px solid rgba(255,200,175,0.35);
   color: #fff;
-  box-shadow: 0 6px 24px rgba(240,81,35,0.48), inset 0 1px 2px rgba(255,255,255,0.45), inset 0 -2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 20px rgba(240,81,35,0.40), inset 0 1px 1px rgba(255,255,255,0.40), inset 0 -2px 4px rgba(0,0,0,0.15);
 }
 
 .confirm-modal-btn.submit-btn-confirm:hover {
   transform: translateY(-1.5px);
-  box-shadow: 0 10px 32px rgba(240,81,35,0.65), inset 0 1px 2px rgba(255,255,255,0.6);
+  box-shadow: 0 8px 28px rgba(240,81,35,0.55), inset 0 1px 1px rgba(255,255,255,0.55);
   background: linear-gradient(135deg, #f25c30 0%, #ff7347 50%, #e24518 100%);
 }
 
