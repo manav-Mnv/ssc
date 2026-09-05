@@ -680,20 +680,21 @@ var finalSubmitBtn=document.getElementById("finalSubmitBtn");
 
 function hideConfirmModal(){
   if(confirmModal)confirmModal.classList.add("hidden");
-  if(typeof turnstile!=="undefined"){
-    var container=confirmModal.querySelector(".cf-turnstile");
-    if(container)container.innerHTML="";
-  }
 }
 
+var turnstileRendered=false;
 function showConfirmModal(){
   if(confirmModal)confirmModal.classList.remove("hidden");
-  if(typeof turnstile!=="undefined"){
-    var container=confirmModal.querySelector(".cf-turnstile");
-    if(container){
-      container.innerHTML="";
+  if(typeof turnstile==="undefined")return;
+  var container=confirmModal.querySelector(".cf-turnstile");
+  if(!container)return;
+  if(!turnstileRendered){
+    requestAnimationFrame(function(){
       turnstile.render(container,{sitekey:"0x4AAAAAAAEob8LomrYFkELZU"});
-    }
+      turnstileRendered=true;
+    });
+  }else{
+    turnstile.reset(container);
   }
 }
 
