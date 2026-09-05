@@ -682,20 +682,12 @@ function hideConfirmModal(){
   if(confirmModal)confirmModal.classList.add("hidden");
 }
 
-var turnstileRendered=false;
 function showConfirmModal(){
   if(confirmModal)confirmModal.classList.remove("hidden");
   if(typeof turnstile==="undefined")return;
   var container=confirmModal.querySelector(".cf-turnstile");
   if(!container)return;
-  if(!turnstileRendered){
-    requestAnimationFrame(function(){
-      turnstile.render(container,{sitekey:"0x4AAAAAAAEob8LomrYFkELZU"});
-      turnstileRendered=true;
-    });
-  }else{
-    turnstile.reset(container);
-  }
+  try{turnstile.reset(container);}catch(e){}
 }
 
 if(form)form.addEventListener("submit",function(e){
