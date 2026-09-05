@@ -682,12 +682,22 @@ function hideConfirmModal(){
   if(confirmModal)confirmModal.classList.add("hidden");
 }
 
+var turnstileWidgetId=null;
 function showConfirmModal(){
   if(confirmModal)confirmModal.classList.remove("hidden");
   if(typeof turnstile==="undefined")return;
   var container=confirmModal.querySelector(".cf-turnstile");
   if(!container)return;
-  try{turnstile.reset(container);}catch(e){}
+  if(turnstileWidgetId!==null){
+    try{turnstile.reset(turnstileWidgetId);}catch(e){}
+  }else{
+    requestAnimationFrame(function(){
+      turnstileWidgetId=turnstile.render(container,{
+        sitekey:"0x4AAAAAAAEob8LomrYFkELZU",
+        callback:function(token){}
+      });
+    });
+  }
 }
 
 if(form)form.addEventListener("submit",function(e){

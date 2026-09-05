@@ -58,7 +58,7 @@ module.exports = async function handler(req, res) {
     return res.status(429).json({ error: "Too many requests. Please try again later." });
   }
 
-  const { rowData, cfTurnstileResponse } = req.body || {};
+  const { rowData, turnstileResponse } = req.body || {};
   const email = rowData?.email;
   const full_name = rowData?.full_name;
 
@@ -66,7 +66,7 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: "Missing required registration data." });
   }
 
-  if (!cfTurnstileResponse) {
+  if (!turnstileResponse) {
     return res.status(400).json({ error: "CAPTCHA validation failed. Please refresh and try again." });
   }
 
@@ -77,7 +77,7 @@ module.exports = async function handler(req, res) {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         secret: TURNSTILE_SECRET_KEY,
-        response: cfTurnstileResponse,
+        response: turnstileResponse,
         remoteip: ip,
       }),
     });
