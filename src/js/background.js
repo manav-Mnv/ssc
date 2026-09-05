@@ -2,6 +2,7 @@
    Each page sets window.SSC_FX_PAUSED before including this file:
      index.html -> true until the boot overlay finishes
      apply.html -> false immediately */
+window.addEventListener('load', () => {
   (() => {
     const TAU = Math.PI * 2;
     const _mq = (q) => window.matchMedia(q).matches;
@@ -336,5 +337,5 @@ void main(){
     }
     requestAnimationFrame(render);
   })();
+});
 
-  
