@@ -732,6 +732,13 @@ window.addEventListener("keydown",function(e){
 
 if(finalSubmitBtn){
   finalSubmitBtn.addEventListener("click",function(){
+    var token="";
+    var el=document.querySelector('#confirmModal [name="cf-turnstile-response"]');
+    if(el)token=el.value;
+    if(!token){
+      showToast("Please complete the CAPTCHA check.","error");
+      return;
+    }
     hideConfirmModal();
     executeSubmission();
   });
