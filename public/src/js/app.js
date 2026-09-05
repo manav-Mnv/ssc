@@ -64,6 +64,13 @@ function buildRegistrationRow(){
       else raw[k]=[raw[k],v];
     }else raw[k]=v;
   });
+  // Override "Other" radio values with write-in text
+  var otherPairs=[["faculty","facultyOther"],["studentStatus","studentStatusOther"]];
+  otherPairs.forEach(function(p){
+    if(raw[p[0]]==="Other"&&raw[p[1]]&&raw[p[1]].trim()){
+      raw[p[0]]=raw[p[1]].trim();
+    }
+  });
   var row={};
   Object.keys(FIELD_MAP).forEach(function(f){
     if(raw[f]===undefined)return;

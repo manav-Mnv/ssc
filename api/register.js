@@ -99,6 +99,36 @@ module.exports = async function handler(req, res) {
   }
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+  // Ensure all NOT NULL columns have values
+  const requiredDefaults = {
+    work_schedule: [],
+    interests_improving: [],
+    excitement_level: [],
+    build_interest: [],
+    has_uni_email: false,
+    previous_competitions: false,
+    confirm_accurate: false,
+    understand_no_guarantee: false,
+    agree_contact: false,
+    email_sent: false,
+    division_batch: "",
+    github_profile: "",
+    linkedin_profile: "",
+    portfolio_website: "",
+    uni_email: "",
+    uni_enrollment_id: "",
+    personal_email: "",
+    student_status: "",
+    device_frequency: "",
+    competition_details: "",
+    anything_else: ""
+  };
+  for (const [key, val] of Object.entries(requiredDefaults)) {
+    if (rowPayload[key] === undefined || rowPayload[key] === null) {
+      rowPayload[key] = val;
+    }
+  }
+
   let insertedId = null;
   try {
     const { data, error } = await supabase
@@ -110,6 +140,7 @@ module.exports = async function handler(req, res) {
       if (error.code === "23505") { // Unique constraint violation
         return res.status(409).json({ error: "You have already registered with this email." });
       }
+      console.error("Supabase error details:", JSON.stringify({ code: error.code, message: error.message, details: error.details, hint: error.hint }));
       throw error;
     }
     insertedId = data[0].id;
