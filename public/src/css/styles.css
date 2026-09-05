@@ -1938,17 +1938,6 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
   padding: 20px 0 0;
 }
 
-.confirm-modal-turnstile {
-  display: flex;
-  justify-content: center;
-  padding: 0 28px 16px;
-}
-
-.confirm-modal-turnstile .cf-turnstile {
-  transform: scale(0.88);
-  transform-origin: center;
-}
-
 .confirm-modal-btn-row {
   display: flex;
   border-top: 2px solid rgba(255,255,255,0.10);

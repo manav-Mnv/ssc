@@ -35,7 +35,7 @@
   <script defer src="/_vercel/speed-insights/script.js"></script>
   
   <!-- Cloudflare Turnstile -->
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -768,6 +768,7 @@
       </div>
 
     <div class="form-nav">
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAAAEob8LomrYFkELZU"></div>
       <button type="button" id="prevBtn" class="nav-btn prev-btn liquid-glass" disabled>Previous</button>
       <button type="button" id="nextBtn" class="nav-btn next-btn liquid-glass">Next</button>
       <button type="submit" id="submitBtn" class="nav-btn submit-btn liquid-glass hidden">Submit Application</button>
@@ -824,9 +825,6 @@
       </p>
 
       <div class="confirm-modal-actions">
-        <div class="confirm-modal-turnstile">
-          <div class="cf-turnstile" data-sitekey="0x4AAAAAAAEob8LomrYFkELZU"></div>
-        </div>
         <div class="confirm-modal-btn-row">
           <button type="button" id="cancelConfirmBtn" class="confirm-modal-btn cancel-btn"><< REVIEW</button>
           <button type="button" id="finalSubmitBtn" class="confirm-modal-btn submit-btn-confirm">

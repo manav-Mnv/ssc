@@ -682,22 +682,8 @@ function hideConfirmModal(){
   if(confirmModal)confirmModal.classList.add("hidden");
 }
 
-var turnstileWidgetId=null;
 function showConfirmModal(){
   if(confirmModal)confirmModal.classList.remove("hidden");
-  if(typeof turnstile==="undefined")return;
-  var container=confirmModal.querySelector(".cf-turnstile");
-  if(!container)return;
-  if(turnstileWidgetId!==null){
-    try{turnstile.reset(turnstileWidgetId);}catch(e){}
-  }else{
-    requestAnimationFrame(function(){
-      turnstileWidgetId=turnstile.render(container,{
-        sitekey:"0x4AAAAAAAEob8LomrYFkELZU",
-        callback:function(token){}
-      });
-    });
-  }
 }
 
 if(form)form.addEventListener("submit",function(e){
@@ -735,7 +721,7 @@ window.addEventListener("keydown",function(e){
 if(finalSubmitBtn){
   finalSubmitBtn.addEventListener("click",function(){
     var token="";
-    var el=document.querySelector('#confirmModal [name="cf-turnstile-response"]');
+    var el=form.querySelector('[name="cf-turnstile-response"]');
     if(el)token=el.value;
     if(!token){
       showToast("Please complete the CAPTCHA check.","error");
@@ -799,8 +785,7 @@ function executeSubmission(){
   }).catch(function(err){ console.error("Google Sheets sync error:", err); });
 
   var turnstileResponse = "";
-  var turnstileElement = document.querySelector('#confirmModal [name="cf-turnstile-response"]');
-  if (!turnstileElement) turnstileElement = form.querySelector('[name="cf-turnstile-response"]');
+  var turnstileElement = form.querySelector('[name="cf-turnstile-response"]');
   if (turnstileElement) {
     turnstileResponse = turnstileElement.value;
   }
