@@ -811,6 +811,9 @@
   <!-- Submission Confirmation Modal -->
   <div id="confirmModal" class="confirm-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
     <div class="confirm-modal-card glass-card liquid-glass">
+      <div class="confirm-shimmer-sweep"></div>
+      <div class="confirm-glow-orb"></div>
+
       <button type="button" id="closeConfirmBtn" class="confirm-modal-close" aria-label="Close dialog">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -819,10 +822,17 @@
       </button>
 
       <div class="confirm-icon-wrap">
+        <div class="confirm-icon-ring"></div>
         <div class="confirm-icon-box">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#shieldGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <defs>
+              <linearGradient id="shieldGrad" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF8A65"/>
+                <stop offset="100%" stop-color="#F05123"/>
+              </linearGradient>
+            </defs>
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <polyline points="9 12 11 14 15 10"/>
+            <polyline points="9 12 11 14 15 10" stroke="#fff" stroke-width="2.2"/>
           </svg>
         </div>
       </div>
@@ -837,7 +847,8 @@
         <div class="confirm-modal-btn-row">
           <button type="button" id="cancelConfirmBtn" class="confirm-modal-btn cancel-btn">Review Application</button>
           <button type="button" id="finalSubmitBtn" class="confirm-modal-btn submit-btn-confirm">
-            <span>Yes, Submit Application</span>
+            <span class="btn-shimmer"></span>
+            <span class="btn-label">Yes, Submit Application</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
