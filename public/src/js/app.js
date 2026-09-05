@@ -718,6 +718,30 @@ window.addEventListener("keydown",function(e){
   }
 });
 
+// Turnstile widget lifecycle callbacks (wired via data-callback / data-error-callback)
+window.turnstileSuccess=function(){
+  var fb=document.getElementById("turnstileFallback");
+  if(fb)fb.classList.add("hidden");
+};
+window.turnstileError=function(){
+  console.error("[turnstile] widget failed to render - check sitekey domain allowlist in Cloudflare dashboard, adblocker, or network.");
+  var fb=document.getElementById("turnstileFallback");
+  if(fb)fb.classList.remove("hidden");
+};
+
+(function(){
+  var retry=document.getElementById("turnstileRetry");
+  if(!retry)return;
+  retry.addEventListener("click",function(){
+    if(typeof turnstile==="undefined")return;
+    var container=form?form.querySelector(".cf-turnstile"):document.querySelector(".cf-turnstile");
+    if(!container)return;
+    var fb=document.getElementById("turnstileFallback");
+    if(fb)fb.classList.add("hidden");
+    try{turnstile.reset(container);}catch(e){console.error("[turnstile] reset failed:",e);}
+  });
+})();
+
 if(finalSubmitBtn){
   finalSubmitBtn.addEventListener("click",function(){
     var token="";

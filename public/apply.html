@@ -768,7 +768,14 @@
       </div>
 
     <div class="form-nav">
-      <div class="cf-turnstile" data-sitekey="0x4AAAAAAAEob8LomrYFkELZU"></div>
+      <div class="turnstile-wrap">
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAAEob8LomrYFkELZU" data-callback="turnstileSuccess" data-error-callback="turnstileError" data-timeout-callback="turnstileError"></div>
+        <div id="turnstileFallback" class="turnstile-fallback hidden">
+          <span class="turnstile-fallback-icon">!</span>
+          <span>CAPTCHA FAILED TO LOAD — DISABLE ADBLOCKER / CHECK CONNECTION, THEN REFRESH.</span>
+          <button type="button" id="turnstileRetry">RETRY ↻</button>
+        </div>
+      </div>
       <button type="button" id="prevBtn" class="nav-btn prev-btn liquid-glass" disabled>Previous</button>
       <button type="button" id="nextBtn" class="nav-btn next-btn liquid-glass">Next</button>
       <button type="submit" id="submitBtn" class="nav-btn submit-btn liquid-glass hidden">Submit Application</button>
