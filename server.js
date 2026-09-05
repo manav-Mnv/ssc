@@ -1,4 +1,4 @@
-﻿require("dotenv").config();
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 
@@ -12,14 +12,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static student app files
-app.use(express.static(path.join(__dirname, "./")));
+app.use(express.static(path.join(__dirname, "public")));
 
 // API Routes
 app.post("/api/confirm", (req, res) => confirmHandler(req, res));
 
 // Fallback to index.html
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
 app.listen(PORT, HOST, () => {
