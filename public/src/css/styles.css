@@ -866,7 +866,7 @@ body.boot-done .hero-desc{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s bot
    NAVIGATION BUTTONS
    ============================================ */
 .form-nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;gap:12px;flex-wrap:wrap}
-.turnstile-wrap{width:100%;display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-height:65px}
+.turnstile-wrap{width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:65px}
 .turnstile-fallback{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
   font-family:'JetBrains Mono','SF Mono','Fira Code',monospace;
