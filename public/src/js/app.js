@@ -723,10 +723,19 @@ window.turnstileSuccess=function(){
   var fb=document.getElementById("turnstileFallback");
   if(fb)fb.classList.add("hidden");
 };
-window.turnstileError=function(){
-  console.error("[turnstile] widget failed to render - check sitekey domain allowlist in Cloudflare dashboard, adblocker, or network.");
+window.turnstileError=function(code){
+  console.error("[turnstile] widget error code:",code);
   var fb=document.getElementById("turnstileFallback");
-  if(fb)fb.classList.remove("hidden");
+  if(!fb)return;
+  fb.classList.remove("hidden");
+  var msg=document.getElementById("turnstileErrMsg");
+  var hint="DISABLE ADBLOCKER / CHECK CONNECTION, THEN RETRY.";
+  if(typeof code==="number"){
+    if(code>=110000&&code<200000)hint="SITEKEY OR DOMAIN NOT AUTHORIZED — CLOUDFLARE DASHBOARD → TURNSTILE → THIS SITE → SETTINGS → HOSTNAME MANAGEMENT → ADD sscpu.vercel.app";
+    else if(code===200500)hint="CHALLENGES.CLOUDFLARE.COM IS BLOCKED — DISABLE ADBLOCKER / VPN / TRY INCOGNITO, THEN RETRY.";
+    else if(code>=300000)hint="FLAGGED AS BOT — SWITCH NETWORK OR BROWSER, THEN RETRY.";
+  }
+  if(msg)msg.textContent="TURNSTILE ERR "+code+" — "+hint;
 };
 
 (function(){

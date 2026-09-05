@@ -772,7 +772,7 @@
         <div class="cf-turnstile" data-sitekey="0x4AAAAAAAEob8LomrYFkELZU" data-callback="turnstileSuccess" data-error-callback="turnstileError" data-timeout-callback="turnstileError"></div>
         <div id="turnstileFallback" class="turnstile-fallback hidden">
           <span class="turnstile-fallback-icon">!</span>
-          <span>CAPTCHA FAILED TO LOAD — DISABLE ADBLOCKER / CHECK CONNECTION, THEN REFRESH.</span>
+          <span id="turnstileErrMsg">CAPTCHA FAILED TO LOAD — DISABLE ADBLOCKER / CHECK CONNECTION, THEN REFRESH.</span>
           <button type="button" id="turnstileRetry">RETRY ↻</button>
         </div>
       </div>
@@ -819,7 +819,6 @@
       </button>
 
       <div class="confirm-icon-wrap">
-        <div class="confirm-icon-ambient"></div>
         <div class="confirm-icon-box">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -828,9 +827,8 @@
         </div>
       </div>
 
-      <div class="confirm-kicker">[ CONFIRM SUBMISSION ]</div>
+      <div class="confirm-kicker">Final check</div>
       <h3 id="confirmModalTitle" class="confirm-modal-title">Ready to Submit?</h3>
-      <div class="confirm-divider"></div>
       <p class="confirm-modal-desc">
         Once submitted, your application <span class="confirm-warn-pill">cannot be edited or modified</span>. Double-check your enrollment and contact details before proceeding.
       </p>
