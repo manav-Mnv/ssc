@@ -559,12 +559,15 @@ function goToPage(num){
   updateProgress();
   saveProgress();
   prevBtn.disabled=currentPage===1;
+  var twrap=document.getElementById("turnstileWrap");
   if(currentPage===TOTAL_PAGES){
     nextBtn.classList.add("hidden");
     submitBtn.classList.remove("hidden");
+    if(twrap)twrap.classList.remove("hidden");
   }else{
     nextBtn.classList.remove("hidden");
     submitBtn.classList.add("hidden");
+    if(twrap)twrap.classList.add("hidden");
   }
   if(num===2){
     toggleVerificationFields();
