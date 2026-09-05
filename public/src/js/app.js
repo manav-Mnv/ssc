@@ -680,10 +680,21 @@ var finalSubmitBtn=document.getElementById("finalSubmitBtn");
 
 function hideConfirmModal(){
   if(confirmModal)confirmModal.classList.add("hidden");
+  if(typeof turnstile!=="undefined"){
+    var container=confirmModal.querySelector(".cf-turnstile");
+    if(container)container.innerHTML="";
+  }
 }
 
 function showConfirmModal(){
   if(confirmModal)confirmModal.classList.remove("hidden");
+  if(typeof turnstile!=="undefined"){
+    var container=confirmModal.querySelector(".cf-turnstile");
+    if(container){
+      container.innerHTML="";
+      turnstile.render(container,{sitekey:"0x4AAAAAAAEob8LomrYFkELZU"});
+    }
+  }
 }
 
 if(form)form.addEventListener("submit",function(e){
@@ -778,7 +789,8 @@ function executeSubmission(){
   }).catch(function(err){ console.error("Google Sheets sync error:", err); });
 
   var turnstileResponse = "";
-  var turnstileElement = form.querySelector('[name="cf-turnstile-response"]');
+  var turnstileElement = document.querySelector('#confirmModal [name="cf-turnstile-response"]');
+  if (!turnstileElement) turnstileElement = form.querySelector('[name="cf-turnstile-response"]');
   if (turnstileElement) {
     turnstileResponse = turnstileElement.value;
   }

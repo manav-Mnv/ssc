@@ -768,7 +768,6 @@
       </div>
 
     <div class="form-nav">
-      <div class="cf-turnstile" data-sitekey="0x4AAAAAAAEob8LomrYFkELZU"></div>
       <button type="button" id="prevBtn" class="nav-btn prev-btn liquid-glass" disabled>Previous</button>
       <button type="button" id="nextBtn" class="nav-btn next-btn liquid-glass">Next</button>
       <button type="submit" id="submitBtn" class="nav-btn submit-btn liquid-glass hidden">Submit Application</button>
@@ -828,13 +827,18 @@
       </p>
 
       <div class="confirm-modal-actions">
-        <button type="button" id="cancelConfirmBtn" class="confirm-modal-btn cancel-btn">Review Application</button>
-        <button type="button" id="finalSubmitBtn" class="confirm-modal-btn submit-btn-confirm">
-          <span>Yes, Submit Application</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </button>
+        <div class="confirm-modal-turnstile">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAAEob8LomrYFkELZU"></div>
+        </div>
+        <div class="confirm-modal-btn-row">
+          <button type="button" id="cancelConfirmBtn" class="confirm-modal-btn cancel-btn">Review Application</button>
+          <button type="button" id="finalSubmitBtn" class="confirm-modal-btn submit-btn-confirm">
+            <span>Yes, Submit Application</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
