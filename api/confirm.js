@@ -72,28 +72,108 @@ module.exports = async function handler(req, res) {
     const first = (full_name || "Student").trim().split(" ")[0].replace(/[&<>"']/g, "");
     const uniqueHash = crypto.randomBytes(4).toString("hex").toUpperCase();
 
-    const html = `
-      <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;padding:24px;color:#0f172a;line-height:1.6;">
-        <div style="max-width:560px;margin:0 auto;border:1px solid #e2e8f0;border-radius:12px;padding:32px;background:#ffffff;">
-          <h2 style="color:#f05138;margin-top:0;">Swift Student Challenge 2027</h2>
-          <p style="font-size:16px;">Hi <strong>${first}</strong>,</p>
-          <p>Your registration for the <strong>Swift Student Challenge 2027</strong> at Swift Coding Club, Parul University has been successfully recorded!</p>
-          <p>Our mentor team is reviewing your app playground idea. We will reach out to you with upcoming workshop schedules and challenge guidance.</p>
-          <div style="margin:24px 0;padding:16px;background:#f8fafc;border-left:4px solid #f05138;border-radius:4px;">
-            <p style="margin:0;font-size:14px;color:#475569;"><strong>Status:</strong> Registration Verified & Received</p>
-          </div>
-          <hr style="border:0;border-top:1px solid #e2e8f0;margin:24px 0;"/>
-          <p style="margin:16px 0 12px;font-size:14px;color:#0f172a;font-weight:600;">Stay Connected For Updates:</p>
-          <div style="margin-bottom:16px;">
-            <a href="https://chat.whatsapp.com/FXLcmWvxJbP24jZIn4B3Il" style="display:inline-block;padding:8px 16px;margin:0 8px 8px 0;background:#25D366;color:#ffffff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">WhatsApp Community</a>
-            <a href="https://whatsapp.com/channel/0029VbDO8OGD8SE0NtyZbN3h" style="display:inline-block;padding:8px 16px;margin:0 8px 8px 0;background:#25D366;color:#ffffff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">WhatsApp Channel</a>
-            <a href="https://www.instagram.com/swiftcodingclub_pu/" style="display:inline-block;padding:8px 16px;margin:0 8px 8px 0;background:#E1306C;color:#ffffff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">Instagram</a>
-            <a href="https://www.linkedin.com/company/scc-pu/" style="display:inline-block;padding:8px 16px;margin:0 0 8px 0;background:#0077b5;color:#ffffff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">LinkedIn</a>
-          </div>
-          <p style="font-size:12px;color:#94a3b8;margin:0;">Ref ID: #${uniqueHash} · Swift Coding Club, Parul University</p>
-        </div>
-      </body>
-    `;
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Swift Student Challenge 2027</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f4f4f5; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f5; padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px; width:100%; background-color:#ffffff; border-radius:16px; overflow:hidden;">
+
+          <!-- Header -->
+          <tr>
+            <td style="padding:36px 32px 0 32px;">
+              <p style="margin:0; font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#8b8b93;">
+                Swift Coding Club &middot; Parul University
+              </p>
+              <h1 style="margin:8px 0 0 0; font-size:22px; line-height:1.3; font-weight:700; color:#111114;">
+                You're registered for SSC 2027 🎉
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:20px 32px 0 32px;">
+              <p style="margin:0 0 14px 0; font-size:15px; line-height:1.6; color:#3a3a3e;">
+                Hi <strong style="color:#111114;">${first}</strong>,
+              </p>
+              <p style="margin:0 0 14px 0; font-size:15px; line-height:1.6; color:#3a3a3e;">
+                We've received your registration for the <strong>Swift Student Challenge 2027</strong>. Our mentor team is reviewing your app playground idea now.
+              </p>
+              <p style="margin:0; font-size:15px; line-height:1.6; color:#3a3a3e;">
+                You'll hear from us soon with workshop schedules and challenge guidance.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Status pill -->
+          <tr>
+            <td style="padding:24px 32px 0 32px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" style="background-color:#f0f9f1; border-radius:10px; width:100%;">
+                <tr>
+                  <td style="padding:14px 16px; font-size:14px; color:#1e7a34; font-weight:600;">
+                    ✓ Registration verified &amp; received
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding:28px 32px 0 32px;">
+              <hr style="border:none; border-top:1px solid #ececef; margin:0;" />
+            </td>
+          </tr>
+
+          <!-- Social links -->
+          <tr>
+            <td style="padding:24px 32px 0 32px;">
+              <p style="margin:0 0 12px 0; font-size:13px; font-weight:600; color:#111114;">
+                Stay connected
+              </p>
+              <table role="presentation" cellpadding="0" cellspacing="6">
+                <tr>
+                  <td>
+                    <a href="https://chat.whatsapp.com/FXLcmWvxJbP24jZIn4B3Il" style="display:inline-block; padding:9px 14px; background-color:#111114; color:#ffffff; font-size:13px; font-weight:600; text-decoration:none; border-radius:20px;">WhatsApp Community</a>
+                  </td>
+                  <td>
+                    <a href="https://whatsapp.com/channel/0029VbDO8OGD8SE0NtyZbN3h" style="display:inline-block; padding:9px 14px; background-color:#111114; color:#ffffff; font-size:13px; font-weight:600; text-decoration:none; border-radius:20px;">WhatsApp Channel</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="https://www.instagram.com/swiftcodingclub_pu/" style="display:inline-block; padding:9px 14px; background-color:#111114; color:#ffffff; font-size:13px; font-weight:600; text-decoration:none; border-radius:20px;">Instagram</a>
+                  </td>
+                  <td>
+                    <a href="https://www.linkedin.com/company/scc-pu/" style="display:inline-block; padding:9px 14px; background-color:#111114; color:#ffffff; font-size:13px; font-weight:600; text-decoration:none; border-radius:20px;">LinkedIn</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:28px 32px 32px 32px;">
+              <p style="margin:0; font-size:12px; color:#a9a9b0;">
+                Ref ID: #${uniqueHash} &middot; Swift Coding Club, Parul University
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
 
     // Send Mail
     await transporter.sendMail({
