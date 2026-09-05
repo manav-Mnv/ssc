@@ -768,24 +768,15 @@ window.turnstileError=function(code){
 
 if(finalSubmitBtn){
   finalSubmitBtn.addEventListener("click",function(){
-    // Reset Turnstile to get a fresh token before submitting
-    var container=form?form.querySelector(".cf-turnstile"):document.querySelector(".cf-turnstile");
-    if(container && typeof turnstile!=="undefined"){
-      try{turnstile.reset(container);}catch(e){}
+    var token="";
+    var el=form.querySelector('[name="cf-turnstile-response"]');
+    if(el)token=el.value;
+    if(!token){
+      showToast("Please complete the CAPTCHA check.","error");
+      return;
     }
-    // Wait briefly for fresh token, then read it
-    setTimeout(function(){
-      var token="";
-      var el=form.querySelector('[name="cf-turnstile-response"]');
-      if(el)token=el.value;
-      if(!token){
-        showToast("Please complete the CAPTCHA check.","error");
-        if(finalSubmitBtn)finalSubmitBtn.disabled=false;
-        return;
-      }
-      hideConfirmModal();
-      executeSubmission();
-    },800);
+    hideConfirmModal();
+    executeSubmission();
   });
 }
 
@@ -871,6 +862,9 @@ function executeSubmission(){
         if(submitBtn)submitBtn.disabled=false;
         if(finalSubmitBtn)finalSubmitBtn.disabled=false;
         if(submitBtn)submitBtn.textContent="Submit Application";
+        // Reset Turnstile so next attempt gets a fresh token
+        var container=form?form.querySelector(".cf-turnstile"):null;
+        if(container && typeof turnstile!=="undefined"){try{turnstile.reset(container);}catch(e){}}
       }
     });
   }).catch(function(err){
@@ -879,6 +873,8 @@ function executeSubmission(){
     if(submitBtn)submitBtn.disabled=false;
     if(finalSubmitBtn)finalSubmitBtn.disabled=false;
     if(submitBtn)submitBtn.textContent="Submit Application";
+    var container=form?form.querySelector(".cf-turnstile"):null;
+    if(container && typeof turnstile!=="undefined"){try{turnstile.reset(container);}catch(e){}}
   });
 }
 
